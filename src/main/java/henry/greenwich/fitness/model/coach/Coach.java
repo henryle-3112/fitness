@@ -36,5 +36,5 @@ public class Coach {
     private float ratingAverage;
 
     @Column(name = Constants.COACH_NUMBER_OF_MEMBERSHIPS)
-    private int nMemberships;
+    private int numberOfMemberships;
 }

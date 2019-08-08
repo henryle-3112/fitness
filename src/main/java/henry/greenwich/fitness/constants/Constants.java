@@ -7,6 +7,9 @@ public class Constants {
     // email subject active account
     public static final String EMAIL_SUBJECT_ACTIVE_ACCOUNT = "Greenwich Fitness - Active Account";
 
+    // login url
+    public static final String LOGIN_URL = "/greenwich-fitness/api/v1/login";
+
     // security constants
     public static final String SECRET = "SecretKeyToGenJWTs";
     public static final long EXPIRATION_TIME = 864000000;
@@ -100,7 +103,7 @@ public class Constants {
     public static final String COACH_NUMBER_OF_MEMBERSHIPS = "number_of_memberships";
 
     // user profile's table and columns
-    public static final String USER_PROFILE_TABLE = "coach";
+    public static final String USER_PROFILE_TABLE = "user_profile";
 
     public static final String USER_PROFILE_ID = "id";
     public static final String USER_PROFILE_FULL_NAME = "full_name";

@@ -1,11 +1,10 @@
-package henry.greenwich.fitness.repository.coach;
+package henry.greenwich.fitness.repository.membership;
 
 import henry.greenwich.fitness.constants.Constants;
 import henry.greenwich.fitness.model.coach.Coach;
 import henry.greenwich.fitness.model.membership.Membership;
 import henry.greenwich.fitness.model.user.UserProfile;
 
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Qualifier("membershipRepository")
 @Repository
 public interface MembershipRepository extends JpaRepository<Membership, Long> {
         String GET_MEMBERSHIPS_BY_PAGE = "select" + " " + Constants.MEMBERSHIP_TABLE + "."

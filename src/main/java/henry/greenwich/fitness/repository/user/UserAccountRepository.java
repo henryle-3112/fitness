@@ -12,13 +12,15 @@ import java.util.List;
 @Repository
 public interface UserAccountRepository extends JpaRepository<UserAccount, Long> {
 
-    String CHECK_AUTHENTICATION = "select " + Constants.USER_ACCOUNT_TABLE + "." + Constants.USER_ACCOUNT_USER_NAME + "," +
-            " " + Constants.USER_ACCOUNT_TABLE + "." + Constants.USER_ACCOUNT_PASSWORD + "," +
-            " " + Constants.USER_ACCOUNT_TABLE + "." + Constants.USER_ACCOUNT_USER_PROFILE_ID + " from " + Constants.USER_ACCOUNT_TABLE + "" +
-            " inner join " + Constants.USER_PROFILE_TABLE + " on " + Constants.USER_ACCOUNT_TABLE + "." + Constants.USER_ACCOUNT_USER_PROFILE_ID + " on " + Constants.USER_PROFILE_TABLE + "." + Constants.USER_PROFILE_ID + "" +
-            " where " + Constants.USER_ACCOUNT_TABLE + "." + Constants.USER_ACCOUNT_USER_NAME + " = :userName" +
-            " and " + Constants.USER_ACCOUNT_TABLE + "." + Constants.USER_ACCOUNT_USER_ACCOUNT_STATUS_ID + " = 1" +
-            " and " + Constants.USER_PROFILE_TABLE + "." + Constants.USER_PROFILE_STATUS + " = 1";
+    String CHECK_AUTHENTICATION = "select " + Constants.USER_ACCOUNT_TABLE + "." + Constants.USER_ACCOUNT_USER_NAME
+            + "," + " " + Constants.USER_ACCOUNT_TABLE + "." + Constants.USER_ACCOUNT_PASSWORD + "," + " "
+            + Constants.USER_ACCOUNT_TABLE + "." + Constants.USER_ACCOUNT_USER_PROFILE_ID + " from "
+            + Constants.USER_ACCOUNT_TABLE + "" + " inner join " + Constants.USER_PROFILE_TABLE + " on "
+            + Constants.USER_ACCOUNT_TABLE + "." + Constants.USER_ACCOUNT_USER_PROFILE_ID + " = "
+            + Constants.USER_PROFILE_TABLE + "." + Constants.USER_PROFILE_ID + "" + " where "
+            + Constants.USER_ACCOUNT_TABLE + "." + Constants.USER_ACCOUNT_USER_NAME + " = :userName" + " and "
+            + Constants.USER_ACCOUNT_TABLE + "." + Constants.USER_ACCOUNT_USER_ACCOUNT_STATUS_ID + " = 1" + " and "
+            + Constants.USER_PROFILE_TABLE + "." + Constants.USER_PROFILE_STATUS + " = 1";
 
     /**
      * @param userName - userName of account that would be authenticated

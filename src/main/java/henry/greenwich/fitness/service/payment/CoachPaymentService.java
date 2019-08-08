@@ -3,7 +3,7 @@ package henry.greenwich.fitness.service.payment;
 import henry.greenwich.fitness.model.membership.Membership;
 import henry.greenwich.fitness.model.payment.CoachPayment;
 import henry.greenwich.fitness.repository.payment.CoachPaymentRepository;
-import henry.greenwich.fitness.service.coach.MembershipService;
+import henry.greenwich.fitness.service.membership.MembershipService;
 
 import org.springframework.stereotype.Service;
 

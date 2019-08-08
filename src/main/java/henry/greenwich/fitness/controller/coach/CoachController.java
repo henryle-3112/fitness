@@ -33,14 +33,18 @@ public class CoachController {
      */
     @GetMapping(value = "/coaches", produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    public List<Coach> getCoaches(HttpServletResponse response, @RequestParam("page") Integer page,
-            @RequestParam("status") Integer status, @RequestParam("search") String search) {
+    public List<Coach> getCoaches(HttpServletResponse response, @RequestParam(required = false) Integer page,
+            @RequestParam(required = false) Integer status, @RequestParam(required = false) String search) {
         if (page != null) {
             int startIndex = ((page - 1) * Constants.NUMBER_ITEMS_PER_PAGE) + 1;
             int nCoaches = this.coachService.getNumberOfCoaches(status, search);
             response.addHeader("X-Total-Count", String.valueOf(nCoaches));
-            response.addHeader("X-Total-Page", String.valueOf(nCoaches / Constants.NUMBER_ITEMS_PER_PAGE));
-            return this.coachService.getCoachesByPage(status, search, startIndex);
+            if (nCoaches < Constants.NUMBER_ITEMS_PER_PAGE) {
+                response.addHeader("X-Total-Page", "1");
+            } else {
+                response.addHeader("X-Total-Page", String.valueOf(nCoaches / Constants.NUMBER_ITEMS_PER_PAGE));
+            }
+            return this.coachService.getCoachesByPage(status, search, startIndex - 1);
         }
         return this.coachService.getCoaches(status, search);
     }
@@ -51,7 +55,7 @@ public class CoachController {
      *                could be optional)
      * @return selected coach
      */
-    @GetMapping(value = "/coaches/{id}", produces = { MediaType.APPLICATION_JSON_VALUE })
+    @GetMapping(value = "/coaches/{coachId}", produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     public Coach getCoach(@PathVariable Integer coachId, @RequestParam(required = false) Integer status) {
         return this.coachService.getCoach(coachId, status);

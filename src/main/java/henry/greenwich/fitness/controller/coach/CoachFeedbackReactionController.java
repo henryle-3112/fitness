@@ -21,23 +21,25 @@ public class CoachFeedbackReactionController {
     }
 
     /**
-     * @param coachFeedbackReaction - coach's feedback's reaction that user want to add to the database
+     * @param coachFeedbackReaction - coach's feedback's reaction that user want to
+     *                              add to the database
      * @return inserted coach's feedback's reaction
      */
-    @PostMapping(value = "/feedback-reactions", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PostMapping(value = "/feedback-reactions", produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     public CoachFeedbackReaction addCoachFeedbackReaction(@RequestBody CoachFeedbackReaction coachFeedbackReaction) {
         return this.coachFeedbackReactionService.addCoachFeedbackReaction(coachFeedbackReaction);
     }
 
     /**
-     * @param userProfileId - user's profile's id that user want to get list of coach's feedback's reactions (1 is like and 0 is dislike)
+     * @param userProfileId - user's profile's id that user want to get list of
+     *                      coach's feedback's reactions (1 is like and 0 is
+     *                      dislike)
      * @return list of coach's feedback's reactions
      */
-    @GetMapping(value = "/users/{userProfileId}/feedback-reactions", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping(value = "/users/{userProfileId}/feedback-reactions", produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    public List<CoachFeedbackReaction> getCoachFeedbackReactionsByUserProfile(
-            @PathVariable Integer userProfileId) {
+    public List<CoachFeedbackReaction> getCoachFeedbackReactionsByUserProfile(@PathVariable Integer userProfileId) {
         return this.coachFeedbackReactionService.getCoachFeedbackReactions(userProfileId);
     }
 }

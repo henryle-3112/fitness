@@ -1,11 +1,10 @@
-package henry.greenwich.fitness.controller.coach;
+package henry.greenwich.fitness.controller.membership;
 
 import henry.greenwich.fitness.constants.Constants;
 import henry.greenwich.fitness.model.coach.Coach;
 import henry.greenwich.fitness.model.membership.Membership;
-import henry.greenwich.fitness.service.coach.MembershipService;
+import henry.greenwich.fitness.service.membership.MembershipService;
 
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +17,7 @@ import java.util.List;
 public class MembershipController {
     private MembershipService membershipService;
 
-    public MembershipController(@Qualifier("membershipService") MembershipService membershipService) {
+    public MembershipController(MembershipService membershipService) {
         this.membershipService = membershipService;
     }
 

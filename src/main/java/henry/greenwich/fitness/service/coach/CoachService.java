@@ -122,12 +122,21 @@ public class CoachService {
     private Coach createCoachFromObjectArray(Object[] coachObjectArr) {
         int coachId = (int) coachObjectArr[0];
         int userProfileId = (int) coachObjectArr[1];
-        UserProfile userProfile = this.userProfileService.getUserProfile((long) userProfileId);
+        UserProfile userProfile = this.getUserProfile((long) userProfileId);
         String coachAbout = (String) coachObjectArr[2];
         int coachStatus = (int) coachObjectArr[3];
-        float coachRatingAverage = (float) coachObjectArr[4];
+        int coachRatingAverage = (int) coachObjectArr[4];
         int nMemberships = (int) coachObjectArr[5];
         return new Coach((long) coachId, userProfile, coachAbout, coachStatus, coachRatingAverage, nMemberships);
+    }
+
+    /**
+     * @param userProfileId - user's profile's id that user want to get selected
+     *                      user's profile
+     * @return selected user's profile
+     */
+    private UserProfile getUserProfile(Long userProfileId) {
+        return this.userProfileService.getUserProfile(userProfileId);
     }
 
 }

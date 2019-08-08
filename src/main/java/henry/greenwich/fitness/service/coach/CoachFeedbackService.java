@@ -19,14 +19,15 @@ public class CoachFeedbackService {
     private CoachService coachService;
 
     /**
-     * @param coachFeedbackRepository      - inject coachFeedbackRepository
-     * @param userProfileService           - inject userProfileService
-     * @param coachService                 - inject coachService
+     * @param coachFeedbackRepository - inject coachFeedbackRepository
+     * @param userProfileService      - inject userProfileService
+     * @param coachService            - inject coachService
      */
     public CoachFeedbackService(CoachFeedbackRepository coachFeedbackRepository, UserProfileService userProfileService,
             CoachService coachService) {
         this.coachFeedbackRepository = coachFeedbackRepository;
         this.userProfileService = userProfileService;
+        this.coachService = coachService;
     }
 
     /**

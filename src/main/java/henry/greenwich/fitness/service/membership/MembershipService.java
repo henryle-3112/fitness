@@ -1,20 +1,18 @@
-package henry.greenwich.fitness.service.coach;
+package henry.greenwich.fitness.service.membership;
 
 import henry.greenwich.fitness.model.coach.Coach;
 import henry.greenwich.fitness.model.membership.Membership;
 import henry.greenwich.fitness.model.user.UserProfile;
-import henry.greenwich.fitness.repository.coach.MembershipRepository;
+import henry.greenwich.fitness.repository.membership.MembershipRepository;
 import henry.greenwich.fitness.service.coach.CoachService;
 import henry.greenwich.fitness.service.user.UserProfileService;
 
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@Qualifier("membershipService")
 @Service
 public class MembershipService {
     private MembershipRepository membershipRepository;
@@ -26,8 +24,8 @@ public class MembershipService {
      * @param userProfileService   - inject userProfileService
      * @param membershipService    - inject membershipService
      */
-    public MembershipService(@Qualifier("membershipRepository") MembershipRepository membershipRepository,
-            UserProfileService userProfileService, CoachService coachService) {
+    public MembershipService(MembershipRepository membershipRepository, UserProfileService userProfileService,
+            CoachService coachService) {
         this.membershipRepository = membershipRepository;
         this.userProfileService = userProfileService;
         this.coachService = coachService;
