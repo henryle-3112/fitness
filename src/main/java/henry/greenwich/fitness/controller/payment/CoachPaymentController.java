@@ -53,6 +53,8 @@ public class CoachPaymentController {
         }
 
         /**
+         * @param response      - response to add number of pages and number of coach
+         *                      paymennt histories to header
          * @param userProfileId - user's profile's id that user want to get coach
          *                      payment histories (this parameter could be optional)
          * @param month         - month to view coach payment histories (this parameter
@@ -73,6 +75,8 @@ public class CoachPaymentController {
         }
 
         /**
+         * @param response      - response to add number of pages and number of coach
+         *                      paymennt histories to header
          * @param coachId       - coach's id that user want to get coach payment
          *                      histories (this parameter could be optional)
          * @param userProfileId - user's profile's id that user want to get coach

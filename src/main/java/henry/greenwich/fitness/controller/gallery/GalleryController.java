@@ -23,9 +23,11 @@ public class GalleryController {
     }
 
     /**
-     * @param status - gallery's status that user want to get galleries
-     * @param search - gallery's title's keywords that user want to get galleries
-     * @param page   - start index (for pagination)
+     * @param response - response to add number of galleries and number of pages to
+     *                 header
+     * @param status   - gallery's status that user want to get galleries
+     * @param search   - gallery's title's keywords that user want to get galleries
+     * @param page     - start index (for pagination)
      * @return list of galleries
      */
     @GetMapping(value = "/galleries", produces = { MediaType.APPLICATION_JSON_VALUE })
@@ -39,9 +41,11 @@ public class GalleryController {
     }
 
     /**
-     * @param status - gallery's status that user want to get galleries
-     * @param search - gallery's title's keywords that user want to get galleries
-     * @param page   - start index (for pagination)
+     * @param response - response to add number of galleries and number of pages to
+     *                 header
+     * @param status   - gallery's status that user want to get galleries
+     * @param search   - gallery's title's keywords that user want to get galleries
+     * @param page     - start index (for pagination)
      * @return list of galleries
      */
     private List<Gallery> getGalleriesPaging(HttpServletResponse response, Integer page, Integer status,

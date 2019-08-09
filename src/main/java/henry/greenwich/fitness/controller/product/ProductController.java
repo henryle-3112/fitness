@@ -23,6 +23,8 @@ public class ProductController {
     }
 
     /**
+     * @param response   - response to add number of products and number of pages to
+     *                   header
      * @param categoryId - product's category's id that user want to get products
      *                   (this parameter could be optional)
      * @param minPrice   - product's min price that user want to get products (this
@@ -51,6 +53,21 @@ public class ProductController {
         return this.productService.getProducts(categoryId, minPrice, maxPrice, status, search);
     }
 
+    /**
+     * @param response   - response to add number of products and number of pages to
+     *                   header
+     * @param categoryId - product's category's id that user want to get products
+     *                   (this parameter could be optional)
+     * @param minPrice   - product's min price that user want to get products (this
+     *                   parameter could be optional)
+     * @param maxPrice   - product's max price that user want to get products (this
+     *                   parameter could be optional)
+     * @param status     - product's status that user want to get products
+     * @param search     - product's name's keywords that user want to get products
+     *                   (this parameter could be optional)
+     * @param page       - start index to get products (for pagination) (this
+     *                   parameter could be optional)
+     */
     private List<Product> getProductsPaging(HttpServletResponse response, Integer categoryId, Integer minPrice,
             Integer maxPrice, Integer status, String search, Integer page) {
         int startIndex = ((page - 1) * Constants.NUMBER_ITEMS_PER_PAGE) + 1;

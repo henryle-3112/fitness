@@ -23,6 +23,8 @@ public class NotificationController {
     }
 
     /**
+     * @param response      - response to add number of pages and number of
+     *                      notifications to header
      * @param userProfileId - user's profile's id that user want to get
      *                      notifications (this parameter could be optional)
      * @param search        - notification's content's keywords that user want to
@@ -45,6 +47,8 @@ public class NotificationController {
     }
 
     /**
+     * @param response      - response to add number of pages and number of
+     *                      notifications to header
      * @param userProfileId - user's profile's id that user want to get
      *                      notifications (this parameter could be optional)
      * @param search        - notification's content's keywords that user want to

@@ -23,12 +23,14 @@ public class NewFeedController {
     }
 
     /**
-     * @param status - newfeeds' status that user want to filter newfeeds (this
-     *               parameter could be optional)
-     * @param search - newfeed's content's keywords that user want to get newfeeds
-     *               (this parameter could be optional)
-     * @param page   - start index to get newfeeds (for pagination) (this parameter
-     *               could be optional)
+     * @param response - response to add number of pages and number of newfeeds to
+     *                 header
+     * @param status   - newfeeds' status that user want to filter newfeeds (this
+     *                 parameter could be optional)
+     * @param search   - newfeed's content's keywords that user want to get newfeeds
+     *                 (this parameter could be optional)
+     * @param page     - start index to get newfeeds (for pagination) (this
+     *                 parameter could be optional)
      * @return list of newfeeds
      */
     @GetMapping(value = "/feeds", produces = { MediaType.APPLICATION_JSON_VALUE })
@@ -42,12 +44,14 @@ public class NewFeedController {
     }
 
     /**
-     * @param status - newfeeds' status that user want to filter newfeeds (this
-     *               parameter could be optional)
-     * @param search - newfeed's content's keywords that user want to get newfeeds
-     *               (this parameter could be optional)
-     * @param page   - start index to get newfeeds (for pagination) (this parameter
-     *               could be optional)
+     * @param response - response to add number of pages and number of newfeeds to
+     *                 header
+     * @param status   - newfeeds' status that user want to filter newfeeds (this
+     *                 parameter could be optional)
+     * @param search   - newfeed's content's keywords that user want to get newfeeds
+     *                 (this parameter could be optional)
+     * @param page     - start index to get newfeeds (for pagination) (this
+     *                 parameter could be optional)
      * @return list of newfeeds
      */
     private List<NewFeed> getNewFeedsPaging(HttpServletResponse response, Integer status, String search, Integer page) {

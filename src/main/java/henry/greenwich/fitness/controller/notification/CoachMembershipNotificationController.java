@@ -25,13 +25,15 @@ public class CoachMembershipNotificationController {
         }
 
         /**
-         * @param coachId - coach's id that user want to get coach membership
-         *                notifications (this parameter could be optional)
-         * @param search  - notifications' content's keywords that user want to get
-         *                coach membership notifications (this parameter could be
-         *                optional)
-         * @param page    - start index (for pagination) (this parameter could be
-         *                optional)
+         * @param response - response to add number of pages and number of coach
+         *                 membership notifications to header
+         * @param coachId  - coach's id that user want to get coach membership
+         *                 notifications (this parameter could be optional)
+         * @param search   - notifications' content's keywords that user want to get
+         *                 coach membership notifications (this parameter could be
+         *                 optional)
+         * @param page     - start index (for pagination) (this parameter could be
+         *                 optional)
          * @return list of coach membership notifications
          */
         @GetMapping(value = "/coaches/{coachId}/trainings", produces = { MediaType.APPLICATION_JSON_VALUE })
@@ -46,6 +48,8 @@ public class CoachMembershipNotificationController {
         }
 
         /**
+         * @param response      - response to add number of pages and number of coach
+         *                      membership notifications to header
          * @param userProfileId - user's profile's id that user want to get coach
          *                      memberships notifications (this parameter could be
          *                      optional)
@@ -69,6 +73,8 @@ public class CoachMembershipNotificationController {
         }
 
         /**
+         * @param response      - response to add number of pages and number of coach
+         *                      membership notifications to header
          * @param coachId       - coach's id that user want to get coach membership
          *                      notifications (this parameter could be optional)
          * @param userProfileId - user's profile's id that user want to get coach

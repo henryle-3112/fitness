@@ -23,12 +23,14 @@ public class MusicController {
     }
 
     /**
-     * @param status - music's status that user want to get musics (this parameter
-     *               could be optional)
-     * @param search - music's title's keywords that user want to get (this
-     *               parameter could be optional)
-     * @param page   - start's index (for pagination) (this parameter could be
-     *               optional)
+     * @param response - response to add number of pages and number of musics to
+     *                 header
+     * @param status   - music's status that user want to get musics (this parameter
+     *                 could be optional)
+     * @param search   - music's title's keywords that user want to get (this
+     *                 parameter could be optional)
+     * @param page     - start's index (for pagination) (this parameter could be
+     *                 optional)
      * @return list of musics
      */
     @GetMapping(value = "/musics", produces = { MediaType.APPLICATION_JSON_VALUE })
@@ -42,12 +44,14 @@ public class MusicController {
     }
 
     /**
-     * @param status - music's status that user want to get musics (this parameter
-     *               could be optional)
-     * @param search - music's title's keywords that user want to get (this
-     *               parameter could be optional)
-     * @param page   - start's index (for pagination) (this parameter could be
-     *               optional)
+     * @param response - response to add number of pages and number of musics to
+     *                 header
+     * @param status   - music's status that user want to get musics (this parameter
+     *                 could be optional)
+     * @param search   - music's title's keywords that user want to get (this
+     *                 parameter could be optional)
+     * @param page     - start's index (for pagination) (this parameter could be
+     *                 optional)
      * @return list of musics
      */
     private List<Music> getMusicsPaging(HttpServletResponse response, Integer status, String search, Integer page) {
