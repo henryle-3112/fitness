@@ -26,7 +26,7 @@ public class ResetPasswordController {
      * @param email - email of user
      * @return message - email was sent successfully or not
      */
-    @PostMapping(value = "/send/email/reset/password", produces = { MediaType.APPLICATION_JSON_VALUE })
+    @PostMapping(value = "/send-email-reset-password", produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     public ResponseMessage sendEmailResetPassword(@RequestBody String email) {
         boolean isEmailSentSuccessfully = this.resetPasswordService.sendEmailResetPassword(email);
@@ -40,7 +40,7 @@ public class ResetPasswordController {
      * @param updatedUserAccount - updated user's account that contains new password
      * @return responseMessage - contains message successfully or not
      */
-    @PostMapping(value = "/change/password", produces = { MediaType.APPLICATION_JSON_VALUE })
+    @PostMapping(value = "/change-password", produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     public ResponseMessage changePassword(@RequestBody UserAccount updatedUserAccount) throws ParseException {
         boolean isPasswordChangedSuccessfully = this.resetPasswordService.changePassword(updatedUserAccount);

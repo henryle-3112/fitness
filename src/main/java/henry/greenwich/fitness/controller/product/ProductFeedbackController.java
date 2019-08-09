@@ -26,7 +26,7 @@ public class ProductFeedbackController {
      *                  product's feedbacks
      * @return list of product's feedbacks
      */
-    @PostMapping(value = "/products/{productId}/feedbacks", produces = { MediaType.APPLICATION_JSON_VALUE })
+    @GetMapping(value = "/products/{productId}/feedbacks", produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     public List<ProductFeedback> getProductFeedbacks(@PathVariable Integer productId,
             @RequestParam(required = false) Integer status) {

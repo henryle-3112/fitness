@@ -111,9 +111,9 @@ public class MembershipService {
      */
     public List<Coach> getCoachesByPage(Integer userProfileId, Integer membershipStatus,
             String userProfileFullNameKeywords, Integer startIndex) {
-        List<Object> coachesObjectList = this.membershipRepository.getCoachesByPage(userProfileId, membershipStatus,
+        List<Object> coacheIdsObjectList = this.membershipRepository.getCoachesByPage(userProfileId, membershipStatus,
                 userProfileFullNameKeywords, startIndex);
-        return this.getCoachesFromObjectList(coachesObjectList);
+        return this.getCoachesFromObjectList(coacheIdsObjectList);
     }
 
     /**
@@ -146,9 +146,9 @@ public class MembershipService {
      *         profile's fulname's keywords
      */
     public List<Coach> getCoaches(Integer userProfileId, Integer membershipStatus, String coachFullNameKeywords) {
-        List<Object> coachesObjectList = this.membershipRepository.getCoaches(userProfileId, membershipStatus,
+        List<Object> coacheIdsObjectList = this.membershipRepository.getCoaches(userProfileId, membershipStatus,
                 coachFullNameKeywords);
-        return this.getCoachesFromObjectList(coachesObjectList);
+        return this.getCoachesFromObjectList(coacheIdsObjectList);
     }
 
     /**
@@ -207,15 +207,14 @@ public class MembershipService {
     }
 
     /**
-     * @param coachesObjectList - coaches object list that user want to convert to
+     * @param coacheIdsObjectList - coaches object list that user want to convert to
      *                          coaches list
      * @return list of coaches
      */
-    private List<Coach> getCoachesFromObjectList(List<Object> coachesObjectList) {
+    private List<Coach> getCoachesFromObjectList(List<Object> coacheIdsObjectList) {
         List<Coach> coaches = new ArrayList<>();
-        for (Object o : coachesObjectList) {
-            Object[] eachCoachObject = (Object[]) o;
-            int eachCoachId = (int) eachCoachObject[0];
+        for (Object o : coacheIdsObjectList) {
+            int eachCoachId = (int) o;
             Coach coach = this.getCoach(eachCoachId, null);
             coaches.add(coach);
         }

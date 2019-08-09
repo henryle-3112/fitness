@@ -29,20 +29,40 @@ public class NotificationController {
      *                      get notifications (this parameter could be optional)
      * @param page          - start index (for pagination) (this parameter could be
      *                      optional)
+     * @param status        - notification's status that user want to get
+     *                      notifications (this parameter could be optional)
      * @return list of notifications
      */
     @GetMapping(value = "/users/{userProfileId}/notifications", produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    public List<Notification> getNotificationsPaging(HttpServletResponse response, @PathVariable Integer userProfileId,
-            @RequestParam(required = false) Integer page, @RequestParam(required = false) String search) {
+    public List<Notification> getNotifications(HttpServletResponse response, @PathVariable Integer userProfileId,
+            @RequestParam(required = false) Integer page, @RequestParam(required = false) String search,
+            @RequestParam(required = false) Integer status) {
         if (page != null) {
-            int startIndex = ((page - 1) * Constants.NUMBER_ITEMS_PER_PAGE) + 1;
-            int nNotifications = this.notificationService.getNumberOfNotifications(userProfileId, search);
-            response.addHeader("X-Total-Count", String.valueOf(nNotifications));
-            response.addHeader("X-Total-Page", String.valueOf(nNotifications / Constants.NUMBER_ITEMS_PER_PAGE));
-            return this.notificationService.getNotificationsPaging(userProfileId, search, startIndex);
+            return this.getNotificationsPaging(response, userProfileId, page, search, status);
         }
-        return this.notificationService.getNotifications(userProfileId, search);
+        return this.notificationService.getNotifications(userProfileId, search, status);
+    }
+
+    /**
+     * @param userProfileId - user's profile's id that user want to get
+     *                      notifications (this parameter could be optional)
+     * @param search        - notification's content's keywords that user want to
+     *                      get notifications (this parameter could be optional)
+     * @param page          - start index (for pagination) (this parameter could be
+     *                      optional)
+     * @return list of notifications
+     */
+    private List<Notification> getNotificationsPaging(HttpServletResponse response, Integer userProfileId, Integer page,
+            String search, Integer status) {
+        int startIndex = ((page - 1) * Constants.NUMBER_ITEMS_PER_PAGE) + 1;
+        int nNotifications = this.notificationService.getNumberOfNotifications(userProfileId, search, status);
+        response.addHeader(Constants.HEADER_X_TOTAL_COUNT, String.valueOf(nNotifications));
+        int nPages = nNotifications >= Constants.NUMBER_ITEMS_PER_PAGE
+                ? nNotifications / Constants.NUMBER_ITEMS_PER_PAGE
+                : 1;
+        response.addHeader(Constants.HEADER_X_TOTAL_PAGE, String.valueOf(nPages));
+        return this.notificationService.getNotificationsPaging(userProfileId, search, status, startIndex - 1);
     }
 
     /**

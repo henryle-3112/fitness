@@ -23,6 +23,9 @@ spring:
           auth: true
           starttls:
             enable: true
+  devtools:
+    restart:
+      enabled: false     
 
 server:
   servlet:

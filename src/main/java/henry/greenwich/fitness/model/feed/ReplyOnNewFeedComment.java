@@ -42,8 +42,8 @@ public class ReplyOnNewFeedComment {
     private Date replyOnNewFeedCommentCreatedDate;
 
     @Column(name = Constants.REPLY_ON_NEW_FEED_COMMENT_NUMBER_OF_LIKES)
-    private int nLikes;
+    private int numberOfLikes;
 
     @Column(name = Constants.REPLY_ON_NEW_FEED_COMMENT_NUMBER_OF_DISLIKES)
-    private int nDislikes;
+    private int numberOfDislikes;
 }

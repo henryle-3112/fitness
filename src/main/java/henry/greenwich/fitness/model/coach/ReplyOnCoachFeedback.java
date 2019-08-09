@@ -41,8 +41,8 @@ public class ReplyOnCoachFeedback {
     public UserProfile userProfile;
 
     @Column(name = Constants.REPLY_ON_COACH_FEEDBACK_NUMBER_OF_LIKES)
-    private int nLikes;
+    private int numberOfLikes;
 
     @Column(name = Constants.REPLY_ON_COACH_FEEDBACK_NUMBER_OF_DISLIKES)
-    private int nDislikes;
+    private int numberOfDislikes;
 }

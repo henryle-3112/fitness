@@ -5,13 +5,14 @@ import henry.greenwich.fitness.model.feed.ReplyOnNewFeedComment;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
 @Repository
 public interface ReplyOnNewFeedCommentRepository extends JpaRepository<ReplyOnNewFeedComment, Long> {
 
-        String GET_REPLIES_ON_NEW_FEED_COMMENT = "select * " + Constants.REPLY_ON_NEW_FEED_COMMENT_TABLE + ""
+        String GET_REPLIES_ON_NEW_FEED_COMMENT = "select * from " + Constants.REPLY_ON_NEW_FEED_COMMENT_TABLE + ""
                         + " where (:newFeedCommentId is null or " + Constants.REPLY_ON_NEW_FEED_COMMENT_TABLE + "."
                         + Constants.REPLY_ON_NEW_FEED_COMMENT_NEW_FEED_COMMENT_ID + " = :newFeedCommentId)"
                         + " and (:replyOnNewFeedCommentStatus is null or " + Constants.REPLY_ON_NEW_FEED_COMMENT_TABLE
@@ -26,7 +27,8 @@ public interface ReplyOnNewFeedCommentRepository extends JpaRepository<ReplyOnNe
          * @return list of replies
          */
         @Query(nativeQuery = true, value = GET_REPLIES_ON_NEW_FEED_COMMENT)
-        List<Object> getRepliesOnNewFeedComment(Integer newFeedCommentId, Integer replyOnNewFeedCommentStatus);
+        List<Object> getRepliesOnNewFeedComment(@RequestParam("newFeedCommentId") Integer newFeedCommentId,
+                        @RequestParam("replyOnNewFeedCommentStatus") Integer replyOnNewFeedCommentStatus);
 
         /**
          * @param id - id of reply on newfeed's comment that user want to get

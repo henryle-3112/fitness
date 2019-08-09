@@ -49,9 +49,12 @@ public class ProductOrderController {
         if (page != null) {
             int startIndex = ((page - 1) * Constants.NUMBER_ITEMS_PER_PAGE) + 1;
             int nProductOrders = this.productOrderService.getNumberOfProductOrders(userProfileId, status);
-            response.addHeader("X-Total-Count", String.valueOf(nProductOrders));
-            response.addHeader("X-Total-Page", String.valueOf(nProductOrders / Constants.NUMBER_ITEMS_PER_PAGE));
-            return this.productOrderService.getProductOrdersPaging(userProfileId, status, startIndex);
+            response.addHeader(Constants.HEADER_X_TOTAL_COUNT, String.valueOf(nProductOrders));
+            int nPages = nProductOrders >= Constants.NUMBER_ITEMS_PER_PAGE
+                    ? nProductOrders / Constants.NUMBER_ITEMS_PER_PAGE
+                    : 1;
+            response.addHeader(Constants.HEADER_X_TOTAL_PAGE, String.valueOf(nPages));
+            return this.productOrderService.getProductOrdersPaging(userProfileId, status, startIndex - 1);
         }
         return this.productOrderService.getProductOrders(userProfileId, status);
     }

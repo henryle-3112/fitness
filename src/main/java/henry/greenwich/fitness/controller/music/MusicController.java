@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @Controller
+@RequestMapping("music-management")
 public class MusicController {
     private MusicService musicService;
 
@@ -35,12 +36,26 @@ public class MusicController {
     public List<Music> getMusics(HttpServletResponse response, @RequestParam("status") Integer status,
             @RequestParam("search") String search, @RequestParam("page") Integer page) {
         if (page != null) {
-            int startIndex = ((page - 1) * Constants.NUMBER_ITEMS_PER_PAGE) + 1;
-            int nMusics = this.musicService.getNumberOfMusics(status, search);
-            response.addHeader("X-Total-Count", String.valueOf(nMusics));
-            response.addHeader("X-Total-Page", String.valueOf(nMusics / Constants.NUMBER_ITEMS_PER_PAGE));
-            return this.musicService.getMusicsByPage(status, search, startIndex);
+            return this.getMusicsPaging(response, status, search, page);
         }
         return this.musicService.getMusics(status, search);
+    }
+
+    /**
+     * @param status - music's status that user want to get musics (this parameter
+     *               could be optional)
+     * @param search - music's title's keywords that user want to get (this
+     *               parameter could be optional)
+     * @param page   - start's index (for pagination) (this parameter could be
+     *               optional)
+     * @return list of musics
+     */
+    private List<Music> getMusicsPaging(HttpServletResponse response, Integer status, String search, Integer page) {
+        int startIndex = ((page - 1) * Constants.NUMBER_ITEMS_PER_PAGE) + 1;
+        int nMusics = this.musicService.getNumberOfMusics(status, search);
+        int nPages = nMusics > Constants.NUMBER_ITEMS_PER_PAGE ? nMusics / Constants.NUMBER_ITEMS_PER_PAGE : 1;
+        response.addHeader(Constants.HEADER_X_TOTAL_COUNT, String.valueOf(nMusics));
+        response.addHeader(Constants.HEADER_X_TOTAL_PAGE, String.valueOf(nPages));
+        return this.musicService.getMusicsByPage(status, search, startIndex - 1);
     }
 }

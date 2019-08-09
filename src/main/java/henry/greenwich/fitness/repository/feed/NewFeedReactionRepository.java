@@ -17,7 +17,7 @@ public interface NewFeedReactionRepository extends JpaRepository<NewFeedReaction
         String GET_NEW_FEED_REACTION = "select * from " + Constants.NEW_FEED_REACTION_TABLE + ""
                         + " where (:userProfileId is null or " + Constants.NEW_FEED_REACTION_TABLE + "."
                         + Constants.NEW_FEED_REACTION_USER_PROFILE_ID + " = :userProfileId)"
-                        + " and (:newFeedId is null or " + Constants.NEW_FEED_COMMENT_REACTION_TABLE + "."
+                        + " and (:newFeedId is null or " + Constants.NEW_FEED_REACTION_TABLE + "."
                         + Constants.NEW_FEED_REACTION_NEW_FEED_ID + " = :newFeedId)";
 
         /**

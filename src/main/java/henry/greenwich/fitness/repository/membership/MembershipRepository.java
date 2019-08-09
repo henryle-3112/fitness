@@ -26,7 +26,7 @@ public interface MembershipRepository extends JpaRepository<Membership, Long> {
                         + "." + Constants.MEMBERSHIP_COACH_ID + " = :coachId)" + " and (:membershipStatus is null or "
                         + Constants.MEMBERSHIP_TABLE + "." + Constants.MEMBERSHIP_STATUS + " = :membershipStatus)"
                         + " and (:userProfileFullNameKeywords is null or lower(" + Constants.USER_PROFILE_TABLE + "."
-                        + Constants.USER_PROFILE_FULL_NAME + ") like %userProfileFullNameKeywords%)"
+                        + Constants.USER_PROFILE_FULL_NAME + ") like %:userProfileFullNameKeywords%)"
                         + " limit :startIndex, " + Constants.NUMBER_ITEMS_PER_PAGE;
 
         String GET_NUMBER_OF_MEMBERSHIPS_PAGING = "select count(*) from " + Constants.MEMBERSHIP_TABLE + ""
@@ -36,7 +36,7 @@ public interface MembershipRepository extends JpaRepository<Membership, Long> {
                         + "." + Constants.MEMBERSHIP_COACH_ID + " = :coachId)" + " and (:membershipStatus is null or "
                         + Constants.MEMBERSHIP_TABLE + "." + Constants.MEMBERSHIP_STATUS + " = :membershipStatus)"
                         + " and (:userProfileFullNameKeywords is null or lower(" + Constants.USER_PROFILE_TABLE + "."
-                        + Constants.USER_PROFILE_FULL_NAME + ") like %userProfileFullNameKeywords%)";
+                        + Constants.USER_PROFILE_FULL_NAME + ") like %:userProfileFullNameKeywords%)";
 
         String GET_MEMBERSHIPS = "select" + " " + Constants.MEMBERSHIP_TABLE + "." + Constants.MEMBERSHIP_COACH_ID + ","
                         + " " + Constants.MEMBERSHIP_TABLE + "." + Constants.MEMBERSHIP_USER_PROFILE_ID + "," + " "
@@ -50,19 +50,19 @@ public interface MembershipRepository extends JpaRepository<Membership, Long> {
                         + Constants.MEMBERSHIP_COACH_ID + " = :coachId)" + " and (:membershipStatus is null or "
                         + Constants.MEMBERSHIP_TABLE + "." + Constants.MEMBERSHIP_STATUS + " = :membershipStatus)"
                         + " and (:userProfileFullNameKeywords is null or lower(" + Constants.USER_PROFILE_TABLE + "."
-                        + Constants.USER_PROFILE_FULL_NAME + ") like %userProfileFullNameKeywords%)";
+                        + Constants.USER_PROFILE_FULL_NAME + ") like %:userProfileFullNameKeywords%)";
 
         String GET_COACHES_BY_PAGE = "select membership.coach_id from " + Constants.MEMBERSHIP_TABLE + ""
                         + " inner join " + Constants.COACH_TABLE + "" + " on " + Constants.MEMBERSHIP_TABLE + "."
                         + Constants.MEMBERSHIP_COACH_ID + " = " + Constants.COACH_TABLE + "." + Constants.COACH_ID + ""
                         + " inner join " + Constants.USER_PROFILE_TABLE + " on " + Constants.COACH_TABLE + "."
                         + Constants.COACH_USER_PROFILE_ID + " = " + Constants.USER_PROFILE_TABLE + "."
-                        + Constants.USER_PROFILE_ID + "" + " where (:userProfileId is null or "
-                        + Constants.MEMBERSHIP_TABLE + "." + Constants.MEMBERSHIP_USER_PROFILE_ID + " = :userProfileId)"
+                        + Constants.USER_PROFILE_ID + "" + " where (:userProfileId is null or " + Constants.COACH_TABLE
+                        + "." + Constants.COACH_USER_PROFILE_ID + " = :userProfileId)"
                         + " and (:membershipStatus is null or " + Constants.MEMBERSHIP_TABLE + "."
                         + Constants.MEMBERSHIP_STATUS + " = :membershipStatus)"
                         + " and (:coachFullNameKeywords is null or lower(" + Constants.USER_PROFILE_TABLE + "."
-                        + Constants.USER_PROFILE_FULL_NAME + ") like %coachFullNameKeywords%) limit :startIndex, "
+                        + Constants.USER_PROFILE_FULL_NAME + ") like %:coachFullNameKeywords%) limit :startIndex, "
                         + Constants.NUMBER_ITEMS_PER_PAGE;
 
         String GET_NUMBER_OF_COACHES_PAGING = "select count(*) from " + Constants.MEMBERSHIP_TABLE + "" + " inner join "
@@ -75,8 +75,7 @@ public interface MembershipRepository extends JpaRepository<Membership, Long> {
                         + " and (:membershipStatus is null or " + Constants.MEMBERSHIP_TABLE + "."
                         + Constants.MEMBERSHIP_STATUS + " = :membershipStatus)"
                         + " and (:coachFullNameKeywords is null or lower(" + Constants.USER_PROFILE_TABLE + "."
-                        + Constants.USER_PROFILE_FULL_NAME + ") like %coachFullNameKeywords%)" + " limit :startIndex, "
-                        + Constants.NUMBER_ITEMS_PER_PAGE;
+                        + Constants.USER_PROFILE_FULL_NAME + ") like %:coachFullNameKeywords%)";
 
         String GET_COACHES = "select membership.coach_id from " + Constants.MEMBERSHIP_TABLE + "" + " inner join "
                         + Constants.COACH_TABLE + "" + " on " + Constants.MEMBERSHIP_TABLE + "."
@@ -88,7 +87,7 @@ public interface MembershipRepository extends JpaRepository<Membership, Long> {
                         + " and (:membershipStatus is null or " + Constants.MEMBERSHIP_TABLE + "."
                         + Constants.MEMBERSHIP_STATUS + " = :membershipStatus)"
                         + " and (:coachFullNameKeywords is null or lower(" + Constants.USER_PROFILE_TABLE + "."
-                        + Constants.USER_PROFILE_FULL_NAME + ") like %coachFullNameKeywords%)";
+                        + Constants.USER_PROFILE_FULL_NAME + ") like %:coachFullNameKeywords%)";
 
         /**
          * @param id - membership's id that user want to get

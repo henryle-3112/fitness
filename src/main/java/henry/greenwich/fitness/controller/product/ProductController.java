@@ -22,28 +22,42 @@ public class ProductController {
         this.productService = productService;
     }
 
+    /**
+     * @param categoryId - product's category's id that user want to get products
+     *                   (this parameter could be optional)
+     * @param minPrice   - product's min price that user want to get products (this
+     *                   parameter could be optional)
+     * @param maxPrice   - product's max price that user want to get products (this
+     *                   parameter could be optional)
+     * @param status     - product's status that user want to get products
+     * @param search     - product's name's keywords that user want to get products
+     *                   (this parameter could be optional)
+     * @param page       - start index to get products (for pagination) (this
+     *                   parameter could be optional)
+     * @param top        - top limit products that user want to get products (this
+     *                   parameter could be optional)
+     */
     @GetMapping(value = "/products", produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    public List<Product> getProducts(HttpServletResponse response,
-            @RequestParam(required = false) Integer productCategoryId,
-            @RequestParam(required = false) Integer productMinPrice,
-            @RequestParam(required = false) Integer productMaxPrice,
-            @RequestParam(required = false) Integer productStatus,
-            @RequestParam(required = false) String productNameKeywords, @RequestParam(required = false) Integer page,
-            @RequestParam(required = false) Integer top) {
+    public List<Product> getProducts(HttpServletResponse response, @RequestParam(required = false) Integer categoryId,
+            @RequestParam(required = false) Integer minPrice, @RequestParam(required = false) Integer maxPrice,
+            @RequestParam(required = false) Integer status, @RequestParam(required = false) String search,
+            @RequestParam(required = false) Integer page, @RequestParam(required = false) Integer top) {
         if (page != null) {
-            int startIndex = ((page - 1) * Constants.NUMBER_ITEMS_PER_PAGE) + 1;
-            int nProducts = this.productService.getNumberOfProducts(productCategoryId, productMinPrice, productMaxPrice,
-                    productStatus, productNameKeywords);
-            response.addHeader("X-Total-Count", String.valueOf(nProducts));
-            response.addHeader("X-Total-Page", String.valueOf(nProducts / Constants.NUMBER_ITEMS_PER_PAGE));
-            return this.productService.getProductsPaging(productCategoryId, productMinPrice, productMaxPrice,
-                    productStatus, productNameKeywords, startIndex);
+            return this.getProductsPaging(response, categoryId, minPrice, maxPrice, status, search, page);
         } else if (top != null) {
-            return this.productService.getTopProducts(productCategoryId, productMinPrice, productMaxPrice,
-                    productStatus, productNameKeywords, top);
+            return this.productService.getTopProducts(categoryId, minPrice, maxPrice, status, search, top);
         }
-        return this.productService.getProducts(productCategoryId, productMinPrice, productMaxPrice, productStatus,
-                productNameKeywords);
+        return this.productService.getProducts(categoryId, minPrice, maxPrice, status, search);
+    }
+
+    private List<Product> getProductsPaging(HttpServletResponse response, Integer categoryId, Integer minPrice,
+            Integer maxPrice, Integer status, String search, Integer page) {
+        int startIndex = ((page - 1) * Constants.NUMBER_ITEMS_PER_PAGE) + 1;
+        int nProducts = this.productService.getNumberOfProducts(categoryId, minPrice, maxPrice, status, search);
+        response.addHeader(Constants.HEADER_X_TOTAL_COUNT, String.valueOf(nProducts));
+        int nPages = nProducts >= Constants.NUMBER_ITEMS_PER_PAGE ? nProducts / Constants.NUMBER_ITEMS_PER_PAGE : 1;
+        response.addHeader(Constants.HEADER_X_TOTAL_PAGE, String.valueOf(nPages));
+        return this.productService.getProductsPaging(categoryId, minPrice, maxPrice, status, search, startIndex - 1);
     }
 }

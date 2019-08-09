@@ -10,6 +10,11 @@ public class Constants {
     // login url
     public static final String LOGIN_URL = "/greenwich-fitness/api/v1/login";
 
+    // header meta information
+    public static final String HEADER_X_TOTAL_COUNT = "X-Total-Count";
+    public static final String HEADER_X_TOTAL_PAGE = "X-Total-Page"; 
+    public static final String HEADER_X_TOTAL_PAYMENT = "X-Total-Payment"; 
+
     // security constants
     public static final String SECRET = "SecretKeyToGenJWTs";
     public static final long EXPIRATION_TIME = 864000000;
@@ -73,7 +78,7 @@ public class Constants {
     public static final String NEW_FEED_REACTION_USER_PROFILE_ID = "user_profile_id";
 
     // reply on newfeed's comment table and columns
-    public static final String REPLY_ON_NEW_FEED_COMMENT_TABLE = "new_feed_comment";
+    public static final String REPLY_ON_NEW_FEED_COMMENT_TABLE = "reply_on_new_feed_comment";
 
     public static final String REPLY_ON_NEW_FEED_COMMENT_ID = "id";
     public static final String REPLY_ON_NEW_FEED_COMMENT_CONTENT = "reply_on_new_feed_comment_content";
@@ -85,7 +90,7 @@ public class Constants {
     public static final String REPLY_ON_NEW_FEED_COMMENT_NUMBER_OF_DISLIKES = "number_of_dislikes";
 
     // reactions of reply on newfeed's comment table and columns
-    public static final String REPLY_ON_NEW_FEED_COMMENT_REACTION_TABLE = "new_feed_comment_reaction";
+    public static final String REPLY_ON_NEW_FEED_COMMENT_REACTION_TABLE = "reply_on_new_feed_comment_reaction";
 
     public static final String REPLY_ON_NEW_FEED_COMMENT_REACTION_ID = "id";
     public static final String REPLY_ON_NEW_FEED_COMMENT_REACTION_REACTION = "reaction";
@@ -190,7 +195,7 @@ public class Constants {
     public static final String MUSIC_AUTHOR = "music_author";
     public static final String MUSIC_CREATED_DATE = "music_created_date";
     public static final String MUSIC_MODIFIED_DATE = "music_modified_date";
-    public static final String MUSIC_STATUS = "music_status";
+    public static final String MUSIC_STATUS = "status";
     public static final String MUSIC_IMAGE = "music_image";
 
     // coach membership notification's table and columns
@@ -358,7 +363,7 @@ public class Constants {
     public static final String PRODUCT_CATEGORY_CREATED_DATE = "product_category_created_date";
     public static final String PRODUCT_CATEGORY_MODIFIED_DATE = "product_category_modified_date";
     public static final String PRODUCT_CATEGORY_META_KEYWORDS = "product_category_meta_keywords";
-    public static final String PRODUCT_CATEGORY_META_DESCRIPTION = "product_category_meta_description";
+    public static final String PRODUCT_CATEGORY_META_DESCRIPTION = "product_category_meta_desccription";
     public static final String PRODUCT_CATEGORY_STATUS = "product_category_status";
     public static final String PRODUCT_CATEGORY_SHOW_ON_HOME = "product_category_show_on_home";
     public static final String PRODUCT_CATEGORY_IMAGE = "product_category_image";
@@ -385,7 +390,7 @@ public class Constants {
     public static final String PRODUCT_TOP_HOT = "product_top_hot";
     public static final String PRODUCT_NEW = "product_new";
     public static final String PRODUCT_STATUS = "product_status";
-    public static final String PRODUCT_VIEW_COUNT = "product_count";
+    public static final String PRODUCT_VIEW_COUNT = "product_view_count";
     public static final String PRODUCT_PRODUCT_CATEGORY_ID = "product_category_id";
 
     // product's feedback table and columns
@@ -393,7 +398,7 @@ public class Constants {
 
     public static final String PRODUCT_FEEDBACK_ID = "id";
     public static final String PRODUCT_FEEDBACK_CONTENT = "feedback_content";
-    public static final String PRODUCT_FEEDBACK_CREATED_DATE = "feedback_created_date";
+    public static final String PRODUCT_FEEDBACK_CREATED_DATE = "feedback_create_date";
     public static final String PRODUCT_FEEDBACK_STATUS = "feedback_status";
     public static final String PRODUCT_FEEDBACK_USER_PROFILE_ID = "user_profile_id";
     public static final String PRODUCT_FEEDBACK_PRODUCT_ID = "product_id";
@@ -458,7 +463,7 @@ public class Constants {
     public static final String REPLY_ON_PRODUCT_FEEDBACK_NUMBER_OF_DISLIKES = "number_of_dislikes";
 
     // reply on product feedback reaction table and columns
-    public static final String REPLY_ON_PRODUCT_FEEDBACK_REACTION_TABLE = "reply_on_product_feedback";
+    public static final String REPLY_ON_PRODUCT_FEEDBACK_REACTION_TABLE = "reply_on_product_feedback_reaction";
 
     public static final String REPLY_ON_PRODUCT_FEEDBACK_REACTION_ID = "id";
     public static final String REPLY_ON_PRODUCT_FEEDBACK_REACTION_REPLY_ON_PRODUCT_FEEDBACK_ID = "reply_on_product_feedback_id";

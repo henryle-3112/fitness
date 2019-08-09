@@ -41,11 +41,11 @@ public class NewFeedComment {
     private int newFeedCommentStatus;
 
     @Column(name = Constants.NEW_FEED_COMMENT_NUMBER_OF_LIKES)
-    private int nLikes;
+    private int numberOfLikes;
 
     @Column(name = Constants.NEW_FEED_COMMENT_NUMBER_OF_DISLIKES)
-    private int nDisLikes;
+    private int numberOfDislikes;
 
     @Column(name = Constants.NEW_FEED_COMMENT_NUMBER_OF_REPLIES)
-    private int nReplies;
+    private int numberOfReplies;
 }

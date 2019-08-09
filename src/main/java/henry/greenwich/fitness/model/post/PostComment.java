@@ -41,11 +41,11 @@ public class PostComment {
     private Date postCommentCreatedDate;
 
     @Column(name = Constants.POST_COMMENT_NUMBER_OF_LIKES)
-    private int nLikes;
+    private int numberOfLikes;
 
     @Column(name = Constants.POST_COMMENT_NUMBER_OF_DISLIKES)
-    private int nDislikes;
+    private int numberOfDislikes;
 
     @Column(name = Constants.POST_COMMENT_NUMBER_OF_REPLIES)
-    private int nReplies;
+    private int numberOfReplies;
 }

@@ -14,6 +14,9 @@ public class ActiveAccountController {
 
     private ActiveAccountService activeAccountService;
 
+    /**
+     * @param activeAccountService - inject activeAccountService
+     */
     public ActiveAccountController(ActiveAccountService activeAccountService) {
         this.activeAccountService = activeAccountService;
     }

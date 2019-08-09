@@ -63,9 +63,11 @@ public class AchievementController {
     private List<Achievement> getAchievementsPaging(HttpServletResponse response, Integer userProfileId, Integer page) {
         int startIndex = ((page - 1) * Constants.NUMBER_ITEMS_PER_PAGE) + 1;
         int nAchievements = this.achievementService.getNumberOfAchievements(userProfileId);
-        response.addHeader("X-Total-Count", String.valueOf(nAchievements));
-        response.addHeader("X-Total-Page", String.valueOf(nAchievements / Constants.NUMBER_ITEMS_PER_PAGE));
-        return this.achievementService.getAchievementPaging(userProfileId, startIndex);
+        response.addHeader(Constants.HEADER_X_TOTAL_COUNT, String.valueOf(nAchievements));
+        int nPages = nAchievements >= Constants.NUMBER_ITEMS_PER_PAGE ? nAchievements / Constants.NUMBER_ITEMS_PER_PAGE
+                : 1;
+        response.addHeader(Constants.HEADER_X_TOTAL_PAGE, String.valueOf(nPages));
+        return this.achievementService.getAchievementPaging(userProfileId, startIndex - 1);
     }
 
 }

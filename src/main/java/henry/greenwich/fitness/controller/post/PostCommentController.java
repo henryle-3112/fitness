@@ -25,10 +25,10 @@ public class PostCommentController {
      * @param status - post's comment's status that user want to get post's comments
      * @return list of post's comments
      */
-    @PostMapping(value = "/posts/{postId}/comments", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping(value = "/posts/{postId}/comments", produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     public List<PostComment> getPostComments(@PathVariable Integer postId,
-                                             @RequestParam(required = false) Integer status) {
+            @RequestParam(required = false) Integer status) {
         return this.postCommentService.getPostComments(postId, status);
     }
 
@@ -36,7 +36,7 @@ public class PostCommentController {
      * @param postComment - that user want to add to the database
      * @return postComment - inserted post's comment
      */
-    @PostMapping(value = "/comments", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PostMapping(value = "/comments", produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     public PostComment addPostComment(@RequestBody PostComment postComment) {
         return this.postCommentService.addPostComment(postComment);

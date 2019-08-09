@@ -26,7 +26,7 @@ public interface TrainingRepository extends JpaRepository<Training, Long> {
             " and (:userProfileId is null or " + Constants.TRAINING_TABLE + "." + Constants.TRAINING_USER_PROFILE_ID + " = :userProfileId)" +
             " group by " + Constants.TRAINING_TABLE + "." + Constants.TRAINING_DATE;
 
-    String GET_NUMBER_OF_TRAININGS = "select " + Constants.TRAINING_TABLE + "." + Constants.TRAINING_DATE + " from " + Constants.TRAINING_TABLE + "" +
+    String GET_NUMBER_OF_TRAININGS = "select count(*) from " + Constants.TRAINING_TABLE + "" +
             " where (:coachId is null or " + Constants.TRAINING_TABLE + "." + Constants.TRAINING_COACH_ID + " = :coachId)" +
             " and (:userProfileId is null or " + Constants.TRAINING_TABLE + "." + Constants.TRAINING_USER_PROFILE_ID + " = :userProfileId)" +
             " group by " + Constants.TRAINING_TABLE + "." + Constants.TRAINING_DATE;

@@ -46,11 +46,11 @@ public class NewFeed {
     public UserProfile userProfile;
 
     @Column(name = Constants.NEW_FEED_NUMBER_OF_LIKES)
-    private int nLikes;
+    private int numberOfLikes;
 
     @Column(name = Constants.NEW_FEED_NUMBER_OF_DISLIKES)
-    private int nDislikes;
+    private int numberOfDislikes;
 
     @Column(name = Constants.NEW_FEED_NUMBER_OF_COMMENTS)
-    private int nComments;
+    private int numberOfComments;
 }

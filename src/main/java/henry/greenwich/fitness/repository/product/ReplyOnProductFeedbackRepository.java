@@ -11,7 +11,7 @@ import java.util.List;
 
 @Repository
 public interface ReplyOnProductFeedbackRepository extends JpaRepository<ReplyOnProductFeedback, Long> {
-        String GET_REPLIES_ON_PRODUCT_FEEDBACK = "select * " + Constants.REPLY_ON_PRODUCT_FEEDBACK_TABLE + ""
+        String GET_REPLIES_ON_PRODUCT_FEEDBACK = "select * from " + Constants.REPLY_ON_PRODUCT_FEEDBACK_TABLE + ""
                         + " where (:productFeedbackId is null or " + Constants.REPLY_ON_PRODUCT_FEEDBACK_TABLE + "."
                         + Constants.REPLY_ON_PRODUCT_FEEDBACK_PRODUCT_FEEDBACK_ID + " = :productFeedbackId)"
                         + " and (:replyOnProductFeedbackStatus is null or " + Constants.REPLY_ON_PRODUCT_FEEDBACK_TABLE

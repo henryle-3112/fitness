@@ -5,16 +5,17 @@ import henry.greenwich.fitness.model.feed.NewFeedComment;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
 @Repository
 public interface NewFeedCommentRepository extends JpaRepository<NewFeedComment, Long> {
-        String GET_NEW_FEED_COMMENTS = "select * " + Constants.NEW_FEED_COMMENT_TABLE + ""
+        String GET_NEW_FEED_COMMENTS = "select * from " + Constants.NEW_FEED_COMMENT_TABLE + ""
                         + " where (:newFeedId is null or " + Constants.NEW_FEED_COMMENT_TABLE + "."
                         + Constants.NEW_FEED_COMMENT_NEW_FEED_ID + " = :newFeedId)"
                         + " and (:newFeedCommentStatus is null or " + Constants.NEW_FEED_COMMENT_TABLE + "."
-                        + Constants.NEW_FEED_COMMENT_STATUS + " = %:newFeedCommentStatus%)";
+                        + Constants.NEW_FEED_COMMENT_STATUS + " = :newFeedCommentStatus)";
 
         /**
          * @param newFeedId            - newfeed's id that user want to get newfeed's
@@ -25,7 +26,8 @@ public interface NewFeedCommentRepository extends JpaRepository<NewFeedComment, 
          * @return list of newfeed's comments
          */
         @Query(nativeQuery = true, value = GET_NEW_FEED_COMMENTS)
-        List<Object> getNewFeedComments(Integer newFeedId, Integer newFeedCommentStatus);
+        List<Object> getNewFeedComments(@RequestParam("newFeedId") Integer newFeedId,
+                        @RequestParam("newFeedCommentStatus") Integer newFeedCommentStatus);
 
         /**
          *

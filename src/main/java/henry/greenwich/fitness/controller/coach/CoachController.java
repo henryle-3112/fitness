@@ -36,17 +36,29 @@ public class CoachController {
     public List<Coach> getCoaches(HttpServletResponse response, @RequestParam(required = false) Integer page,
             @RequestParam(required = false) Integer status, @RequestParam(required = false) String search) {
         if (page != null) {
-            int startIndex = ((page - 1) * Constants.NUMBER_ITEMS_PER_PAGE) + 1;
-            int nCoaches = this.coachService.getNumberOfCoaches(status, search);
-            response.addHeader("X-Total-Count", String.valueOf(nCoaches));
-            if (nCoaches < Constants.NUMBER_ITEMS_PER_PAGE) {
-                response.addHeader("X-Total-Page", "1");
-            } else {
-                response.addHeader("X-Total-Page", String.valueOf(nCoaches / Constants.NUMBER_ITEMS_PER_PAGE));
-            }
-            return this.coachService.getCoachesByPage(status, search, startIndex - 1);
+            this.getCoachesPaging(response, page, status, search);
         }
         return this.coachService.getCoaches(status, search);
+    }
+
+    /**
+     * @param response - response to add to header number of pages and number of
+     *                 coaches (for pagination)
+     * @param page     - current page that user want to get number of coaches (this
+     *                 parameter could be optional)
+     * @param status   - coach's status that user want to get coaches (this
+     *                 parameter could be optional)
+     * @param search   - coach's fullname's keywords that user want to get filter
+     *                 coaches (this parameter could be optional)
+     * @return list of coaches
+     */
+    private List<Coach> getCoachesPaging(HttpServletResponse response, Integer page, Integer status, String search) {
+        int startIndex = ((page - 1) * Constants.NUMBER_ITEMS_PER_PAGE) + 1;
+        int nCoaches = this.coachService.getNumberOfCoaches(status, search);
+        response.addHeader(Constants.HEADER_X_TOTAL_COUNT, String.valueOf(nCoaches));
+        int nPages = nCoaches >= Constants.NUMBER_ITEMS_PER_PAGE ? nCoaches / Constants.NUMBER_ITEMS_PER_PAGE : 1;
+        response.addHeader(Constants.HEADER_X_TOTAL_PAGE, String.valueOf(nPages));
+        return this.coachService.getCoachesByPage(status, search, startIndex - 1);
     }
 
     /**

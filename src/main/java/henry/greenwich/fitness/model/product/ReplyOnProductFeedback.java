@@ -41,8 +41,8 @@ public class ReplyOnProductFeedback {
     public UserProfile userProfile;
 
     @Column(name = Constants.REPLY_ON_PRODUCT_FEEDBACK_NUMBER_OF_LIKES)
-    int nLikes;
+    int numberOfLikes;
 
     @Column(name = Constants.REPLY_ON_PRODUCT_FEEDBACK_NUMBER_OF_DISLIKES)
-    int nDislikes;
+    int numberOfDislikes;
 }

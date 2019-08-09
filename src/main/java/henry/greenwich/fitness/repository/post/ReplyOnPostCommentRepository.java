@@ -11,7 +11,7 @@ import java.util.List;
 @Repository
 public interface ReplyOnPostCommentRepository extends JpaRepository<ReplyOnPostComment, Long> {
 
-        String GET_REPLIES_ON_POST_COMMENT = "select * " + Constants.REPLY_ON_POST_COMMENT_TABLE + ""
+        String GET_REPLIES_ON_POST_COMMENT = "select * from " + Constants.REPLY_ON_POST_COMMENT_TABLE + ""
                         + " where (:postCommentId is null or " + Constants.REPLY_ON_POST_COMMENT_TABLE + "."
                         + Constants.REPLY_ON_POST_COMMENT_POST_COMMENT_ID + " = :postCommentId)"
                         + " and (:replyOnPostCommentStatus is null or " + Constants.REPLY_ON_POST_COMMENT_TABLE + "."

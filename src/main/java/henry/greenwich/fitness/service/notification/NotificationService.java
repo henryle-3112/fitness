@@ -35,9 +35,9 @@ public class NotificationService {
      * @return list of notifications
      */
     public List<Notification> getNotificationsPaging(Integer userProfileId, String notificationContentKeywords,
-            Integer startIndex) {
+            Integer notificationStatus, Integer startIndex) {
         List<Object> notificationsObjectList = this.notificationRepository.getNotificationsPaging(userProfileId,
-                notificationContentKeywords, startIndex);
+                notificationContentKeywords, notificationStatus, startIndex);
         return this.getNotificationsFromObjectList(notificationsObjectList);
     }
 
@@ -50,9 +50,10 @@ public class NotificationService {
      *                                    (this parameter could be optional)
      * @return number of notifications
      */
-    public int getNumberOfNotifications(Integer userProfileId, String notificationContentKeywords) {
+    public int getNumberOfNotifications(Integer userProfileId, String notificationContentKeywords,
+            Integer notificationStatus) {
         List<Object> nNotificationsObjectList = this.notificationRepository.getNumberOfNotifications(userProfileId,
-                notificationContentKeywords);
+                notificationContentKeywords, notificationStatus);
         if (nNotificationsObjectList.size() > 0) {
             return Integer.valueOf(nNotificationsObjectList.get(0).toString());
         }
@@ -68,9 +69,10 @@ public class NotificationService {
      *                                    parameter could be optional)
      * @return list of notifications
      */
-    public List<Notification> getNotifications(Integer userProfileId, String notificationContentKeywords) {
+    public List<Notification> getNotifications(Integer userProfileId, String notificationContentKeywords,
+            Integer notificationStatus) {
         List<Object> notificationsObjectList = this.notificationRepository.getNotifications(userProfileId,
-                notificationContentKeywords);
+                notificationContentKeywords, notificationStatus);
         return this.getNotificationsFromObjectList(notificationsObjectList);
     }
 

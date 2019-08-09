@@ -41,8 +41,8 @@ public class ReplyOnPostComment {
     private Date replyOnPostCommentCreatedDate;
 
     @Column(name = Constants.REPLY_ON_POST_COMMENT_NUMBER_OF_LIKES)
-    private int nLikes;
+    private int numberOfLikes;
 
     @Column(name = Constants.REPLY_ON_POST_COMMENT_NUMBER_OF_DISLIKES)
-    private int nDislikes;
+    private int numberOfDislikes;
 }

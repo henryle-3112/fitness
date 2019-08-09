@@ -42,9 +42,12 @@ public class MembershipController {
         if (page != null) {
             int startIndex = ((page - 1) * Constants.NUMBER_ITEMS_PER_PAGE) + 1;
             int nMembershipsPaging = this.membershipService.getNumberOfMembershipsPaging(coachId, status, search);
-            response.addHeader("X-Total-Count", String.valueOf(nMembershipsPaging));
-            response.addHeader("X-Total-Page", String.valueOf(nMembershipsPaging / Constants.NUMBER_ITEMS_PER_PAGE));
-            return this.membershipService.getMembershipsByPage(coachId, status, search, startIndex);
+            response.addHeader(Constants.HEADER_X_TOTAL_COUNT, String.valueOf(nMembershipsPaging));
+            int nPages = nMembershipsPaging >= Constants.NUMBER_ITEMS_PER_PAGE
+                    ? nMembershipsPaging / Constants.NUMBER_ITEMS_PER_PAGE
+                    : 1;
+            response.addHeader(Constants.HEADER_X_TOTAL_PAGE, String.valueOf(nPages));
+            return this.membershipService.getMembershipsByPage(coachId, status, search, startIndex - 1);
         } else {
             return this.membershipService.getMemberships(coachId, status, search);
         }
@@ -71,9 +74,12 @@ public class MembershipController {
         if (page != null) {
             int startIndex = ((page - 1) * Constants.NUMBER_ITEMS_PER_PAGE) + 1;
             int nCoachesPaging = this.membershipService.getNumberOfCoachesPaging(userProfileId, status, search);
-            response.addHeader("X-Total-Count", String.valueOf(nCoachesPaging));
-            response.addHeader("X-Total-Page", String.valueOf(nCoachesPaging / Constants.NUMBER_ITEMS_PER_PAGE));
-            return this.membershipService.getCoachesByPage(userProfileId, status, search, startIndex);
+            response.addHeader(Constants.HEADER_X_TOTAL_COUNT, String.valueOf(nCoachesPaging));
+            int nPages = nCoachesPaging >= Constants.NUMBER_ITEMS_PER_PAGE
+                    ? nCoachesPaging / Constants.NUMBER_ITEMS_PER_PAGE
+                    : 1;
+            response.addHeader(Constants.HEADER_X_TOTAL_PAGE, String.valueOf(nPages));
+            return this.membershipService.getCoachesByPage(userProfileId, status, search, startIndex - 1);
         } else {
             return this.membershipService.getCoaches(userProfileId, status, search);
         }
@@ -88,7 +94,8 @@ public class MembershipController {
     @GetMapping(value = "/users/{userProfileId}/coaches/{coachId}/memberships", produces = {
             MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    public Membership getCoachByCoachIdAndUserProfileId(@PathVariable int coachId, @PathVariable int userProfileId) {
+    public Membership getMembershipByCoachIdAndUserProfileId(@PathVariable int coachId,
+            @PathVariable int userProfileId) {
         return this.membershipService.getMembershipByCoachIdAndUserProfileId(coachId, userProfileId);
     }
 

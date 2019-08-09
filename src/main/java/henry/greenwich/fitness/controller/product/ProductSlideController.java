@@ -23,7 +23,7 @@ public class ProductSlideController {
     /**
      * @return list of product's slide
      */
-    @GetMapping(value = "/product/slides", produces = { MediaType.APPLICATION_JSON_VALUE })
+    @GetMapping(value = "/slides", produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     public List<ProductSlide> getProductSlides(@RequestParam(required = false) Integer status) {
         return this.productSlideService.getProductSlides(status);

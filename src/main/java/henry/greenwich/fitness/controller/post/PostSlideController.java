@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
+@RequestMapping("post-management")
 public class PostSlideController {
     private PostSlideService postSlideService;
 
@@ -22,7 +23,7 @@ public class PostSlideController {
     /**
      * @return list of post's slide
      */
-    @GetMapping(value = "/post/slides", produces = { MediaType.APPLICATION_JSON_VALUE })
+    @GetMapping(value = "/slides", produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     public List<PostSlide> getPostSlides(@RequestParam(required = false) Integer status) {
         return this.postSlideService.getPostSlides(status);

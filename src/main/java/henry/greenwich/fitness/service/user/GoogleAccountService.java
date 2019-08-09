@@ -21,8 +21,8 @@ public class GoogleAccountService {
      * @param facebookId - facebook's id that user want to get
      * @return facebookAccount
      */
-    public GoogleAccount findGoogleAccountByGoogleId(String facebookId) {
-        return this.googleAccountRepository.findGoogleAccountByGoogleId(facebookId);
+    public GoogleAccount findGoogleAccountByGoogleId(String googleId) {
+        return this.googleAccountRepository.findGoogleAccountByGoogleId(googleId);
     }
 
     /**

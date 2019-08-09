@@ -36,13 +36,27 @@ public class NewFeedController {
     public List<NewFeed> getNewFeeds(HttpServletResponse response, @RequestParam(required = false) Integer status,
             @RequestParam(required = false) String search, @RequestParam(required = false) Integer page) {
         if (page != null) {
-            int nNewFeeds = this.newFeedService.getNumberOfNewFeeds(status, search);
-            response.addHeader("X-Total-Count", String.valueOf(nNewFeeds));
-            response.addHeader("X-Total-Page", String.valueOf(nNewFeeds / Constants.NUMBER_ITEMS_PER_PAGE));
-            return this.newFeedService.getNewFeedsByPage(status, search, page);
-        } else {
-            return this.newFeedService.getNewFeeds(status, search);
+            return this.getNewFeedsPaging(response, status, search, page);
         }
+        return this.newFeedService.getNewFeeds(status, search);
+    }
+
+    /**
+     * @param status - newfeeds' status that user want to filter newfeeds (this
+     *               parameter could be optional)
+     * @param search - newfeed's content's keywords that user want to get newfeeds
+     *               (this parameter could be optional)
+     * @param page   - start index to get newfeeds (for pagination) (this parameter
+     *               could be optional)
+     * @return list of newfeeds
+     */
+    private List<NewFeed> getNewFeedsPaging(HttpServletResponse response, Integer status, String search, Integer page) {
+        int startIndex = ((page - 1) * Constants.NUMBER_ITEMS_PER_PAGE) + 1;
+        int nNewFeeds = this.newFeedService.getNumberOfNewFeeds(status, search);
+        response.addHeader(Constants.HEADER_X_TOTAL_COUNT, String.valueOf(nNewFeeds));
+        int nPages = nNewFeeds >= Constants.NUMBER_ITEMS_PER_PAGE ? nNewFeeds / Constants.NUMBER_ITEMS_PER_PAGE : 1;
+        response.addHeader(Constants.HEADER_X_TOTAL_PAGE, String.valueOf(nPages));
+        return this.newFeedService.getNewFeedsByPage(status, search, startIndex - 1);
     }
 
     /**

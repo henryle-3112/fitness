@@ -12,7 +12,7 @@ import java.util.List;
 public interface ProductFeedbackRepository extends JpaRepository<ProductFeedback, Long> {
 
     String GET_PRODUCT_FEEDBACKS = "select * from " + Constants.PRODUCT_FEEDBACK_TABLE + ""
-            + " where (:productId is null and " + Constants.PRODUCT_FEEDBACK_TABLE + "."
+            + " where (:productId is null or " + Constants.PRODUCT_FEEDBACK_TABLE + "."
             + Constants.PRODUCT_FEEDBACK_PRODUCT_ID + " = :productId)" + " and (:productFeedbackStatus is null or "
             + Constants.PRODUCT_FEEDBACK_TABLE + "." + Constants.PRODUCT_FEEDBACK_STATUS + " = :productFeedbackStatus)";
 

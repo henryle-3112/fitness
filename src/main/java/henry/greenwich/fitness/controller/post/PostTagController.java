@@ -3,6 +3,7 @@ package henry.greenwich.fitness.controller.post;
 import henry.greenwich.fitness.constants.Constants;
 import henry.greenwich.fitness.model.post.*;
 import henry.greenwich.fitness.service.post.PostTagService;
+
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -52,8 +53,9 @@ public class PostTagController {
             Integer postStatus) {
         int startIndex = ((page - 1) * Constants.NUMBER_ITEMS_PER_PAGE) + 1;
         int nPostTags = this.postTagService.getNumberOfPostTagsByTag(tagId, postStatus);
-        response.addHeader("X-Total-Count", String.valueOf(nPostTags));
-        response.addHeader("X-Total-Page", String.valueOf(nPostTags / Constants.NUMBER_ITEMS_PER_PAGE));
+        response.addHeader(Constants.HEADER_X_TOTAL_COUNT, String.valueOf(nPostTags));
+        int nPages = nPostTags >= Constants.NUMBER_ITEMS_PER_PAGE ? nPostTags / Constants.NUMBER_ITEMS_PER_PAGE : 1;
+        response.addHeader(Constants.HEADER_X_TOTAL_PAGE, String.valueOf(nPages));
         return this.postTagService.getPostTagsByTagPaging(tagId, postStatus, startIndex);
     }
 

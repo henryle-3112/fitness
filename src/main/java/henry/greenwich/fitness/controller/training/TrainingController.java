@@ -59,9 +59,10 @@ public class TrainingController {
             Integer page) {
         int startIndex = ((page - 1) * Constants.NUMBER_ITEMS_PER_PAGE) + 1;
         int nTrainings = this.trainingService.getNumberOfTrainings(coachId, userProfileId);
-        response.addHeader("X-Total-Count", String.valueOf(nTrainings));
-        response.addHeader("X-Total-Page", String.valueOf(nTrainings / Constants.NUMBER_ITEMS_PER_PAGE));
-        return this.trainingService.getTrainingsPaging(coachId, userProfileId, startIndex);
+        response.addHeader(Constants.HEADER_X_TOTAL_COUNT, String.valueOf(nTrainings));
+        int nPages = nTrainings >= Constants.NUMBER_ITEMS_PER_PAGE ? nTrainings / Constants.NUMBER_ITEMS_PER_PAGE : 1;
+        response.addHeader(Constants.HEADER_X_TOTAL_PAGE, String.valueOf(nPages));
+        return this.trainingService.getTrainingsPaging(coachId, userProfileId, startIndex - 1);
     }
 
     /**
@@ -82,7 +83,7 @@ public class TrainingController {
      * @param coachId       - coach's id that user want to get list of trainings
      * @return list of trainings
      */
-    @PostMapping(value = "users/{userProfileId}/coaches/{coachId}", produces = { MediaType.APPLICATION_JSON_VALUE })
+    @GetMapping(value = "users/{userProfileId}/coaches/{coachId}", produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     public List<Training> getTrainings(@PathVariable int userProfileId, @PathVariable int coachId,
             @RequestParam(required = false) String trainingDate) {
