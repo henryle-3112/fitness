@@ -4,14 +4,12 @@ import henry.greenwich.fitness.config.PaypalClient;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Map;
 
 @Controller
-@RequestMapping("paypal-management")
 public class PaypalController {
     /**
      * payPlalClient - payPalClient
@@ -31,7 +29,7 @@ public class PaypalController {
      * @param sum - sum
      * @return created payment
      */
-    @PostMapping(value = "/paypal/make/payment", produces = { MediaType.APPLICATION_JSON_VALUE })
+    @PostMapping(value = "/paypal/make/payment", produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public Map<String, Object> makePayment(@RequestParam("sum") String sum) {
         return payPalClient.createPayment(sum);
@@ -40,12 +38,13 @@ public class PaypalController {
     /**
      *
      * @param paymentId - paymentId
-     * @param payerId   - payerId
+     * @param payerId - payerId
      * @return completed payment
      */
-    @PostMapping(value = "/paypal/complete/payment", produces = { MediaType.APPLICATION_JSON_VALUE })
+    @PostMapping(value = "/paypal/complete/payment", produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public Map<String, Object> completePayment(@RequestParam("paymentId") String paymentId,
+    public Map<String, Object> completePayment(
+            @RequestParam("paymentId") String paymentId,
             @RequestParam("payerId") String payerId) {
         return payPalClient.completePayment(paymentId, payerId);
     }

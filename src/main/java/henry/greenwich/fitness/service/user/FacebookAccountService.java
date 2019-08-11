@@ -1,5 +1,6 @@
 package henry.greenwich.fitness.service.user;
 
+
 import henry.greenwich.fitness.model.user.FacebookAccount;
 import org.springframework.stereotype.Service;
 
@@ -7,6 +8,9 @@ import henry.greenwich.fitness.repository.user.FacebookAccountRepository;
 
 @Service
 public class FacebookAccountService {
+    /**
+     * facebookAccountRepository - interact with facebook's account's data
+     */
     private FacebookAccountRepository facebookAccountRepository;
 
     /**
@@ -28,8 +32,7 @@ public class FacebookAccountService {
 
     /**
      *
-     * @param facebookAccount - facebookAccount that user want to add to the
-     *                        database
+     * @param facebookAccount - facebookAccount that user want to add to the database
      * @return selected facebookAccount
      */
     public FacebookAccount addFacebookAccount(FacebookAccount facebookAccount) {

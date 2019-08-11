@@ -1,6 +1,6 @@
 package henry.greenwich.fitness.model.notification;
 
-import henry.greenwich.fitness.constants.Constants;
+import henry.greenwich.fitness.model.coach.Membership;
 import henry.greenwich.fitness.model.user.UserProfile;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,24 +15,24 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = Constants.NOTIFICATION_TABLE)
+@Table(name = "notification")
 public class Notification {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = Constants.NOTIFICATION_ID)
+    @Column(name = "id")
     private Long id;
 
-    @Column(name = Constants.NOTIFICATION_CONTENT)
+    @Column(name = "content")
     private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = Constants.NOTIFICATION_USER_PROFILE_ID)
+    @JoinColumn(name = "user_profile_id")
     public UserProfile userProfile;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = Constants.NOTIFICATION_CREATED_DATE)
+    @Column(name = "created_date")
     private Date createdDate;
 
-    @Column(name = Constants.NOTIFICATION_STATUS)
+    @Column(name = "status")
     private int status;
 }

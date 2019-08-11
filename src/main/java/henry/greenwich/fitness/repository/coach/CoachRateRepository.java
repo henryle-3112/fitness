@@ -1,6 +1,5 @@
 package henry.greenwich.fitness.repository.coach;
 
-import henry.greenwich.fitness.constants.Constants;
 import henry.greenwich.fitness.model.coach.CoachRate;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -11,16 +10,18 @@ import java.util.List;
 @Repository
 public interface CoachRateRepository extends JpaRepository<CoachRate, Long> {
 
-        String GET_COACH_RATE = "select * from " + Constants.COACH_RATE_TABLE + ""
-                        + " where (:userProfileId is null or " + Constants.COACH_RATE_USER_PROFILE_ID
-                        + " = :userProfileId)" + " and (:coachId is null or " + Constants.COACH_RATE_COACH_ID
-                        + " = :coachId)";
+    /**
+     * @param coachId - coach's id
+     * @return find rating average
+     */
+    @Query(nativeQuery = true, value = "select avg(rate) as rate_average from coach_rate where coach_id = :coachId")
+    List<Object> findRateAverage(int coachId);
 
-        /**
-         * @param userProfileId - user's profile' id that user want to get coach's rate
-         * @param coachId       - coach's id that user want to get coach's rate
-         * @return selected coach's rate
-         */
-        @Query(nativeQuery = true, value = GET_COACH_RATE)
-        List<Object> getCoachRate(Long userProfileId, Long coachId);
+    /**
+     * @param userId  - user' id
+     * @param coachId - coach's id
+     * @return selected coach's rate
+     */
+    @Query(nativeQuery = true, value = "select * from coach_rate where user_profile_id = :userId and coach_id = :coachId")
+    List<Object> getCoachRateByUserIdAndCoachId(Long userId, Long coachId);
 }

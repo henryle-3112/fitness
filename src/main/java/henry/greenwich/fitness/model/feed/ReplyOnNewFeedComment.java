@@ -1,6 +1,5 @@
 package henry.greenwich.fitness.model.feed;
 
-import henry.greenwich.fitness.constants.Constants;
 import henry.greenwich.fitness.model.user.UserProfile;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,35 +14,29 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = Constants.REPLY_ON_NEW_FEED_COMMENT_TABLE)
+@Table(name = "reply_on_new_feed_comment")
 public class ReplyOnNewFeedComment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = Constants.REPLY_ON_NEW_FEED_COMMENT_ID)
+    @Column(name = "id")
     private Long id;
 
-    @Column(name = Constants.REPLY_ON_NEW_FEED_COMMENT_CONTENT)
+    @Column(name = "reply_on_new_feed_comment_content")
     private String replyOnNewFeedCommentContent;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = Constants.REPLY_ON_NEW_FEED_COMMENT_NEW_FEED_COMMENT_ID)
+    @JoinColumn(name = "new_feed_comment_id")
     public NewFeedComment newFeedComment;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = Constants.REPLY_ON_NEW_FEED_COMMENT_USER_PROFILE_ID)
+    @JoinColumn(name = "user_profile_id")
     public UserProfile userProfile;
 
-    @Column(name = Constants.REPLY_ON_NEW_FEED_COMMENT_STATUS)
+    @Column(name = "reply_on_new_feed_comment_status")
     private int replyOnNewFeedCommentStatus;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = Constants.REPLY_ON_NEW_FEED_COMMENT_CREATED_DATE)
+    @Column(name = "reply_on_new_feed_comment_created_date")
     private Date replyOnNewFeedCommentCreatedDate;
-
-    @Column(name = Constants.REPLY_ON_NEW_FEED_COMMENT_NUMBER_OF_LIKES)
-    private int numberOfLikes;
-
-    @Column(name = Constants.REPLY_ON_NEW_FEED_COMMENT_NUMBER_OF_DISLIKES)
-    private int numberOfDislikes;
 }

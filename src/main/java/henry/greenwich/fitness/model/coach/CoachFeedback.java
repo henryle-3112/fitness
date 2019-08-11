@@ -1,6 +1,6 @@
 package henry.greenwich.fitness.model.coach;
 
-import henry.greenwich.fitness.constants.Constants;
+
 import henry.greenwich.fitness.model.user.UserProfile;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,33 +19,24 @@ import java.util.Date;
 public class CoachFeedback {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = Constants.COACH_FEEDBACK_ID)
+    @Column(name = "id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = Constants.COACH_FEEDBACK_USER_PROFILE_ID)
+    @JoinColumn(name = "user_profile_id")
     public UserProfile userProfile;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = Constants.COACH_FEEDBACK_COACH_ID)
+    @JoinColumn(name = "coach_id")
     public Coach coach;
 
-    @Column(name = Constants.COACH_FEEDBACK_CONTENT)
+    @Column(name = "coach_feedback_content")
     private String coachFeedbackContent;
 
-    @Column(name = Constants.COACH_FEEDBACK_STATUS)
+    @Column(name = "coach_feedback_status")
     private int coachFeedbackStatus;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = Constants.COACH_FEEDBACK_CREATED_DATE)
+    @Column(name = "coach_feedback_created_date")
     private Date coachFeedbackCreatedDate;
-
-    @Column(name = Constants.COACH_FEEDBACK_NUMBER_OF_LIKES)
-    private int numberOfLikes;
-
-    @Column(name = Constants.COACH_FEEDBACK_NUMBER_OF_DISLIKES)
-    private int numberOfDislikes;
-
-    @Column(name = Constants.COACH_FEEDBACK_NUMBER_OF_REPLIES)
-    private int numberOfReplies;
 }

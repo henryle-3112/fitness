@@ -1,7 +1,6 @@
 package henry.greenwich.fitness.model.user;
 
 
-import henry.greenwich.fitness.constants.Constants;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,24 +13,24 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = Constants.BODY_INDEX_TABLE)
+@Table(name = "body_index")
 public class BodyIndex {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = Constants.BODY_INDEX_ID)
+    @Column(name = "body_index_id")
     private Long bodyIndexId;
 
-    @Column(name = Constants.BODY_INDEX_WEIGHT)
+    @Column(name = "body_index_weight")
     private float weight;
 
-    @Column(name = Constants.BODY_INDEX_HEIGHT)
+    @Column(name = "body_index_height")
     private float height;
 
-    @Column(name = Constants.BODY_INDEX_DATE)
+    @Column(name = "body_index_date")
     private String currentDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = Constants.BODY_INDEX_USER_PROFILE_ID)
+    @JoinColumn(name = "user_profile_id")
     public UserProfile userProfile;
 }

@@ -1,6 +1,5 @@
 package henry.greenwich.fitness.model.about;
 
-import henry.greenwich.fitness.constants.Constants;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,32 +13,32 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = Constants.ABOUT_TABLE)
+@Table(name = "about")
 public class About {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = Constants.ABOUT_ID)
+    @Column(name = "id")
     private Long id;
 
-    @Column(name = Constants.ABOUT_NAME)
+    @Column(name = "about_name")
     private String aboutName;
 
-    @Column(name = Constants.ABOUT_CONTENT)
+    @Column(name = "about_content")
     private String aboutContent;
 
-    @Column(name = Constants.ABOUT_META_TITLE)
+    @Column(name = "about_meta_title")
     private String aboutMetaTitle;
 
-    @Column(name = Constants.ABOUT_META_KEYWORDS)
+    @Column(name = "about_meta_keywords")
     private String aboutMetaKeywords;
 
-    @Column(name = Constants.ABOUT_META_DESCRIPTION)
+    @Column(name = "about_meta_description")
     private String aboutMetaDescription;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = Constants.ABOUT_CREATED_DATE)
+    @Column(name = "about_created_date")
     private Date aboutCreatedDate;
 
-    @Column(name = Constants.ABOUT_STATUS)
+    @Column(name = "about_status")
     private int aboutStatus;
 }

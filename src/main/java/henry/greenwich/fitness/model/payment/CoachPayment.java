@@ -1,7 +1,7 @@
 package henry.greenwich.fitness.model.payment;
 
-import henry.greenwich.fitness.constants.Constants;
-import henry.greenwich.fitness.model.membership.Membership;
+import henry.greenwich.fitness.model.coach.Membership;
+import henry.greenwich.fitness.model.product.ProductOrder;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,30 +15,30 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = Constants.COACH_PAYMENT_TABLE)
+@Table(name = "coach_payment")
 public class CoachPayment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = Constants.COACH_PAYMENT_ID)
+    @Column(name = "id")
     private Long id;
 
-    @Column(name = Constants.COACH_PAYMENT_PAYMENT_ID)
+    @Column(name = "payment_id")
     private String paymentId;
 
-    @Column(name = Constants.COACH_PAYMENT_PAYER_ID)
+    @Column(name = "payer_id")
     private String payerId;
 
-    @Column(name = Constants.COACH_PAYMENT_TOKEN)
+    @Column(name = "token")
     private String token;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = Constants.COACH_PAYMENT_MEMBERSHIP_ID)
+    @JoinColumn(name = "membership_id")
     public Membership membership;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = Constants.COACH_PAYMENT_CREATED_DATE)
+    @Column(name = "created_date")
     private Date createdDate;
 
-    @Column(name = Constants.COACH_PAYMENT_SUM)
+    @Column(name = "sum")
     private int sum;
 }

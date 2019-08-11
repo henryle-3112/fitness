@@ -1,6 +1,5 @@
 package henry.greenwich.fitness.model.coach;
 
-import henry.greenwich.fitness.constants.Constants;
 import henry.greenwich.fitness.model.user.UserProfile;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,22 +18,16 @@ public class Coach {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = Constants.COACH_ID)
+    @Column(name = "id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = Constants.COACH_USER_PROFILE_ID)
+    @JoinColumn(name = "user_profile_id")
     public UserProfile userProfile;
 
-    @Column(name = Constants.COACH_ABOUT)
+    @Column(name = "about")
     private String about;
 
-    @Column(name = Constants.COACH_STATUS)
+    @Column(name = "status")
     private int status;
-
-    @Column(name = Constants.COACH_RATING_AVERAGE)
-    private float ratingAverage;
-
-    @Column(name = Constants.COACH_NUMBER_OF_MEMBERSHIPS)
-    private int numberOfMemberships;
 }

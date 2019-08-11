@@ -1,6 +1,5 @@
 package henry.greenwich.fitness.model.product;
 
-import henry.greenwich.fitness.constants.Constants;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,22 +12,22 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = Constants.PRODUCT_ORDER_DETAIL_TABLE)
+@Table(name = "product_order_detail")
 public class ProductOrderDetail {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = Constants.PRODUCT_ORDER_DETAIL_ID)
+    @Column(name = "product_order_detail_id")
     private Long id;
 
-    @Column(name = Constants.PRODUCT_ORDER_DETAIL_QUANTITY)
+    @Column(name = "quantity")
     private int quantity;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = Constants.PRODUCT_ORDER_DETAIL_PRODUCT_ID)
+    @JoinColumn(name = "product_id")
     public Product product;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = Constants.PRODUCT_ORDER_DETAIL_PRODUCT_ORDER_ID)
+    @JoinColumn(name = "product_order_product_order_id")
     public ProductOrder productOrder;
 }

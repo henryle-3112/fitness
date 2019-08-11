@@ -23,13 +23,13 @@ public class PaypalClient {
      * @return status and redirect url
      */
     public Map<String, Object> createPayment(String sum) {
-        Map<String, Object> response = new HashMap<>();
+        Map<String, Object> response = new HashMap<String, Object>();
         Amount amount = new Amount();
         amount.setCurrency("USD");
         amount.setTotal(sum);
         Transaction transaction = new Transaction();
         transaction.setAmount(amount);
-        List<Transaction> transactions = new ArrayList<>();
+        List<Transaction> transactions = new ArrayList<Transaction>();
         transactions.add(transaction);
 
         Payer payer = new Payer();

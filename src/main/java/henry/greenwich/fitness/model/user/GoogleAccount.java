@@ -1,7 +1,7 @@
 package henry.greenwich.fitness.model.user;
 
 
-import henry.greenwich.fitness.constants.Constants;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,16 +14,16 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = Constants.GOOGLE_ACCOUNT_TABLE)
+@Table(name = "google_account")
 public class GoogleAccount {
     @EmbeddedId
     private UserProfileKey userProfileId;
 
-    @Column(name = Constants.GOOGLE_ACCOUNT_GOOGLE_ID)
+    @Column(name = "google_id")
     private String googleId;
 
     @MapsId("userProfileId")
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = Constants.GOOGLE_ACCOUNT_USER_PROFILE_ID)
+    @JoinColumn(name = "user_profile_id")
     public UserProfile userProfile;
 }

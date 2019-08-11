@@ -1,6 +1,5 @@
 package henry.greenwich.fitness.model.contact;
 
-import henry.greenwich.fitness.constants.Constants;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,33 +13,33 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = Constants.CONTACT_TABLE)
+@Table(name = "contact")
 public class Contact {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = Constants.CONTACT_ID)
+    @Column(name = "id")
     private Long id;
 
-    @Column(name = Constants.CONTACT_NAME)
+    @Column(name = "contact_name")
     private String contactName;
 
-    @Column(name = Constants.CONTACT_CONTENT)
+    @Column(name = "contact_content")
     private String contactContent;
 
-    @Column(name = Constants.CONTACT_META_TITLE)
+    @Column(name = "contact_meta_title")
     private String contactMetaTitle;
 
-    @Column(name = Constants.CONTACT_META_KEYWORDS)
+    @Column(name = "contact_meta_keywords")
     private String contactMetaKeywords;
 
-    @Column(name = Constants.CONTACT_META_DESCRIPTION)
+    @Column(name = "contact_meta_description")
     private String contactMetaDescription;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = Constants.CONTACT_CREATED_DATE)
+    @Column(name = "contact_created_date")
     private Date contactCreatedDate;
 
-    @Column(name = Constants.CONTACT_STATUS)
+    @Column(name = "contact_status")
     private int contactStatus;
 }

@@ -2,117 +2,56 @@ package henry.greenwich.fitness.service.feed;
 
 import henry.greenwich.fitness.model.feed.NewFeed;
 import henry.greenwich.fitness.model.feed.NewFeedComment;
-import henry.greenwich.fitness.model.user.UserProfile;
 import henry.greenwich.fitness.repository.feed.NewFeedCommentRepository;
-import henry.greenwich.fitness.service.user.UserProfileService;
-
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Service
 public class NewFeedCommentService {
+    /**
+     * newFeedCommentRepository - interact with new's feed's comment
+     */
     private NewFeedCommentRepository newFeedCommentRepository;
-    private NewFeedService newFeedService;
-    private UserProfileService userProfileService;
 
     /**
      * @param newFeedCommentRepository - inject newFeedCommentRepository
-     * @param newFeedService           - inject newFeedService
-     * @param userProfileService       - inject userProfileService
      */
-    public NewFeedCommentService(NewFeedCommentRepository newFeedCommentRepository, @Lazy NewFeedService newFeedService,
-            UserProfileService userProfileService) {
+    public NewFeedCommentService(NewFeedCommentRepository newFeedCommentRepository) {
         this.newFeedCommentRepository = newFeedCommentRepository;
-        this.newFeedService = newFeedService;
-        this.userProfileService = userProfileService;
     }
 
     /**
-     * @param newFeedComment - newfeed's comment that user want to add to the
-     *                       database
-     * @return inserted newfeed's comment
+     * @param newFeed - new's feed
+     * @param status  - status
+     * @return list of new's feed's comment
+     */
+    public List<NewFeedComment> findNewFeedCommentsByNewFeedAndNewFeedCommentStatus(NewFeed newFeed, int status) {
+        return this.newFeedCommentRepository.findNewFeedCommentsByNewFeedAndNewFeedCommentStatus(newFeed, status);
+    }
+
+    /**
+     * @param newFeedComment - new's feed's comment
+     * @return inserted new's feed's comment
      */
     public NewFeedComment addNewFeedComment(NewFeedComment newFeedComment) {
         return this.newFeedCommentRepository.saveAndFlush(newFeedComment);
     }
 
     /**
-     * @param newFeedId            - newfeed's id that user want to get newfeed's
-     *                             comments
-     * @param newFeedCommentStatus - newfeed's comment's status that user want to
-     *                             filter newfeed's comment (this parameter could be
-     *                             optional)
-     * @return list of newfeed's comments
+     * @param id - new's feed's comment's id
      */
-    public List<NewFeedComment> getNewFeedComments(Integer newFeedId, Integer newFeedCommentStatus) {
-        List<Object> newFeedCommentsObjectList = this.newFeedCommentRepository.getNewFeedComments(newFeedId,
-                newFeedCommentStatus);
-        return this.getNewFeedCommentsFromObjectList(newFeedCommentsObjectList);
+    public void deleteNewFeedComment(Long id) {
+        this.newFeedCommentRepository.deleteById(id);
     }
 
     /**
-     * @param newFeedCommentsObjectList - newfeed's comments object list that user
-     *                                  want to convert to newfeed's comments list
-     * @return list of newfeed's comments
+     *
+     * @param newFeed - new feed
+     * @param status - status
+     * @return number of new feed comments
      */
-    private List<NewFeedComment> getNewFeedCommentsFromObjectList(List<Object> newFeedCommentsObjectList) {
-        List<NewFeedComment> newFeedComments = new ArrayList<>();
-        for (Object o : newFeedCommentsObjectList) {
-            Object[] newFeedCommentObjectArr = (Object[]) o;
-            NewFeedComment newFeedComment = this.createNewFeedCommentFromObjectArr(newFeedCommentObjectArr);
-            newFeedComments.add(newFeedComment);
-        }
-        return newFeedComments;
-    }
-
-    /**
-     * @param newFeedCommentObjectArr - newfeed's comment object array that user
-     *                                want to convert to newfeed's comment object
-     * @return converted newfeed's comment
-     */
-    private NewFeedComment createNewFeedCommentFromObjectArr(Object[] newFeedCommentObjectArr) {
-        int newFeedCommentId = (int) newFeedCommentObjectArr[0];
-        String newFeedCommentContent = (String) newFeedCommentObjectArr[1];
-        Date newFeedCommentCreatedDate = (Date) newFeedCommentObjectArr[2];
-        int newFeedCommentStatus = (int) newFeedCommentObjectArr[3];
-        int userProfileId = (int) newFeedCommentObjectArr[4];
-        UserProfile userProfile = this.getUserProfile((long) userProfileId);
-        int newFeedId = (int) newFeedCommentObjectArr[5];
-        NewFeed newFeed = this.getNewFeed((long) newFeedId);
-        int nNewFeedCommentLikes = (int) newFeedCommentObjectArr[6];
-        int nNewFeedCommentDislikes = (int) newFeedCommentObjectArr[7];
-        int nRepliesOnNewFeedComment = (int) newFeedCommentObjectArr[8];
-        return new NewFeedComment((long) newFeedCommentId, newFeedCommentContent, newFeedCommentCreatedDate, newFeed,
-                userProfile, newFeedCommentStatus, nNewFeedCommentLikes, nNewFeedCommentDislikes,
-                nRepliesOnNewFeedComment);
-    }
-
-    /**
-     * @param userProfileId - user's profile's id that user want to get user's
-     *                      profile
-     * @return selected user's profile
-     */
-    private UserProfile getUserProfile(Long userProfileId) {
-        return this.userProfileService.getUserProfile(userProfileId);
-    }
-
-    /**
-     * @param newFeedId - newfeed's id that user want to get selected newfeed
-     * @return selected newfeed
-     */
-    private NewFeed getNewFeed(Long newFeedId) {
-        return this.newFeedService.getNewFeedById(newFeedId);
-    }
-
-    /**
-     * @param id - newfeed's comment's id that user want to get
-     * @return selected newfeed's comment
-     */
-    public NewFeedComment getNewFeedComment(Long id) {
-        return this.newFeedCommentRepository.findNewFeedCommentById(id);
+    public int countNewFeedCommentsByNewFeedAndNewFeedCommentStatus(NewFeed newFeed, int status) {
+        return this.newFeedCommentRepository.countNewFeedCommentsByNewFeedAndNewFeedCommentStatus(newFeed, status);
     }
 }

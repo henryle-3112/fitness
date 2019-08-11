@@ -23,10 +23,3 @@ spring:
           auth: true
           starttls:
             enable: true
-  devtools:
-    restart:
-      enabled: false     
-
-server:
-  servlet:
-    context-path: /greenwich-fitness/api/v1

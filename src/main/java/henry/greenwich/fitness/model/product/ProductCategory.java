@@ -1,6 +1,5 @@
 package henry.greenwich.fitness.model.product;
 
-import henry.greenwich.fitness.constants.Constants;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,51 +13,51 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = Constants.PRODUCT_CATEGORY_TABLE)
+@Table(name = "product_category")
 public class ProductCategory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = Constants.PRODUCT_CATEGORY_ID)
+    @Column(name = "id")
     private Long id;
 
-    @Column(name = Constants.PRODUCT_CATEGORY_NAME)
+    @Column(name = "product_category_name")
     private String productCategoryName;
 
-    @Column(name = Constants.PRODUCT_CATEGORY_META_TITLE)
+    @Column(name = "product_category_meta_title")
     private String productCategoryMetaTitle;
 
-    @Column(name = Constants.PRODUCT_CATEGORY_PARENT_ID)
+    @Column(name = "product_category_parent_id")
     private int productCategoryParentId;
 
-    @Column(name = Constants.PRODUCT_CATEGORY_DISPLAY_ORDER)
+    @Column(name = "product_category_display_order")
     private int productCategoryDisplayOrder;
 
-    @Column(name = Constants.PRODUCT_CATEGORY_SEO_TITLE)
+    @Column(name = "product_category_seo_title")
     private String productCategorySeoTitle;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = Constants.PRODUCT_CATEGORY_CREATED_DATE)
+    @Column(name = "product_category_created_date")
     private Date productCategoryCreatedDate;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = Constants.PRODUCT_CATEGORY_MODIFIED_DATE)
+    @Column(name = "product_category_modified_date")
     private Date productCategoryModifiedDate;
 
-    @Column(name = Constants.PRODUCT_CATEGORY_META_KEYWORDS)
+    @Column(name = "product_category_meta_keywords")
     private String productCategoryMetaKeywords;
 
-    @Column(name = Constants.PRODUCT_CATEGORY_META_DESCRIPTION)
+    @Column(name = "product_category_meta_desccription")
     private String productCategoryMetaDescription;
 
-    @Column(name = Constants.PRODUCT_CATEGORY_STATUS)
+    @Column(name = "product_category_status")
     private int productCategoryStatus;
 
-    @Column(name = Constants.PRODUCT_CATEGORY_SHOW_ON_HOME)
+    @Column(name = "product_category_show_on_home")
     private String productCategoryShowOnHome;
 
-    @Column(name = Constants.PRODUCT_CATEGORY_IMAGE)
+    @Column(name = "product_category_image")
     private String productCategoryImage;
 
-    @Column(name = Constants.PRODUCT_CATEGORY_MORE_IMAGE)
+    @Column(name = "product_category_more_image")
     private String productCategoryMoreImage;
 }

@@ -1,6 +1,5 @@
 package henry.greenwich.fitness.model.training;
 
-import henry.greenwich.fitness.constants.Constants;
 import henry.greenwich.fitness.model.coach.Coach;
 import henry.greenwich.fitness.model.user.UserProfile;
 import lombok.AllArgsConstructor;
@@ -9,42 +8,43 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Setter
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = Constants.TRAINING_TABLE)
+@Table(name = "training")
 public class Training {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = Constants.TRAINING_ID)
+    @Column(name = "id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = Constants.TRAINING_USER_PROFILE_ID)
+    @JoinColumn(name = "user_profile_id")
     public UserProfile userProfile;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = Constants.TRAINING_COACH_ID)
+    @JoinColumn(name = "coach_id")
     public Coach coach;
 
-    @Column(name = Constants.TRAINING_STATUS)
+    @Column(name = "status")
     private int status;
 
-    @Column(name = Constants.TRAINING_NAME)
+    @Column(name = "name")
     private String name;
 
-    @Column(name = Constants.TRAINING_DATE)
+    @Column(name = "training_date")
     private String trainingDate;
 
-    @Column(name = Constants.TRAINING_NUMBER_OF_REPS)
+    @Column(name = "number_of_reps")
     private int nReps;
 
-    @Column(name = Constants.TRAINING_LOG)
+    @Column(name = "log")
     private String log;
 
-    @Column(name = Constants.TRAINING_CURRENT_HEALTH)
+    @Column(name = "current_health")
     private String currentHealth;
 }

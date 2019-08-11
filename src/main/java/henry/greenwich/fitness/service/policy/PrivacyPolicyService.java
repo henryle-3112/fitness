@@ -1,11 +1,15 @@
 package henry.greenwich.fitness.service.policy;
 
+import henry.greenwich.fitness.model.contact.Contact;
 import henry.greenwich.fitness.model.policy.PrivacyPolicy;
 import henry.greenwich.fitness.repository.policy.PrivacyPolicyRepository;
 import org.springframework.stereotype.Service;
 
 @Service
 public class PrivacyPolicyService {
+    /**
+     * policyRepository - interact with policy's data
+     */
     private PrivacyPolicyRepository privacyPolicyRepository;
 
     /**
@@ -16,8 +20,7 @@ public class PrivacyPolicyService {
     }
 
     /**
-     * @param id - privacy's policy's id that user want to get selected privacy
-     *           policy
+     * @param id - privacy's policy's id
      * @return selected privacy policy
      */
     public PrivacyPolicy getPrivacyPolicyById(Long id) {
@@ -25,7 +28,7 @@ public class PrivacyPolicyService {
     }
 
     /**
-     * @param privacyPolicy - that user want to update
+     * @param privacyPolicy -  that user want to update
      * @return privacyPolicy - that was updated to the database
      */
     public PrivacyPolicy updatePrivacyPolicy(PrivacyPolicy privacyPolicy) {

@@ -1,6 +1,5 @@
 package henry.greenwich.fitness.model.user;
 
-import henry.greenwich.fitness.constants.Constants;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,40 +14,38 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = Constants.USER_ACCOUNT_TABLE)
-public class UserAccount implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+@Table(name = "user_account")
+public class UserAccount implements Serializable{
 
     @EmbeddedId
     private UserProfileKey userProfileId;
 
-    @Column(name = Constants.USER_ACCOUNT_USER_NAME)
+    @Column(name = "user_name")
     private String userName;
 
-    @Column(name = Constants.USER_ACCOUNT_PASSWORD)
+    @Column(name = "password")
     private String password;
 
-    @Column(name = Constants.USER_ACCOUNT_PASSWORD_REMINDER_TOKEN)
+    @Column(name = "password_reminder_token")
     private String passwordReminderToken;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = Constants.USER_ACCOUNT_PASSWORD_REMINDER_EXPIRED)
+    @Column(name = "password_reminder_expired")
     private Date passwordReminderExpired;
 
-    @Column(name = Constants.USER_ACCOUNT_EMAIL_CONFIRMATION_TOKEN)
+    @Column(name = "email_confirmation_token")
     private String emailConfirmationToken;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = Constants.USER_ACCOUNT_USER_ACCOUNT_STATUS_ID)
+    @JoinColumn(name = "user_account_status_id")
     private UserAccountStatus userAccountStatus;
 
     @MapsId("userProfileId")
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = Constants.USER_ACCOUNT_USER_PROFILE_ID)
+    @JoinColumn(name = "user_profile_id")
     public UserProfile userProfile;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = Constants.USER_ACCOUNT_REGISTRATION_TIME)
+    @Column(name = "registration_time")
     private Date registrationTime;
 }

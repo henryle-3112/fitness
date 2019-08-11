@@ -1,6 +1,5 @@
 package henry.greenwich.fitness.model.product;
 
-import henry.greenwich.fitness.constants.Constants;
 import henry.greenwich.fitness.model.user.UserProfile;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,22 +14,22 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = Constants.PRODUCT_ORDER_TABLE)
+@Table(name = "product_order")
 public class ProductOrder {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = Constants.PRODUCT_ORDER_PRODUCT_ORDER_ID)
+    @Column(name = "product_order_id")
     private Long id;
 
-    @Column(name = Constants.PRODUCT_ORDER_PRODUCT_ORDER_STATUS)
+    @Column(name = "product_order_status")
     private int productOrderStatus;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = Constants.PRODUCT_ORDER_PRODUCT_ORDER_DATE)
+    @Column(name = "product_order_date")
     private Date productOrderDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = Constants.PRODUCT_ORDER_USER_PROFILE_ID)
+    @JoinColumn(name = "user_profile_id")
     public UserProfile userProfile;
 }

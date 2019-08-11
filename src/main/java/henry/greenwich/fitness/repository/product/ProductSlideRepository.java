@@ -10,9 +10,16 @@ import java.util.List;
 public interface ProductSlideRepository extends JpaRepository<ProductSlide, Long> {
 
     /**
-     * @param productSlideStatus - product's slide's status that user want to get
-     *                           list of product's slides
-     * @return list of product's slides
+     * @param id - product's slide that user want to get
+     * @param status - product's slide's status that user want to get
+     * @return selected product's slide
      */
-    List<ProductSlide> findProductSlidesByProductSlideStatus(Integer productSlideStatus);
+    ProductSlide findProductSlideByIdAndProductSlideStatus(Long id, int status);
+
+    /**
+     *
+     * @param status - product's slide's status that user want to get
+     * @return selected product's slide
+     */
+    List<ProductSlide> findProductSlidesByProductSlideStatus(int status);
 }

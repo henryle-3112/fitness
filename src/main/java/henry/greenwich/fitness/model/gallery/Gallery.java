@@ -1,7 +1,6 @@
 package henry.greenwich.fitness.model.gallery;
 
 
-import henry.greenwich.fitness.constants.Constants;
 import henry.greenwich.fitness.model.user.UserProfile;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,35 +15,35 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = Constants.GALLERY_TABLE)
+@Table(name = "gallery")
 public class Gallery {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = Constants.GALLERY_ID)
+    @Column(name = "id")
     private Long id;
 
-    @Column(name = Constants.GALLERY_IMAGE)
+    @Column(name = "image")
     private String image;
 
-    @Column(name = Constants.GALLERY_TITLE)
+    @Column(name = "title")
     private String title;
 
-    @Column(name = Constants.GALLERY_CREATED_DATE)
+    @Column(name = "created_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdDate;
 
-    @Column(name = Constants.GALLERY_MODIFIED_DATE)
+    @Column(name = "modified_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date modifiedDate;
 
-    @Column(name = Constants.GALLERY_STATUS)
+    @Column(name = "status")
     private int status;
 
-    @Column(name = Constants.GALLERY_THUMBNAIL)
+    @Column(name = "thumbnail")
     private String thumbnail;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = Constants.GALLERY_USER_PROFILE_ID)
+    @JoinColumn(name = "user_profile_id")
     public UserProfile userProfile;
 }

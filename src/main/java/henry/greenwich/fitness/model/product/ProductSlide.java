@@ -3,7 +3,6 @@ package henry.greenwich.fitness.model.product;
 import javax.persistence.*;
 import java.util.Date;
 
-import henry.greenwich.fitness.constants.Constants;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,34 +13,34 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = Constants.PRODUCT_SLIDE_TABLE)
+@Table(name = "product_slide")
 public class ProductSlide {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = Constants.PRODUCT_SLIDE_ID)
+    @Column(name = "id")
     private Long id;
 
-    @Column(name = Constants.PRODUCT_SLIDE_IMAGE)
+    @Column(name = "product_slide_image")
     private String productSlideImage;
 
-    @Column(name = Constants.PRODUCT_SLIDE_LINK)
+    @Column(name = "product_slide_link")
     private String productSlideLink;
 
-    @Column(name = Constants.PRODUCT_SLIDE_DESCRIPTION)
+    @Column(name = "product_slide_description")
     private String productSlideDescription;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = Constants.PRODUCT_SLIDE_CREATED_DATE)
+    @Column(name = "product_slide_created_date")
     private Date productSlideCreatedDate;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = Constants.PRODUCT_SLIDE_MODIFIED_DATE)
+    @Column(name = "product_slide_modified_date")
     private Date productSlideModifiedDate;
 
-    @Column(name = Constants.PRODUCT_SLIDE_STATUS)
+    @Column(name = "product_slide_status")
     private int productSlideStatus;
 
-    @Column(name = Constants.PRODUCT_SLIDE_TITLE)
+    @Column(name = "product_slide_title")
     private String ProductSlideTitle;
 }

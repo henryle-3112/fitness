@@ -8,6 +8,13 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UserAccountStatusRepository extends JpaRepository<UserAccountStatus, Long> {
+    /**
+     * 
+     * @param id - id of user's account's status
+     * @return userAccountStatus - contained id
+     */
+	UserAccountStatus findUserAccountStatusById(Long id);
+    
 	/**
 	 * 
 	 * @param name - name of user's account's status

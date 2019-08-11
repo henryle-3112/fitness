@@ -1,5 +1,6 @@
 package henry.greenwich.fitness.util;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -12,11 +13,9 @@ import javax.mail.internet.MimeMessage;
 @Component
 public class EmailServiceImpl {
 
-    public final JavaMailSender emailSender;
-
-    public EmailServiceImpl(@Qualifier("getJavaMailSender") JavaMailSender emailSender) {
-        this.emailSender = emailSender;
-    }
+    @Qualifier("getJavaMailSender")
+    @Autowired
+    public JavaMailSender emailSender;
 
     public void sendSimpleMessage(String to, String subject, String content) {
         /* SimpleMailMessage message = new SimpleMailMessage();

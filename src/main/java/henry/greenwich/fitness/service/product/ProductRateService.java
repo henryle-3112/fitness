@@ -1,28 +1,38 @@
 package henry.greenwich.fitness.service.product;
 
-import henry.greenwich.fitness.model.product.Product;
 import henry.greenwich.fitness.model.product.ProductRate;
-import henry.greenwich.fitness.model.user.UserProfile;
 import henry.greenwich.fitness.repository.product.ProductRateRepository;
-import henry.greenwich.fitness.service.user.UserProfileService;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class ProductRateService {
+    /**
+     * productRateRepository - interact with product's rate
+     */
     private ProductRateRepository productRateRepository;
-    private UserProfileService userProfileService;
-    private ProductService productService;
 
     /**
      * @param productRateRepository - inject productRateRepository
-     * @param userProfileService    - inject userProfileService
-     * @param productService        - inject productService
      */
-    public ProductRateService(ProductRateRepository productRateRepository, UserProfileService userProfileService,
-            ProductService productService) {
+    public ProductRateService(ProductRateRepository productRateRepository) {
         this.productRateRepository = productRateRepository;
-        this.userProfileService = userProfileService;
-        this.productService = productService;
+    }
+
+    /**
+     * @return list of product's rates
+     */
+    public List<ProductRate> getProductRates() {
+        return this.productRateRepository.findAll();
+    }
+
+    /**
+     * @param id - product's rate's id that user want to get
+     * @return list of product's rate
+     */
+    public ProductRate getProductRate(Long id) {
+        return this.productRateRepository.findProductRateById(id);
     }
 
     /**
@@ -32,42 +42,40 @@ public class ProductRateService {
     public ProductRate addProductRate(ProductRate productRate) {
         // check productRate existed in the database or not
         // if not, create new one, if yes, just update
-        ProductRate selectedProductRate = this.getProductRateByUserProfileIdAndProductId(
-                productRate.getUserProfile().getId(), productRate.getProduct().getId());
-        if (selectedProductRate == null) {
+        List<Object> productRateObjectList = this.productRateRepository.getProductRateByUserIdAndByProductId(
+                productRate.getUserProfile().getId(),
+                productRate.getProduct().getId()
+        );
+        if (productRateObjectList.isEmpty()) {
             return this.productRateRepository.saveAndFlush(productRate);
         }
-        selectedProductRate.setRate(productRate.getRate());
+        Object[] productRateObjectArray = (Object[]) productRateObjectList.get(0);
+        int productRateId = (int) productRateObjectArray[0];
+        productRate.setId((long) productRateId);
         return this.productRateRepository.saveAndFlush(productRate);
     }
 
     /**
-     * @param userProfileId - user's profile's id that user want to get selected
-     *                      product's rate
-     * @param productId     - product's id that user want to get selected product's
-     *                      rate
-     * @return selected product's rate
+     * @param productRate - that user want to update to the database
+     * @return productRate- tha was updated to the database
      */
-    public ProductRate getProductRateByUserProfileIdAndProductId(Long userProfileId, Long productId) {
-        UserProfile userProfile = this.getUserProfile(userProfileId);
-        Product product = this.getProduct(productId);
-        return this.productRateRepository.findProductRateByUserProfileAndProduct(userProfile, product);
+    public ProductRate updateProductRate(ProductRate productRate) {
+        return this.productRateRepository.saveAndFlush(productRate);
     }
 
     /**
-     * @param userProfileId - user's profile's service that user want to get
-     *                      selected user's profile
-     * @return selected user's profile
+     * @param id - product's rate's id that user want to delete
      */
-    private UserProfile getUserProfile(Long userProfileId) {
-        return this.userProfileService.getUserProfile(userProfileId);
+    public void deleteProductRate(Long id) {
+        this.productRateRepository.deleteById(id);
     }
 
     /**
-     * @param productId - product's id that user want to get selected product
-     * @return selected product
+     * @param userId    - user's id
+     * @param productId - product's id
+     * @return list of product's rates
      */
-    private Product getProduct(Long productId) {
-        return this.productService.getProduct(productId);
+    public List<Object> getProductRateByUserIdAndProductId(Long userId, Long productId) {
+        return this.productRateRepository.getProductRateByUserIdAndByProductId(userId, productId);
     }
 }

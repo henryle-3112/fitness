@@ -1,6 +1,5 @@
 package henry.greenwich.fitness.model.feed;
 
-import henry.greenwich.fitness.constants.Constants;
 import henry.greenwich.fitness.model.user.UserProfile;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,21 +13,21 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = Constants.NEW_FEED_COMMENT_REACTION_TABLE)
+@Table(name = "new_feed_comment_reaction")
 public class NewFeedCommentReaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = Constants.NEW_FEED_COMMENT_REACTION_ID)
+    @Column(name = "id")
     private Long id;
 
-    @Column(name = Constants.NEW_FEED_COMMENT_REACTION_REACTION)
+    @Column(name = "reaction")
     private int reaction;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = Constants.NEW_FEED_COMMENT_REACTION_NEW_FEED_COMMENT_ID)
+    @JoinColumn(name = "new_feed_comment_id")
     public NewFeedComment newFeedComment;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = Constants.NEW_FEED_COMMENT_REACTION_USER_PROFILE_ID)
+    @JoinColumn(name = "user_profile_id")
     public UserProfile userProfile;
 }

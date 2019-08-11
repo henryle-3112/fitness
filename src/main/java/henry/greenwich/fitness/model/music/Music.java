@@ -1,6 +1,5 @@
 package henry.greenwich.fitness.model.music;
 
-import henry.greenwich.fitness.constants.Constants;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,34 +13,34 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = Constants.MUSIC_TABLE)
+@Table(name = "music")
 public class Music {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = Constants.MUSIC_ID)
+    @Column(name = "id")
     private Long id;
 
-    @Column(name = Constants.MUSIC_NAME)
+    @Column(name = "music_name")
     private String musicName;
 
-    @Column(name = Constants.MUSIC_LINK)
+    @Column(name = "music_link")
     private String musicLink;
 
-    @Column(name = Constants.MUSIC_AUTHOR)
+    @Column(name = "music_author")
     private String musicAuthor;
 
-    @Column(name = Constants.MUSIC_CREATED_DATE)
+    @Column(name = "created_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdDate;
 
-    @Column(name = Constants.MUSIC_MODIFIED_DATE)
+    @Column(name = "modified_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date modifiedDate;
 
-    @Column(name = Constants.MUSIC_STATUS)
+    @Column(name = "status")
     private int status;
 
-    @Column(name = Constants.MUSIC_IMAGE)
+    @Column(name = "music_image")
     private String musicImage;
 }

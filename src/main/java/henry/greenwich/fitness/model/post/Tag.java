@@ -1,6 +1,5 @@
 package henry.greenwich.fitness.model.post;
 
-import henry.greenwich.fitness.constants.Constants;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,16 +12,16 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = Constants.TAG_TABLE)
+@Table(name = "tag")
 public class Tag {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = Constants.TAG_ID)
+    @Column(name = "id")
     private Long id;
 
-    @Column(name = Constants.TAG_NAME)
+    @Column(name = "name")
     private String tagName;
 
-    @Column(name = Constants.TAG_STATUS)
+    @Column(name = "status")
     private int tagStatus;
 }

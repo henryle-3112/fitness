@@ -1,28 +1,39 @@
 package henry.greenwich.fitness.service.post;
 
-import henry.greenwich.fitness.model.post.Post;
 import henry.greenwich.fitness.model.post.PostRate;
-import henry.greenwich.fitness.model.user.UserProfile;
+import henry.greenwich.fitness.model.product.ProductRate;
 import henry.greenwich.fitness.repository.post.PostRateRepository;
-import henry.greenwich.fitness.service.user.UserProfileService;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class PostRateService {
+    /**
+     * postRateRepository - interact with post's rate's data
+     */
     private PostRateRepository postRateRepository;
-    private UserProfileService userProfileService;
-    private PostService postService;
 
     /**
-     * @param postRateRepository - inject postRateRepository
-     * @param userProfileService - inject userProfileService
-     * @param postService        - inject postService
+     * @param postRateRepository - inject post's rate's repository
      */
-    public PostRateService(PostRateRepository postRateRepository, UserProfileService userProfileService,
-            PostService postService) {
+    public PostRateService(PostRateRepository postRateRepository) {
         this.postRateRepository = postRateRepository;
-        this.userProfileService = userProfileService;
-        this.postService = postService;
+    }
+
+    /**
+     * @return list of post's rates
+     */
+    public List<PostRate> getPostRates() {
+        return this.postRateRepository.findAll();
+    }
+
+    /**
+     * @param id - post's rate's id that user want to get
+     * @return list of post's rate
+     */
+    public PostRate getPostRate(Long id) {
+        return this.postRateRepository.findPostRateById(id);
     }
 
     /**
@@ -32,32 +43,40 @@ public class PostRateService {
     public PostRate addPostRate(PostRate postRate) {
         // check postRate existed in the database or not
         // if not, create new one, if yes, just update
-        PostRate selectedPostRate = this.getPostRateByUserProfileIsAndPostId(postRate.getUserProfile().getId(),
-                postRate.getPost().getId());
-        if (selectedPostRate != null) {
-            selectedPostRate.setRate(postRate.getRate());
-            return this.updatePostRate(selectedPostRate);
+        List<Object> postRateObjectList = this.postRateRepository.getPostRateByUserIdAndByPostId(
+                postRate.getUserProfile().getId(),
+                postRate.getPost().getId()
+        );
+        if (postRateObjectList.isEmpty()) {
+            return this.postRateRepository.saveAndFlush(postRate);
         }
+        Object[] postRateObjectArray = (Object[]) postRateObjectList.get(0);
+        int postRateId = (int) postRateObjectArray[0];
+        postRate.setId((long) postRateId);
         return this.postRateRepository.saveAndFlush(postRate);
     }
 
     /**
      * @param postRate - that user want to update to the database
-     * @return updated post's rate
+     * @return postRate- tha was updated to the database
      */
-    private PostRate updatePostRate(PostRate postRate) {
+    public PostRate updatePostRate(PostRate postRate) {
         return this.postRateRepository.saveAndFlush(postRate);
     }
 
     /**
-     * @param userProfileId - user's profile's id that user want to get selected
-     *                      post's rate
-     * @param postId        - post's id that user want to get selected post's rate
-     * @return selected post's rate
+     * @param id - post's rate's id that user want to delete
      */
-    public PostRate getPostRateByUserProfileIsAndPostId(Long userProfileId, Long postId) {
-        UserProfile userProfile = this.userProfileService.getUserProfile(userProfileId);
-        Post post = this.postService.getPost(postId);
-        return this.postRateRepository.findPostRateByUserProfileAndPost(userProfile, post);
+    public void deletePostRate(Long id) {
+        this.postRateRepository.deleteById(id);
+    }
+
+    /**
+     * @param userId - user's id
+     * @param postId - post's id
+     * @return list of post's rate
+     */
+    public List<Object> getPostRateByUserIdAndPostId(Long userId, Long postId) {
+        return this.postRateRepository.getPostRateByUserIdAndByPostId(userId, postId);
     }
 }

@@ -1,7 +1,5 @@
-package henry.greenwich.fitness.model.membership;
+package henry.greenwich.fitness.model.coach;
 
-import henry.greenwich.fitness.constants.Constants;
-import henry.greenwich.fitness.model.coach.Coach;
 import henry.greenwich.fitness.model.user.UserProfile;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,26 +14,26 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = Constants.MEMBERSHIP_TABLE)
+@Table(name = "membership")
 public class Membership {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = Constants.MEMBERSHIP_ID)
+    @Column(name = "id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = Constants.MEMBERSHIP_USER_PROFILE_ID)
+    @JoinColumn(name = "user_profile_id")
     public UserProfile userProfile;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = Constants.MEMBERSHIP_COACH_ID)
+    @JoinColumn(name = "coach_id")
     public Coach coach;
 
-    @Column(name = Constants.MEMBERSHIP_STATUS)
+    @Column(name = "status")
     private int status;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = Constants.MEMBERSHIP_START_DATE)
+    @Column(name = "start_date")
     private Date startDate;
 }

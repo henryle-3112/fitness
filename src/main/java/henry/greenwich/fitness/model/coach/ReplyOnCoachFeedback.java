@@ -1,6 +1,5 @@
 package henry.greenwich.fitness.model.coach;
 
-import henry.greenwich.fitness.constants.Constants;
 import henry.greenwich.fitness.model.user.UserProfile;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,34 +14,28 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = Constants.REPLY_ON_COACH_FEEDBACK_TABLE)
+@Table(name = "reply_on_coach_feedback")
 public class ReplyOnCoachFeedback {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = Constants.REPLY_ON_COACH_FEEDBACK_ID)
+    @Column(name = "id")
     private Long id;
 
-    @Column(name = Constants.REPLY_ON_COACH_FEEDBACK_CONTENT)
+    @Column(name = "reply_on_coach_feedback_content")
     private String replyOnCoachFeedbackContent;
 
-    @Column(name = Constants.REPLY_ON_COACH_FEEDBACK_STATUS)
+    @Column(name = "reply_on_coach_feedback_status")
     private int replyOnCoachFeedbackStatus;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = Constants.REPLY_ON_COACH_FEEDBACK_CREATED_DATE)
+    @Column(name = "reply_on_coach_feedback_created_date")
     private Date replyOnCoachFeedbackCreatedDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = Constants.REPLY_ON_COACH_FEEDBACK_COACH_FEED_BACK_ID)
+    @JoinColumn(name = "coach_feedback_id")
     public CoachFeedback coachFeedback;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = Constants.REPLY_ON_COACH_FEEDBACK_USER_PROFILE_ID)
+    @JoinColumn(name = "user_profile_id")
     public UserProfile userProfile;
-
-    @Column(name = Constants.REPLY_ON_COACH_FEEDBACK_NUMBER_OF_LIKES)
-    private int numberOfLikes;
-
-    @Column(name = Constants.REPLY_ON_COACH_FEEDBACK_NUMBER_OF_DISLIKES)
-    private int numberOfDislikes;
 }

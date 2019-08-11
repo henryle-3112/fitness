@@ -1,11 +1,15 @@
 package henry.greenwich.fitness.service.user;
 
+
 import henry.greenwich.fitness.model.user.GoogleAccount;
 import henry.greenwich.fitness.repository.user.GoogleAccountRepository;
 import org.springframework.stereotype.Service;
 
 @Service
 public class GoogleAccountService {
+    /**
+     * googleAccountRepository - interact with facebook's account's data
+     */
     private GoogleAccountRepository googleAccountRepository;
 
     /**
@@ -21,8 +25,8 @@ public class GoogleAccountService {
      * @param facebookId - facebook's id that user want to get
      * @return facebookAccount
      */
-    public GoogleAccount findGoogleAccountByGoogleId(String googleId) {
-        return this.googleAccountRepository.findGoogleAccountByGoogleId(googleId);
+    public GoogleAccount findGoogleAccountByGoogleId(String facebookId) {
+        return this.googleAccountRepository.findGoogleAccountByGoogleId(facebookId);
     }
 
     /**

@@ -1,6 +1,5 @@
 package henry.greenwich.fitness.model.coach;
 
-import henry.greenwich.fitness.constants.Constants;
 import henry.greenwich.fitness.model.user.UserProfile;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,21 +13,21 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = Constants.REPLY_ON_COACH_FEEDBACK_REACTION_TABLE)
+@Table(name = "reply_on_coach_feedback_reaction")
 public class ReplyOnCoachFeedbackReaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = Constants.REPLY_ON_COACH_FEEDBACK_REACTION_ID)
+    @Column(name = "id")
     private Long id;
 
-    @Column(name = Constants.REPLY_ON_COACH_FEEDBACK_REACTION_REACTION)
+    @Column(name = "reaction")
     private int reaction;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = Constants.REPLY_ON_COACH_FEEDBACK_REACTION_REPLY_ON_COACH_FEEDBACK_ID)
+    @JoinColumn(name = "reply_on_coach_feedback_id")
     public ReplyOnCoachFeedback replyOnCoachFeedback;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = Constants.REPLY_ON_COACH_FEEDBACK_REACTION_USER_PROFILE_ID)
+    @JoinColumn(name = "user_profile_id")
     public UserProfile userProfile;
 }

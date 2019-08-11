@@ -7,8 +7,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping("about-management")
 public class AboutController {
+    /**
+     * aboutService - interact with about's data
+     */
     private AboutService aboutService;
 
     /**
@@ -22,10 +24,20 @@ public class AboutController {
      * @param id - about's id that user want to get
      * @return selected about
      */
-    @GetMapping(value = "/abouts/{id}", produces = { MediaType.APPLICATION_JSON_VALUE })
+    @GetMapping(value = "/abouts/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public About getAbout(@PathVariable Long id) {
         return this.aboutService.getAboutById(id);
+    }
+
+    /**
+     * @param about - that user want to update to the database
+     * @return about - that was updated to the database
+     */
+    @PostMapping(value = "/abouts/update", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @ResponseBody
+    public About updateAbout(@RequestBody About about) {
+        return this.aboutService.updateAbout(about);
     }
 
 }

@@ -1,5 +1,7 @@
 package henry.greenwich.fitness.service.upload;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -14,6 +16,9 @@ import java.util.Date;
 
 @Service
 public class UploadService {
+    /**
+     * rootLocation - location that uploaded file would be stored
+     */
     private Path rootLocation;
 
     /**
@@ -37,12 +42,10 @@ public class UploadService {
             String currentFileName = file.getOriginalFilename();
             if (currentFileName != null && currentFileName.contains(".jpg")) {
                 // change file's name to file_name_uploadedDate.jpg
-                savedFileName = currentFileName.substring(0, currentFileName.indexOf(".jpg")) + "_" + uploadedDate
-                        + ".jpg";
+                savedFileName = currentFileName.substring(0, currentFileName.indexOf(".jpg")) + "_" + uploadedDate + ".jpg";
             } else if (currentFileName != null && currentFileName.contains(".mp3")) {
                 // change file's name to file_name_uploadedDate.mp3
-                savedFileName = currentFileName.substring(0, currentFileName.indexOf(".mp3")) + "_" + uploadedDate
-                        + ".mp3";
+                savedFileName = currentFileName.substring(0, currentFileName.indexOf(".mp3")) + "_" + uploadedDate + ".mp3";
             }
             // upload file
             Files.copy(file.getInputStream(), this.rootLocation.resolve(savedFileName));

@@ -1,92 +1,118 @@
 package henry.greenwich.fitness.controller.training;
 
-import henry.greenwich.fitness.constants.Constants;
+import henry.greenwich.fitness.model.coach.Coach;
+import henry.greenwich.fitness.model.response.ResponseMessage;
 import henry.greenwich.fitness.model.training.Training;
+import henry.greenwich.fitness.model.user.UserProfile;
+import henry.greenwich.fitness.service.coach.CoachService;
 import henry.greenwich.fitness.service.training.TrainingService;
+import henry.greenwich.fitness.service.user.UserProfileService;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
-@RequestMapping("training-management")
 public class TrainingController {
+    /**
+     * trainingService - interact with training's data
+     * userProfileService - interact with user's profile's data
+     * coachService - interact with coach's data
+     */
     private TrainingService trainingService;
+    private UserProfileService userProfileService;
+    private CoachService coachService;
 
     /**
      * @param trainingService - inject trainingService
      */
-    public TrainingController(TrainingService trainingService) {
+    public TrainingController(TrainingService trainingService,
+                              UserProfileService userProfileService,
+                              CoachService coachService) {
         this.trainingService = trainingService;
+        this.userProfileService = userProfileService;
+        this.coachService = coachService;
     }
 
     /**
-     * @param response      - response to add number of trainings and number of
-     *                      pages
-     * @param coachId       - coach's id that user want to get list of trainings
-     *                      (this parameter could be optional)
-     * @param userProfileId - user's profile's id that user want to get list of
-     *                      trainings (this parameter could be optional)
-     * @param page          - start index (for pagination) (this parameter could be
-     *                      optional)
+     * @param userProfileId - user's profile's id
+     * @param coachId       - coach's id
+     * @param page          - page
      * @return list of trainings
      */
-    @GetMapping(value = "/trainings", produces = { MediaType.APPLICATION_JSON_VALUE })
+    @GetMapping(value = "/trainings/paging/{userProfileId}/{coachId}/{page}", produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public List<Training> getTrainings(HttpServletResponse response,
-            @RequestParam(required = false) Integer userProfileId, @RequestParam(required = false) Integer coachId,
-            @RequestParam(required = false) Integer page) {
-        if (page != null) {
-            return this.getTrainingsPaging(response, userProfileId, coachId, page);
+    public List<Training> findTrainingsByUserProfileIdAndCoachIdAndPage(
+            @PathVariable int userProfileId,
+            @PathVariable int coachId,
+            @PathVariable int page) {
+        int startIndex = ((page - 1) * 8) + 1;
+        List<Training> trainings = new ArrayList<>();
+        List<Object> trainingsObject = this.trainingService.findTrainingsByUserProfileIdAndCoachIdAndPage(
+                coachId,
+                userProfileId,
+                startIndex - 1);
+        for (Object o : trainingsObject) {
+            String trainingDate = (String) o;
+            Training training = new Training();
+            training.setTrainingDate(trainingDate);
+            trainings.add(training);
         }
-        return this.trainingService.getTrainings(coachId, userProfileId);
+        return trainings;
     }
 
     /**
-     * @param response      - response to add number of trainings and number of
-     *                      pages
-     * @param coachId       - coach's id that user want to get list of trainings
-     *                      (this parameter could be optional)
-     * @param userProfileId - user's profile's id that user want to get list of
-     *                      trainings (this parameter could be optional)
-     * @param page          - start index (for pagination) (this parameter could be
-     *                      optional)
+     * @param userProfileId - user's profile's id
+     * @param coachId       - coach's id
+     * @return number of trainings
+     */
+    @GetMapping(value = "/trainings/count/{userProfileId}/{coachId}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @ResponseBody
+    public ResponseMessage countTrainingsByUserProfileIdAndCoachId(@PathVariable int userProfileId, @PathVariable int coachId) {
+        List<Object> countTrainingsObject = this.trainingService.countTrainingsByUserProfileIdAndCoachId(
+                coachId,
+                userProfileId
+        );
+        int nTrainings = 0;
+        for (Object eachTrainingObject : countTrainingsObject) {
+            nTrainings += Integer.valueOf(eachTrainingObject.toString());
+        }
+        return new ResponseMessage(String.valueOf(nTrainings));
+    }
+
+
+    /**
+     * @param trainings - trainings
      * @return list of trainings
      */
-    private List<Training> getTrainingsPaging(HttpServletResponse response, Integer userProfileId, Integer coachId,
-            Integer page) {
-        int startIndex = ((page - 1) * Constants.NUMBER_ITEMS_PER_PAGE) + 1;
-        int nTrainings = this.trainingService.getNumberOfTrainings(coachId, userProfileId);
-        response.addHeader(Constants.HEADER_X_TOTAL_COUNT, String.valueOf(nTrainings));
-        int nPages = nTrainings >= Constants.NUMBER_ITEMS_PER_PAGE ? nTrainings / Constants.NUMBER_ITEMS_PER_PAGE : 1;
-        response.addHeader(Constants.HEADER_X_TOTAL_PAGE, String.valueOf(nPages));
-        return this.trainingService.getTrainingsPaging(coachId, userProfileId, startIndex - 1);
-    }
-
-    /**
-     * @param trainings - trainings that user want to add to the database
-     * @return inserted list of trainings
-     */
-    @PostMapping(value = "/trainings", produces = { MediaType.APPLICATION_JSON_VALUE })
+    @PostMapping(value = "/trainings", produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public List<Training> addTrainings(@RequestBody List<Training> trainings) {
         return this.trainingService.addTrainings(trainings);
     }
 
     /**
-     * @param trainingDate  - training's date that user want to get list of
-     *                      trainings
-     * @param userProfileId - user's profile's id that user want to get list of
-     *                      trainings
-     * @param coachId       - coach's id that user want to get list of trainings
+     * @param trainingDate - training's date
      * @return list of trainings
      */
-    @GetMapping(value = "users/{userProfileId}/coaches/{coachId}", produces = { MediaType.APPLICATION_JSON_VALUE })
+    @PostMapping(value = "/trainings/date/{userProfileId}/{coachId}", produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public List<Training> getTrainings(@PathVariable int userProfileId, @PathVariable int coachId,
-            @RequestParam(required = false) String trainingDate) {
-        return this.trainingService.getTrainings(userProfileId, coachId, trainingDate);
+    public List<Training> findTrainingsByTrainingDate(@PathVariable int userProfileId, @PathVariable int coachId, @RequestBody String trainingDate) {
+        UserProfile userProfile = this.userProfileService.getUserProfile((long) userProfileId);
+        Coach coach = this.coachService.getCoachById((long) coachId);
+        return this.trainingService.findTrainingsByTrainingDateAndUserProfileAndCoach(trainingDate, userProfile, coach);
     }
+
+    /**
+     * @return responseMessage
+     */
+    @PostMapping(value = "/trainings/update", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @ResponseBody
+    public Training updateTraining(@RequestBody Training training) {
+        return this.trainingService.updateTraining(training);
+    }
+
 }

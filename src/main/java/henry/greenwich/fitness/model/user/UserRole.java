@@ -1,6 +1,5 @@
 package henry.greenwich.fitness.model.user;
 
-import henry.greenwich.fitness.constants.Constants;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,21 +13,19 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = Constants.USER_ROLE_TABLE)
+@Table(name = "user_role")
 public class UserRole implements Serializable {
-
-    private static final long serialVersionUID = 1L;
 
     @EmbeddedId
     private UserRoleKey userRoleKey;
 
     @MapsId("userProfileId")
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = Constants.USER_ROLE_USER_PROFILE_ID)
+    @JoinColumn(name = "user_profile_id")
     private UserProfile userProfile;
 
     @MapsId("roleId")
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = Constants.USER_ROLE_ROLE_ID)
+    @JoinColumn(name = "role_id")
     private Role role;
 }

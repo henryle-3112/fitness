@@ -1,7 +1,6 @@
 package henry.greenwich.fitness.model.payment;
 
 
-import henry.greenwich.fitness.constants.Constants;
 import henry.greenwich.fitness.model.product.ProductOrder;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,27 +15,27 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = Constants.PRODUCT_PAYMENT_TABLE)
+@Table(name = "product_payment")
 public class ProductPayment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = Constants.PRODUCT_PAYMENT_ID)
+    @Column(name = "id")
     private Long id;
 
-    @Column(name = Constants.PRODUCT_PAYMENT_PAYMENT_ID)
+    @Column(name = "payment_id")
     private String paymentId;
 
-    @Column(name = Constants.PRODUCT_PAYMENT_PAYER_ID)
+    @Column(name = "payer_id")
     private String payerId;
 
-    @Column(name = Constants.PRODUCT_PAYMENT_TOKEN)
+    @Column(name = "token")
     private String token;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = Constants.PRODUCT_PAYMENT_PRODUCT_ORDER_PRODUCT_ORDER_ID)
+    @JoinColumn(name = "product_order_product_order_id")
     public ProductOrder productOrder;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = Constants.PRODUCT_PAYMENT_CREATED_DATE)
+    @Column(name = "created_date")
     private Date createdDate;
 }
