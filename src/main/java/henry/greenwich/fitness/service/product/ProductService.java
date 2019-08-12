@@ -1,134 +1,177 @@
 package henry.greenwich.fitness.service.product;
 
 import henry.greenwich.fitness.model.product.Product;
+import henry.greenwich.fitness.model.product.ProductCategory;
 import henry.greenwich.fitness.repository.product.ProductRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
 public class ProductService {
-    /**
-     * productRepository - interact with product's repository
-     */
     private ProductRepository productRepository;
+    private ProductCategoryService productCategoryService;
 
     /**
-     * @param productRepository - inject productRepository
+     * @param productRepository      - inject productRepository
+     * @param productCategoryService - inject productCategoryService
      */
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository, ProductCategoryService productCategoryService) {
         this.productRepository = productRepository;
+        this.productCategoryService = productCategoryService;
     }
 
     /**
-     * @param status - product's status
-     * @return list of product
-     */
-    public List<Product> getProducts(int status) {
-        return this.productRepository.findProductsByProductStatus(status);
-    }
-
-    /**
-     * @param id     - product's id
-     * @param status - product's status
-     * @return selected product
-     */
-    public Product getProduct(Long id, int status) {
-        return this.productRepository.findProductByIdAndProductStatus(id, status);
-    }
-
-    /**
-     * @param product - that user want to add to the database
-     * @return product that was inserted to the database
-     */
-    public Product addProduct(Product product) {
-        return this.productRepository.saveAndFlush(product);
-    }
-
-    /**
-     * @param product - that user want to update to the database
-     * @return product that was updated to the database
-     */
-    public Product updateProduct(Product product) {
-        return this.productRepository.saveAndFlush(product);
-    }
-
-    /**
-     * @param id - product's id that user want to delete
-     */
-    public void deleteProduct(Long id) {
-        this.productRepository.deleteById(id);
-    }
-
-    /**
-     * @param top        - number of products that user want to get
-     * @param categoryId - product's category's id
-     * @param status     - product's status
+     * @param productCategoryId   - product's category's id that user want to get
+     *                            products (this parameter could be optional)
+     * @param productMinPrice     - product's min's price that user want to get
+     *                            products (this parameter could be optional)
+     * @param productMaxPrice     - product's max's price that user want to get
+     *                            products (this parameter could be optional)
+     * @param productStatus       - product's status that user want to get products
+     *                            (this parameter could be optional)
+     * @param productNameKeywords - product's name's keywords that user want to get
+     *                            products (this parameter could be optional)
+     * @param startIndex          - start index (for pagination) (this parameter
+     *                            could be optional)
      * @return list of products
      */
-    public List<Object> getTopProducts(int top, int categoryId, int status) {
-        return this.productRepository.findTopProductsByCategoryAndProductStatus(categoryId, top, status);
+    public List<Product> getProductsPaging(Integer productCategoryId, Integer productMinPrice, Integer productMaxPrice,
+            Integer productStatus, String productNameKeywords, Integer startIndex) {
+        List<Object> productsObjectList = this.productRepository.getProductsPaging(productCategoryId, productMinPrice,
+                productMaxPrice, productStatus, productNameKeywords, startIndex);
+        return this.getProductsFromObjectList(productsObjectList);
     }
 
     /**
-     * @param categoryId - product's category's id
-     * @param startIndex - start index
-     * @param status     - product's status
+     * @param productCategoryId   - product's category's id that user want to get
+     *                            products (this parameter could be optional)
+     * @param productMinPrice     - product's min's price that user want to get
+     *                            products (this parameter could be optional)
+     * @param productMaxPrice     - product's max's price that user want to get
+     *                            products (this parameter could be optional)
+     * @param productStatus       - product's status that user want to get products
+     *                            (this parameter could be optional)
+     * @param productNameKeywords - product's name's keywords that user want to get
+     *                            products (this parameter could be optional)
      * @return list of products
      */
-    public List<Object> findProductsByCategoryAndByPage(int categoryId, int startIndex, int status) {
-        return this.productRepository.findProductsByCategoryAndByPage(categoryId, startIndex, status);
+    public List<Product> getProducts(Integer productCategoryId, Integer productMinPrice, Integer productMaxPrice,
+            Integer productStatus, String productNameKeywords) {
+        List<Object> productsObjectList = this.productRepository.getProducts(productCategoryId, productMinPrice,
+                productMaxPrice, productStatus, productNameKeywords);
+        return this.getProductsFromObjectList(productsObjectList);
     }
 
     /**
-     * @param categoryId - category's id that products belong to
-     * @param status     - product's status
+     * @param productCategoryId   - product's category's id that user want to get
+     *                            number of products (this parameter could be
+     *                            optional)
+     * @param productMinPrice     - product's min's price that user want to get
+     *                            number of products (this parameter could be
+     *                            optional)
+     * @param productMaxPrice     - product's max's price that user want to get
+     *                            number of products (this parameter could be
+     *                            optional)
+     * @param productStatus       - product's status that user want to get number of
+     *                            products (this parameter could be optional)
+     * @param productNameKeywords - product's name's keywords that user want to get
+     *                            number of products (this parameter could be
+     *                            optional)
      * @return number of products
      */
-    public List<Object> countProductsByCategoryAndByProductStatus(int categoryId, int status) {
-        return this.productRepository.countProductsByCategoryAndByProductStatus(categoryId, status);
+    public int getNumberOfProducts(Integer productCategoryId, Integer productMinPrice, Integer productMaxPrice,
+            Integer productStatus, String productNameKeywords) {
+        List<Object> nProductsObjectList = this.productRepository.getNumberOfProducts(productCategoryId,
+                productMinPrice, productMaxPrice, productStatus, productNameKeywords);
+        if (nProductsObjectList.size() > 0) {
+            return Integer.valueOf(nProductsObjectList.get(0).toString());
+        }
+        return 0;
     }
 
     /**
-     * @param categoryId          - category's id that products belong to
-     * @param productMinPrice     - product's min price
-     * @param productMaxPrice     - product's max price
-     * @param productNameKeywords - product's name keywords
-     * @return number of products
+     * @param productCategoryId   - product's category's id that user want to get
+     *                            products (this parameter could be optional)
+     * @param productMinPrice     - product's min's price that user want to get
+     *                            products (this parameter could be optional)
+     * @param productMaxPrice     - product's max's price that user want to get
+     *                            products (this parameter could be optional)
+     * @param productStatus       - product's status that user want to get products
+     *                            (this parameter could be optional)
+     * @param productNameKeywords - product's name's keywords that user want to get
+     *                            products (this parameter could be optional)
+     * @param topProductLimit     - number of products that user want to get (this
+     *                            parameter could be optional)
+     * @return list of products
      */
-    public List<Object> countSearchingProducts(Integer categoryId,
-                                               Integer productMinPrice,
-                                               Integer productMaxPrice,
-                                               String productNameKeywords,
-                                               int status) {
-        return this.productRepository.countSearchingProducts(categoryId, productMinPrice, productMaxPrice, productNameKeywords, status);
+    public List<Product> getTopProducts(Integer productCategoryId, Integer productMinPrice, Integer productMaxPrice,
+            Integer productStatus, String productNameKeywords, Integer topProductLimit) {
+        List<Object> topProductsObjectList = this.productRepository.getTopProducts(productCategoryId, productMinPrice,
+                productMaxPrice, productStatus, productNameKeywords, topProductLimit);
+        return this.getProductsFromObjectList(topProductsObjectList);
     }
 
     /**
-     * @param selectedCategoryId         - product's category's id
-     * @param selectedProductMinPrice    - product's min price
-     * @param selectedProductMaxPrice    - product's mac price
-     * @param selectedProductNameKeyword - product's name keywords
-     * @param startIndex                 - start's index
-     * @param status                     - status
-     * @return
+     * @param productsObjectList - products object list that user want to convert to
+     *                           products list
+     * @return list of products
      */
-    public List<Object> findSearchingProductsByPage(Integer selectedCategoryId,
-                                                    Integer selectedProductMinPrice,
-                                                    Integer selectedProductMaxPrice,
-                                                    String selectedProductNameKeyword,
-                                                    int startIndex,
-                                                    int status) {
-        return this.productRepository.findSearchingProductsByPage(selectedCategoryId,
-                selectedProductMinPrice,
-                selectedProductMaxPrice,
-                selectedProductNameKeyword,
-                startIndex,
-                status);
+    private List<Product> getProductsFromObjectList(List<Object> productsObjectList) {
+        List<Product> products = new ArrayList<>();
+        for (Object o : productsObjectList) {
+            Object[] productObjectArr = (Object[]) o;
+            Product product = this.createProductFromObjectArray(productObjectArr);
+            products.add(product);
+        }
+        return products;
     }
 
     /**
-     *
+     * @param productObjectArr - product object array that user want to convert to
+     *                         product
+     * @return converted product
+     */
+    private Product createProductFromObjectArray(Object[] productObjectArr) {
+        int id = (int) productObjectArr[0];
+        String productName = (String) productObjectArr[1];
+        String productMetaTitle = (String) productObjectArr[2];
+        int productCode = (int) productObjectArr[3];
+        String productImage = (String) productObjectArr[4];
+        String productMoreImage = (String) productObjectArr[5];
+        float productPrice = (float) productObjectArr[6];
+        float productPromotionPrice = (float) productObjectArr[7];
+        int productIncludeVat = (int) productObjectArr[8];
+        int productQuantity = (int) productObjectArr[9];
+        int waranty = (int) productObjectArr[10];
+        Date productCreatedDate = (Date) productObjectArr[11];
+        Date productModifiedDate = (Date) productObjectArr[12];
+        String productMetaKeywords = (String) productObjectArr[13];
+        String productMetaDescription = (String) productObjectArr[14];
+        int productTopHot = (int) productObjectArr[15];
+        int productNew = (int) productObjectArr[16];
+        int productStatus = (int) productObjectArr[17];
+        int productViewCount = (int) productObjectArr[18];
+        int productCategoryId = (int) productObjectArr[19];
+        ProductCategory productCategory = this.getProductCategory((long) productCategoryId);
+        return new Product((long) id, productName, productMetaTitle, productCode, productImage, productMoreImage,
+                productPrice, productPromotionPrice, productIncludeVat, productQuantity, waranty, productCreatedDate,
+                productModifiedDate, productMetaKeywords, productMetaDescription, productTopHot, productNew,
+                productStatus, productViewCount, productCategory);
+    }
+
+    /**
+     * @param productCategoryId - product's category's id that user want to get
+     *                          selected product's category
+     * @return selected product's category
+     */
+    public ProductCategory getProductCategory(Long productCategoryId) {
+        return this.productCategoryService.getProductCategory(productCategoryId);
+    }
+
+    /**
      * @param id - product's id
      * @return selected product
      */

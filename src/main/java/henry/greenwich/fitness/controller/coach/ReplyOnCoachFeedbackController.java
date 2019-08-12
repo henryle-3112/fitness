@@ -1,23 +1,16 @@
 package henry.greenwich.fitness.controller.coach;
 
-import henry.greenwich.fitness.model.coach.CoachFeedback;
 import henry.greenwich.fitness.model.coach.ReplyOnCoachFeedback;
-import henry.greenwich.fitness.model.response.ResponseMessage;
 import henry.greenwich.fitness.service.coach.ReplyOnCoachFeedbackService;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @Controller
+@RequestMapping("coach-management")
 public class ReplyOnCoachFeedbackController {
-    /**
-     * replyOnCoachFeedbackService - interact with reply on coach feedback
-     */
     private ReplyOnCoachFeedbackService replyOnCoachFeedbackService;
 
     /**
@@ -27,23 +20,40 @@ public class ReplyOnCoachFeedbackController {
         this.replyOnCoachFeedbackService = replyOnCoachFeedbackService;
     }
 
-    @PostMapping(value = "/coach/feedback/replies/{status}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    /**
+     * @param coachFeedbackId - coach's feedback's id that user want to get list of
+     *                        replies
+     * @param status          - coach's feedback's status that user want to get list
+     *                        of replies (this parameter could be optional)
+     * @return list of replies
+     */
+    @GetMapping(value = "/feedbacks/{coachFeedbackId}/replies", produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public List<ReplyOnCoachFeedback> getReplyOnCoachFeedbacks(@RequestBody CoachFeedback coachFeedback, @PathVariable int status) {
-        return this.replyOnCoachFeedbackService.getReplyOnCoachFeedbacksByCoachFeedbackAndReplyOnCoachFeedbackStatus(coachFeedback, status);
+    public List<ReplyOnCoachFeedback> getReplyOnCoachFeedbacks(@PathVariable Integer coachFeedbackId,
+                                                               @RequestParam(required = false) Integer status) {
+        return this.replyOnCoachFeedbackService.getRepliesOnCoachFeedback(coachFeedbackId, status);
     }
 
-    @PostMapping(value = "/coach/feedback/replies/create", produces = {MediaType.APPLICATION_JSON_VALUE})
+    /**
+     * @param replyOnCoachFeedback - reply on coach's feedback that user want to add
+     *                             to the database
+     * @return inserted reply on coach's feedback
+     */
+    @PostMapping(value = "/replies", produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public ReplyOnCoachFeedback addReplyOnCoachFeedback(@RequestBody ReplyOnCoachFeedback replyOnCoachFeedback) {
         return this.replyOnCoachFeedbackService.addReplyOnCoachFeedback(replyOnCoachFeedback);
     }
 
-    @PostMapping(value = "/coach/feedback/replies/count/{status}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    /**
+     * @param replyOnCoachFeedback - reply on coach's feedback that user want to update
+     * @return updated reply on coach's feedback
+     */
+    @PutMapping(value = "/replies", produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public ResponseMessage countNumberOfReplyOnCoachFeedbacksByCoachFeedback(@RequestBody CoachFeedback coachFeedback, @PathVariable int status) {
-        int nReplies = this.replyOnCoachFeedbackService.countReplyOnCoachFeedbacksByCoachFeedbackAndReplyOnCoachFeedbackStatus(
-                coachFeedback, status);
-        return new ResponseMessage(String.valueOf(nReplies));
+    public ReplyOnCoachFeedback updateReplyOnCoachFeedback(@RequestBody ReplyOnCoachFeedback replyOnCoachFeedback) {
+        return this.replyOnCoachFeedbackService.updateReplyOnCoachFeedback(replyOnCoachFeedback);
     }
+
+
 }

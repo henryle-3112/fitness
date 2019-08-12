@@ -7,14 +7,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
+@RequestMapping("privacy-policy-management")
 public class PrivacyPolicyController {
-    /**
-     * interact with privacy policy's data
-     */
     private PrivacyPolicyService privacyPolicyService;
 
     /**
-     *
      * @param privacyPolicyService - inject privacyPolicyService
      */
     private PrivacyPolicyController(PrivacyPolicyService privacyPolicyService) {
@@ -22,7 +19,8 @@ public class PrivacyPolicyController {
     }
 
     /**
-     * @param id - privacy's policy's id that user want to get
+     * @param id - privacy's policy's id that user want to get selected privacy
+     *           policy
      * @return selected privacyPolicy
      */
     @GetMapping(value = "/policies/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -35,7 +33,7 @@ public class PrivacyPolicyController {
      * @param privacyPolicy - that user want to update to the database
      * @return privacyPolicy - that was updated to the database
      */
-    @PostMapping(value = "/policies/update", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PutMapping(value = "/policies", produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public PrivacyPolicy updatePrivacyPolicy(@RequestBody PrivacyPolicy privacyPolicy) {
         return this.privacyPolicyService.updatePrivacyPolicy(privacyPolicy);

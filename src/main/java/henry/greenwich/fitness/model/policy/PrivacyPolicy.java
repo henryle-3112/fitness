@@ -1,5 +1,6 @@
 package henry.greenwich.fitness.model.policy;
 
+import henry.greenwich.fitness.constants.Constants;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,31 +13,31 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "privacy_policy")
+@Table(name = Constants.PRIVACY_POLICY_TABLE)
 public class PrivacyPolicy {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = Constants.PRIVACY_POLICY_ID)
     private Long id;
 
-    @Column(name = "privacy_policy_name")
+    @Column(name = Constants.PRIVACY_POLICY_NAME)
     private String privacyPolicyName;
 
-    @Column(name = "privacy_policy_content")
+    @Column(name = Constants.PRIVACY_POLICY_CONTENT)
     private String privacyPolicyContent;
 
-    @Column(name = "privacy_policy_meta_title")
+    @Column(name = Constants.PRIVACY_POLICY_META_TITLE)
     private String privacyPolicyMetaTitle;
 
-    @Column(name = "privacy_policy_meta_keywords")
+    @Column(name = Constants.PRIVACY_POLICY_META_KEYWORDS)
     private String privacyPolicyMetaKeywords;
 
-    @Column(name = "privacy_policy_meta_description")
+    @Column(name = Constants.PRIVACY_POLICY_META_DESCRIPTION)
     private String privacyPolicyMetaDescription;
 
-    @Column(name = "privacy_policy_created_date")
+    @Column(name = Constants.PRIVACY_POLICY_CREATED_DATE)
     private String privacyPolicyCreatedDate;
 
-    @Column(name = "privacy_policy_status")
+    @Column(name = Constants.PRIVACY_POLICY_STATUS)
     private String privacyPolicyStatus;
 }

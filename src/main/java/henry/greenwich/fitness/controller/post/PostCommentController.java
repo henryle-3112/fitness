@@ -1,10 +1,7 @@
 package henry.greenwich.fitness.controller.post;
 
-import henry.greenwich.fitness.model.post.Post;
 import henry.greenwich.fitness.model.post.PostComment;
-import henry.greenwich.fitness.service.post.PostService;
 import henry.greenwich.fitness.service.post.PostCommentService;
-import henry.greenwich.fitness.service.user.UserProfileService;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -12,45 +9,46 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
+@RequestMapping("post-management")
 public class PostCommentController {
-    /**
-     * postCommentService - interact with post's comment's data
-     * postService - interact with post's data
-     * userProfileService - interact with user's profile's data
-     */
     private PostCommentService postCommentService;
-    private PostService postService;
-    private UserProfileService userProfileService;
 
     /**
      * @param postCommentService - inject postCommentService
-     * @param postService        - inject postService
-     * @param userProfileService - inject userProfileService
      */
-    public PostCommentController(PostCommentService postCommentService,
-                                 PostService postService,
-                                 UserProfileService userProfileService) {
+    public PostCommentController(PostCommentService postCommentService) {
         this.postCommentService = postCommentService;
-        this.postService = postService;
-        this.userProfileService = userProfileService;
     }
 
     /**
+     * @param postId - post's id that user want to get post's comments
+     * @param status - post's comment's status that user want to get post's comments
      * @return list of post's comments
      */
-    @PostMapping(value = "/post/comments/{status}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping(value = "/posts/{postId}/comments", produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public List<PostComment> getPostComments(@RequestBody Post post, @PathVariable int status) {
-        return this.postCommentService.getPostCommentsByPostAndPostCommentStatus(post, status);
+    public List<PostComment> getPostComments(@PathVariable Integer postId,
+                                             @RequestParam(required = false) Integer status) {
+        return this.postCommentService.getPostComments(postId, status);
     }
 
     /**
      * @param postComment - that user want to add to the database
-     * @return postComment - that was inserted to the database
+     * @return postComment - inserted post's comment
      */
-    @PostMapping(value = "/post/comments/create", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PostMapping(value = "/comments", produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public PostComment addPostComment(@RequestBody PostComment postComment) {
         return this.postCommentService.addPostComment(postComment);
+    }
+
+    /**
+     * @param postComment - post's comment that user want to update
+     * @return updated post's comment
+     */
+    @PutMapping(value = "/comments", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @ResponseBody
+    public PostComment updatePostComment(@RequestBody PostComment postComment) {
+        return this.postCommentService.updatePostComment(postComment);
     }
 }

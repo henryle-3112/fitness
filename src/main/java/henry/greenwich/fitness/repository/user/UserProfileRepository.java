@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserProfileRepository extends JpaRepository<UserProfile, Long> {
     /**
-     *
      * @param id - user's profile's is that user want to get
      * @return selected userProfile
      */

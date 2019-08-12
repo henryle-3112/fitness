@@ -1,5 +1,6 @@
 package henry.greenwich.fitness.model.product;
 
+import henry.greenwich.fitness.constants.Constants;
 import henry.greenwich.fitness.model.user.UserProfile;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,28 +15,34 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "reply_on_product_feedback")
+@Table(name = Constants.REPLY_ON_PRODUCT_FEEDBACK_TABLE)
 public class ReplyOnProductFeedback {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = Constants.REPLY_ON_PRODUCT_FEEDBACK_ID)
     private Long id;
 
-    @Column(name = "reply_on_product_feedback_content")
+    @Column(name = Constants.REPLY_ON_PRODUCT_FEEDBACK_CONTENT)
     private String replyOnProductFeedbackContent;
 
-    @Column(name = "reply_on_product_feedback_status")
+    @Column(name = Constants.REPLY_ON_PRODUCT_FEEDBACK_STATUS)
     private int replyOnProductFeedbackStatus;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "reply_on_product_feedback_created_date")
+    @Column(name = Constants.REPLY_ON_PRODUCT_FEEDBACK_CREATED_DATE)
     private Date replyOnProductFeedbackCreateDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_feedback_id")
+    @JoinColumn(name = Constants.REPLY_ON_PRODUCT_FEEDBACK_PRODUCT_FEEDBACK_ID)
     public ProductFeedback productFeedback;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_profile_id")
+    @JoinColumn(name = Constants.REPLY_ON_PRODUCT_FEEDBACK_USER_PROFILE_ID)
     public UserProfile userProfile;
+
+    @Column(name = Constants.REPLY_ON_PRODUCT_FEEDBACK_NUMBER_OF_LIKES)
+    int numberOfLikes;
+
+    @Column(name = Constants.REPLY_ON_PRODUCT_FEEDBACK_NUMBER_OF_DISLIKES)
+    int numberOfDislikes;
 }

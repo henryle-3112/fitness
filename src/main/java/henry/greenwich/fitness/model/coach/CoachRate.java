@@ -1,5 +1,6 @@
 package henry.greenwich.fitness.model.coach;
 
+import henry.greenwich.fitness.constants.Constants;
 import henry.greenwich.fitness.model.user.UserProfile;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,22 +14,22 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "coach_rate")
+@Table(name = Constants.COACH_RATE_TABLE)
 public class CoachRate {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = Constants.COACH_RATE_ID)
     private Long id;
 
-    @Column(name = "rate")
+    @Column(name = Constants.COACH_RATE_RATE)
     private int rate;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "coach_id")
+    @JoinColumn(name = Constants.COACH_RATE_COACH_ID)
     public Coach coach;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_profile_id")
+    @JoinColumn(name = Constants.COACH_RATE_USER_PROFILE_ID)
     public UserProfile userProfile;
 }

@@ -1,5 +1,6 @@
 package henry.greenwich.fitness.model.post;
 
+import henry.greenwich.fitness.constants.Constants;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,33 +14,33 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "post_slide")
+@Table(name = Constants.POST_SLIDE_TABLE)
 public class PostSlide {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = Constants.POST_SLIDE_ID)
     private Long id;
 
-    @Column(name = "post_slide_image")
+    @Column(name = Constants.POST_SLIDE_IMAGE)
     private String postSlideImage;
 
-    @Column(name = "post_slide_link")
+    @Column(name = Constants.POST_SLIDE_LINK)
     private String postSlideLink;
 
-    @Column(name = "post_slide_description")
+    @Column(name = Constants.POST_SLIDE_DESCRIPTION)
     private String postSlideDescription;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "post_slide_created_date")
+    @Column(name = Constants.POST_SLIDE_CREATED_DATE)
     private Date postSlideCreatedDate;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "post_slide_modified_date")
+    @Column(name = Constants.POST_SLIDE_MODIFIED_DATE)
     private Date postSlideModifiedDate;
 
-    @Column(name = "post_slide_status")
+    @Column(name = Constants.POST_SLIDE_STATUS)
     private int postSlideStatus;
 
-    @Column(name = "post_slide_title")
+    @Column(name = Constants.POST_SLIDE_TITLE)
     private String postSlideTitle;
 }

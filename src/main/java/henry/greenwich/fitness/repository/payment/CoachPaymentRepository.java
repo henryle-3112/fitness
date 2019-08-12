@@ -1,5 +1,6 @@
 package henry.greenwich.fitness.repository.payment;
 
+import henry.greenwich.fitness.constants.Constants;
 import henry.greenwich.fitness.model.payment.CoachPayment;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -8,116 +9,93 @@ import java.util.List;
 
 public interface CoachPaymentRepository extends JpaRepository<CoachPayment, Long> {
 
-    /**
-     * @param coachId    - coach's id
-     * @param month      - month
-     * @param year       - year
-     * @param startIndex - start index
-     * @return list of coach payments
-     */
-    @Query(nativeQuery = true, value =
-            "select coach_payment.membership_id, coach_payment.sum " +
-                    "from coach_payment inner join membership " +
-                    "on coach_payment.membership_id = membership.id " +
-                    "where membership.coach_id = :coachId and month(coach_payment.created_date) = :month " +
-                    "and year(coach_payment.created_date) = :year limit :startIndex, 8")
-    List<Object> findCoachPaymentsByCoachIdAndByMonthAndByYearAndByPage(
-            int coachId,
-            String month,
-            String year,
-            int startIndex
-    );
+    String GET_COACH_PAYMENT_HISTORIES_BY_PAGE = "select " + Constants.COACH_PAYMENT_TABLE + "." + Constants.COACH_PAYMENT_MEMBERSHIP_ID + ", " + Constants.COACH_PAYMENT_TABLE + "." + Constants.COACH_PAYMENT_SUM + "" +
+            " from " + Constants.COACH_PAYMENT_TABLE + " inner join " + Constants.MEMBERSHIP_TABLE + "" +
+            " on " + Constants.COACH_PAYMENT_TABLE + "." + Constants.COACH_PAYMENT_MEMBERSHIP_ID + " = " + Constants.MEMBERSHIP_TABLE + "." + Constants.MEMBERSHIP_ID + "" +
+            " where (:coachId is null or " + Constants.MEMBERSHIP_TABLE + "." + Constants.MEMBERSHIP_COACH_ID + " = :coachId)" +
+            " and (:userProfileId is null or " + Constants.MEMBERSHIP_TABLE + "." + Constants.MEMBERSHIP_USER_PROFILE_ID + " = :userProfileId)" +
+            " and (:monthToViewCoachPaymentHistories is null or month(" + Constants.COACH_PAYMENT_TABLE + "." + Constants.COACH_PAYMENT_CREATED_DATE + ") = :monthToViewCoachPaymentHistories)" +
+            " and (:yearToViewCoachPaymentHistories is null or year(" + Constants.COACH_PAYMENT_TABLE + "." + Constants.COACH_PAYMENT_CREATED_DATE + ") = :yearToViewCoachPaymentHistories)" +
+            " limit :startIndex, " + Constants.NUMBER_ITEMS_PER_PAGE;
 
-    /**
-     * @param coachId - coach id
-     * @param month   - month
-     * @param year    - year
-     * @return number of coach payments
-     */
-    @Query(nativeQuery = true, value =
-            "select count(*) " +
-                    "from coach_payment inner join membership " +
-                    "on coach_payment.membership_id = membership.id " +
-                    "where membership.coach_id = :coachId and month(coach_payment.created_date) = :month " +
-                    "and year(coach_payment.created_date) = :year")
-    List<Object> countCoachPaymentsByCoachIdAndByMonthAndByYear(
-            int coachId,
-            String month,
-            String year
-    );
+    String GET_COACH_PAYMENT_HISTORIES = "select " + Constants.COACH_PAYMENT_TABLE + "." + Constants.COACH_PAYMENT_MEMBERSHIP_ID + ", " + Constants.COACH_PAYMENT_TABLE + "." + Constants.COACH_PAYMENT_SUM + "" +
+            " from " + Constants.COACH_PAYMENT_TABLE + " inner join " + Constants.MEMBERSHIP_TABLE + "" +
+            " on " + Constants.COACH_PAYMENT_TABLE + "." + Constants.COACH_PAYMENT_MEMBERSHIP_ID + " = " + Constants.MEMBERSHIP_TABLE + "." + Constants.MEMBERSHIP_ID + "" +
+            " where (:coachId is null or " + Constants.MEMBERSHIP_TABLE + "." + Constants.MEMBERSHIP_COACH_ID + " = :coachId)" +
+            " and (:userProfileId is null or " + Constants.MEMBERSHIP_TABLE + "." + Constants.MEMBERSHIP_USER_PROFILE_ID + " = :userProfileId)" +
+            " and (:monthToViewCoachPaymentHistories is null or month(" + Constants.COACH_PAYMENT_TABLE + "." + Constants.COACH_PAYMENT_CREATED_DATE + ") = :monthToViewCoachPaymentHistories)" +
+            " and (:yearToViewCoachPaymentHistories is null or year(" + Constants.COACH_PAYMENT_TABLE + "." + Constants.COACH_PAYMENT_CREATED_DATE + ") = :yearToViewCoachPaymentHistories)";
 
-    /**
-     * @param coachId - coach's id
-     * @param month   - month
-     * @param year    - year
-     * @return total payment
-     */
-    @Query(nativeQuery = true, value =
-            "select sum(coach_payment.sum) " +
-                    "from coach_payment inner join membership " +
-                    "on coach_payment.membership_id = membership.id " +
-                    "where membership.coach_id = :coachId and month(coach_payment.created_date) = :month " +
-                    "and year(coach_payment.created_date) = :year")
-    List<Object> getTotalPaymentByCoachIdByMonthAndByYear(
-            int coachId,
-            String month,
-            String year
-    );
+    String GET_NUMBER_OF_COACH_PAYMENT_HISTORIES = "select count(*)" +
+            " from " + Constants.COACH_PAYMENT_TABLE + " inner join " + Constants.MEMBERSHIP_TABLE + "" +
+            " on " + Constants.COACH_PAYMENT_TABLE + "." + Constants.COACH_PAYMENT_MEMBERSHIP_ID + " = " + Constants.MEMBERSHIP_TABLE + "." + Constants.MEMBERSHIP_ID + "" +
+            " where (:coachId is null or " + Constants.MEMBERSHIP_TABLE + "." + Constants.MEMBERSHIP_COACH_ID + " = :coachId)" +
+            " and (:userProfileId is null or " + Constants.MEMBERSHIP_TABLE + "." + Constants.USER_PROFILE_ID + " = :userProfileId)" +
+            " and (:monthToViewCoachPaymentHistories is null or month(" + Constants.COACH_PAYMENT_TABLE + "." + Constants.COACH_PAYMENT_CREATED_DATE + ") = :monthToViewCoachPaymentHistories)" +
+            " and (:yearToViewCoachPaymentHistories is null or year(" + Constants.COACH_PAYMENT_TABLE + "." + Constants.COACH_PAYMENT_CREATED_DATE + ") = :yearToViewCoachPaymentHistories)";
+
+    String GET_COACH_PAYMENT_HISTORIES_TOTAL = "select sum(" + Constants.COACH_PAYMENT_TABLE + "." + Constants.COACH_PAYMENT_SUM + ") as coaches_payment_sum" +
+            " from " + Constants.COACH_PAYMENT_TABLE + " inner join " + Constants.MEMBERSHIP_TABLE + "" +
+            " on " + Constants.COACH_PAYMENT_TABLE + "." + Constants.COACH_PAYMENT_MEMBERSHIP_ID + " = " + Constants.MEMBERSHIP_TABLE + "." + Constants.MEMBERSHIP_ID + "" +
+            " where (:coachId is null or " + Constants.MEMBERSHIP_TABLE + "." + Constants.MEMBERSHIP_COACH_ID + " = :coachId)" +
+            " and (:userProfileId is null or " + Constants.MEMBERSHIP_TABLE + "." + Constants.MEMBERSHIP_USER_PROFILE_ID + " = :userProfileId)" +
+            " and (:monthToViewCoachPaymentHistories is null or month(" + Constants.COACH_PAYMENT_TABLE + "." + Constants.COACH_PAYMENT_CREATED_DATE + ") = :monthToViewCoachPaymentHistories)" +
+            " and (:yearToViewCoachPaymentHistories is null or year(" + Constants.COACH_PAYMENT_TABLE + "." + Constants.COACH_PAYMENT_CREATED_DATE + ") = :yearToViewCoachPaymentHistories)";
 
 
     /**
-     * @param userProfileId - user profile id
-     * @param month         - month
-     * @param year          - year
-     * @param startIndex    - start index
-     * @return list of coach payments
+     * @param coachId                          - coach's id that user want to get coach payment histories (this parameter could be optional)
+     * @param userProfileId                    - user's profile's id that user want to get coach payment histories (this parameter could be optional)
+     * @param monthToViewCoachPaymentHistories - month to view coach payment histories (this parameter could be optional)
+     * @param yearToViewCoachPaymentHistories  - year to view coach payment histories (this parameter could be optional)
+     * @param startIndex                       - start index for pagination (this parameter could be optional)
+     * @return list of coach payment histories
      */
-    @Query(nativeQuery = true, value =
-            "select coach_payment.membership_id, coach_payment.sum " +
-                    "from coach_payment inner join membership " +
-                    "on coach_payment.membership_id = membership.id " +
-                    "where membership.user_profile_id = :userProfileId and month(coach_payment.created_date) = :month " +
-                    "and year(coach_payment.created_date) = :year limit :startIndex, 8")
-    List<Object> findCoachPaymentsByUserProfileIdAndByMonthAndByYearAndByPage(
-            int userProfileId,
-            String month,
-            String year,
-            int startIndex
-    );
+    @Query(nativeQuery = true, value = GET_COACH_PAYMENT_HISTORIES_BY_PAGE)
+    List<Object> getCoachPaymentHistoriesPaging(Integer coachId,
+                                                Integer userProfileId,
+                                                String monthToViewCoachPaymentHistories,
+                                                String yearToViewCoachPaymentHistories,
+                                                Integer startIndex);
 
     /**
-     * @param userProfileId - user profile id
-     * @param month         - month
-     * @param year          - year
-     * @return number of coach payments
+     * @param coachId                          - coach's id that user want to get coach payment histories (this parameter could be optional)
+     * @param userProfileId                    - user's profile's id that user want to get coach payment histories (this parameter could be optional)
+     * @param monthToViewCoachPaymentHistories - month to view coach payment histories (this parameter could be optional)
+     * @param yearToViewCoachPaymentHistories  - year to view coach payment histories (this parameter could be optional)
+     * @return list of coach payment histories
      */
-    @Query(nativeQuery = true, value =
-            "select count(*) " +
-                    "from coach_payment inner join membership " +
-                    "on coach_payment.membership_id = membership.id " +
-                    "where membership.user_profile_id = :userProfileId and month(coach_payment.created_date) = :month " +
-                    "and year(coach_payment.created_date) = :year")
-    List<Object> countCoachPaymentsByUserProfileIdAndByMonthAndByYear(
-            int userProfileId,
-            String month,
-            String year
-    );
+    @Query(nativeQuery = true, value = GET_COACH_PAYMENT_HISTORIES)
+    List<Object> getCoachPaymentHistories(Integer coachId,
+                                          Integer userProfileId,
+                                          String monthToViewCoachPaymentHistories,
+                                          String yearToViewCoachPaymentHistories);
 
     /**
-     * @param userProfileId - user profile id
-     * @param month         - month
-     * @param year          - year
-     * @return total payment
+     * @param coachId                          - coach's id that user want to get number of coach payment histories (this parameter could be optional)
+     * @param userProfileId                    - user's profile's id that user want to get number of coach payment histories (this parameter could be optional)
+     * @param monthToViewCoachPaymentHistories - month to view number of coach payment histories (this parameter could be optional)
+     * @param yearToViewCoachPaymentHistories  - year to view number of coach payment histories (this parameter could be optional)
+     * @return number of coach payment histories
      */
-    @Query(nativeQuery = true, value =
-            "select sum(coach_payment.sum) " +
-                    "from coach_payment inner join membership " +
-                    "on coach_payment.membership_id = membership.id " +
-                    "where membership.user_profile_id = :userProfileId and month(coach_payment.created_date) = :month " +
-                    "and year(coach_payment.created_date) = :year")
-    List<Object> getTotalPaymentByUserProfileIdByMonthAndByYear(
-            int userProfileId,
-            String month,
-            String year
-    );
+    @Query(nativeQuery = true, value = GET_NUMBER_OF_COACH_PAYMENT_HISTORIES)
+    List<Object> getNumberOfCoachPaymentHistories(Integer coachId,
+                                                  Integer userProfileId,
+                                                  String monthToViewCoachPaymentHistories,
+                                                  String yearToViewCoachPaymentHistories);
+
+    /**
+     * @param coachId                          - coach's id that user want to get coach payment histories total (this parameter could be optional)
+     * @param userProfileId                    - user's profile's id that user want to get coach payment histories total (this parameter could be optional)
+     * @param monthToViewCoachPaymentHistories - month to view number of coach payment histories total (this parameter could be optional)
+     * @param yearToViewCoachPaymentHistories  - year to view number of coach payment histories total (this parameter could be optional)
+     * @return coach payment histories total
+     */
+    @Query(nativeQuery = true, value = GET_COACH_PAYMENT_HISTORIES_TOTAL)
+    List<Object> getCoachPaymentHistoriesTotal(Integer coachId,
+                                               Integer userProfileId,
+                                               String monthToViewCoachPaymentHistories,
+                                               String yearToViewCoachPaymentHistories);
+
+
 }

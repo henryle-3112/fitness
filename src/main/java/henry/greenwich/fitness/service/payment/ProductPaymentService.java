@@ -6,9 +6,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class ProductPaymentService {
-    /**
-     * productPaymentRepository - interact with product payment repository
-     */
     private ProductPaymentRepository productPaymentRepository;
 
     /**

@@ -1,23 +1,16 @@
 package henry.greenwich.fitness.controller.feed;
 
-import henry.greenwich.fitness.model.feed.NewFeed;
 import henry.greenwich.fitness.model.feed.NewFeedComment;
-import henry.greenwich.fitness.model.response.ResponseMessage;
 import henry.greenwich.fitness.service.feed.NewFeedCommentService;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @Controller
+@RequestMapping("feed-management")
 public class NewFeedCommentController {
-    /**
-     * newFeedCommentService - interact with new's feed's comment's data
-     */
     private NewFeedCommentService newFeedCommentService;
 
     /**
@@ -28,37 +21,37 @@ public class NewFeedCommentController {
     }
 
     /**
-     * @param newFeed - new's feed
-     * @param status  - status
-     * @return list of new's feed's comment
+     * @param newFeedId - newfeed's id that user want to get newfeed's comments
+     * @param status    - newfeed's comment's status that user want to filter
+     *                  newfeed's comments (this parameter could be optional)
+     * @return list of newfeed's comments
      */
-    @PostMapping(value = "/feed/comments/{status}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping(value = "/feeds/{newFeedId}/comments", produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public List<NewFeedComment> findNewFeedCommentsByNewFeedAndNewFeedCommentStatus(@RequestBody NewFeed newFeed, @PathVariable int status) {
-        return this.newFeedCommentService.findNewFeedCommentsByNewFeedAndNewFeedCommentStatus(newFeed, status);
+    public List<NewFeedComment> getNewFeedComments(@PathVariable Integer newFeedId,
+                                                   @RequestParam(required = false) Integer status) {
+        return this.newFeedCommentService.getNewFeedComments(newFeedId, status);
     }
 
     /**
-     * @param newFeedComment - new's feed's comment
+     * @param newFeedComment - new's feed's comment that user want to add to the
+     *                       database
      * @return inserted new's feed's comment
      */
-    @PostMapping(value = "/feed/comments/create", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PostMapping(value = "/comments", produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public NewFeedComment addNewFeedComment(@RequestBody NewFeedComment newFeedComment) {
         return this.newFeedCommentService.addNewFeedComment(newFeedComment);
     }
 
     /**
-     * @param newFeed - new's feed
-     * @param status  - status
-     * @return number of new feed comments
+     *
+     * @param newFeedComment - newfeed's comment that user want to update
+     * @return updated newfeed's comment
      */
-    @PostMapping(value = "/feed/comments/count/{status}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PutMapping(value = "/comments", produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public ResponseMessage countNewFeedCommentsByNewFeedAndNewFeedCommentStatus(
-            @RequestBody NewFeed newFeed, @PathVariable int status) {
-        int nNewFeedComments = this.newFeedCommentService
-                .countNewFeedCommentsByNewFeedAndNewFeedCommentStatus(newFeed, status);
-        return new ResponseMessage(String.valueOf(nNewFeedComments));
+    public NewFeedComment updateNewFeedComment(@RequestBody NewFeedComment newFeedComment) {
+        return this.newFeedCommentService.updateNewFeedComment(newFeedComment);
     }
 }

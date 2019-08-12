@@ -1,5 +1,6 @@
 package henry.greenwich.fitness.model.product;
 
+import henry.greenwich.fitness.constants.Constants;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,70 +14,70 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "product")
+@Table(name = Constants.PRODUCT_TABLE)
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = Constants.PRODUCT_ID)
     private Long id;
 
-    @Column(name = "product_name")
+    @Column(name = Constants.PRODUCT_NAME)
     private String productName;
 
-    @Column(name = "product_meta_title")
+    @Column(name = Constants.PRODUCT_META_TITLE)
     private String productMetaTitle;
 
-    @Column(name = "product_code")
+    @Column(name = Constants.PRODUCT_CODE)
     private int productCode;
 
-    @Column(name = "product_image")
+    @Column(name = Constants.PRODUCT_IMAGE)
     private String productImage;
 
-    @Column(name = "product_more_image")
+    @Column(name = Constants.PRODUCT_MORE_IMAGE)
     private String productMoreImage;
 
-    @Column(name = "product_price")
+    @Column(name = Constants.PRODUCT_PRICE)
     private float productPrice;
 
-    @Column(name = "product_promotion_price")
+    @Column(name = Constants.PRODUCT_PROMOTION_PRICE)
     private float productPromotionPrice;
 
-    @Column(name = "product_include_vat")
+    @Column(name = Constants.PRODUCT_INCLUDE_VAT)
     private int productIncludeVat;
 
-    @Column(name = "product_quantity")
+    @Column(name = Constants.PRODUCT_QUANTITY)
     private int productQuantity;
 
-    @Column(name = "product_waranty")
+    @Column(name = Constants.PRODUCT_WARANTY)
     private int waranty;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "product_created_date")
+    @Column(name = Constants.PRODUCT_CREATED_DATE)
     private Date productCreatedDate;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "product_modified_date")
+    @Column(name = Constants.PRODUCT_MODIFIED_DATE)
     private Date productModifiedDate;
 
-    @Column(name = "product_meta_keywords")
+    @Column(name = Constants.PRODUCT_META_KEYWORDS)
     private String productMetaKeywords;
 
-    @Column(name = "product_meta_description")
+    @Column(name = Constants.PRODUCT_META_DESCRIPTION)
     private String productMetaDescription;
 
-    @Column(name = "product_top_hot")
+    @Column(name = Constants.PRODUCT_TOP_HOT)
     private int productTopHot;
 
-    @Column(name = "product_new")
+    @Column(name = Constants.PRODUCT_NEW)
     private int productNew;
 
-    @Column(name = "product_status")
+    @Column(name = Constants.PRODUCT_STATUS)
     private int productStatus;
 
-    @Column(name = "product_view_count")
+    @Column(name = Constants.PRODUCT_VIEW_COUNT)
     private int productViewCount;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_category_id")
+    @JoinColumn(name = Constants.PRODUCT_PRODUCT_CATEGORY_ID)
     public ProductCategory productCategory;
 }

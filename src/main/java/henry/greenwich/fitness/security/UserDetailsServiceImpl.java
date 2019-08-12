@@ -19,28 +19,42 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private UserAccountRepository userAccountRepository;
     private UserRoleRepository userRoleRepository;
 
+    /**
+     * @param userAccountRepository - inject userAccountRepository
+     * @param userRoleRepository    - inject userRoleRepository
+     */
     public UserDetailsServiceImpl(UserAccountRepository userAccountRepository, UserRoleRepository userRoleRepository) {
         this.userAccountRepository = userAccountRepository;
         this.userRoleRepository = userRoleRepository;
     }
 
+    /**
+     * @param username - user's name that will be used to load user's information
+     * @return user details
+     * @throws UsernameNotFoundException - throw exception if username not found
+     */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         // check Authentication by loading user's account by user's name;
         List<Object> userAccount = this.userAccountRepository.checkAuthentication(username);
         if (userAccount != null && !userAccount.isEmpty()) {
-            // convert selected result to object
-            Object[] selectedUserAccount = (Object[]) userAccount.get(0);
-            // get user's information (including user's name, user's password, user's profile id)
-            String selectedUserName = (String) selectedUserAccount[0];
-            String selectedUserPassword = (String) selectedUserAccount[1];
-            Integer selectedUserProfileId = (Integer) selectedUserAccount[2];
-            // get user's roles
-            List<Object> userRoles = this.userRoleRepository.findUserRoles(selectedUserProfileId);
-            List<GrantedAuthority> authorities = new ArrayList<>();
-            userRoles.forEach(role -> authorities.add(new SimpleGrantedAuthority((String) role)));
-            return new User(selectedUserName, selectedUserPassword, authorities);
+            return this.getUserDetails(userAccount);
         }
         return null;
+    }
+
+    /**
+     * @param userAccount - user account that user want to convert to user details
+     * @return converted user details
+     */
+    private User getUserDetails(List<Object> userAccount) {
+        Object[] selectedUserAccount = (Object[]) userAccount.get(0);
+        String selectedUserName = (String) selectedUserAccount[0];
+        String selectedUserPassword = (String) selectedUserAccount[1];
+        Integer selectedUserProfileId = (Integer) selectedUserAccount[2];
+        List<Object> userRoles = this.userRoleRepository.findUserRoles(selectedUserProfileId);
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        userRoles.forEach(role -> authorities.add(new SimpleGrantedAuthority((String) role)));
+        return new User(selectedUserName, selectedUserPassword, authorities);
     }
 }

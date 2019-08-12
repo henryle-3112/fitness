@@ -1,6 +1,5 @@
 package henry.greenwich.fitness.model.user;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,6 +15,8 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Embeddable
 public class UserRoleKey implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private UserProfileKey userProfileKey;
 
     @Column(name = "role_id")

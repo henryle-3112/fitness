@@ -8,24 +8,15 @@ import java.util.List;
 
 @Repository
 public interface PostCategoryRepository extends JpaRepository<PostCategory, Long> {
-    /**
-     *
-     * @param id - post's category's id
-     * @param status - post's category's status
-     * @return selected post's category
-     */
-    PostCategory findPostCategoryByIdAndPostCategoryStatus(Long id, int status);
 
     /**
-     *
-     * @param status - post's category's status
-     * @return list of post categories
+     * @param postCategoryStatus - post's category's status that user want to get post's categories
+     * @return list of post's categories
      */
-    List<PostCategory> findPostCategoriesByPostCategoryStatus(int status);
+    List<PostCategory> findPostCategoriesByPostCategoryStatus(Integer postCategoryStatus);
 
     /**
-     *
-     * @param id - post's category's id
+     * @param id - post's category's id that user want to get post's category
      * @return selected post's category
      */
     PostCategory findPostCategoryById(Long id);

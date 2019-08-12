@@ -1,23 +1,27 @@
 package henry.greenwich.fitness.service.payment;
 
+import henry.greenwich.fitness.model.membership.Membership;
 import henry.greenwich.fitness.model.payment.CoachPayment;
 import henry.greenwich.fitness.repository.payment.CoachPaymentRepository;
+import henry.greenwich.fitness.service.membership.MembershipService;
+
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class CoachPaymentService {
-    /**
-     * coachPaymentRepository - interact with coach payment data
-     */
     private CoachPaymentRepository coachPaymentRepository;
+    private MembershipService membershipService;
 
     /**
      * @param coachPaymentRepository - inject coachPaymentRepository
+     * @param membershipService      - inject membershipService
      */
-    public CoachPaymentService(CoachPaymentRepository coachPaymentRepository) {
+    public CoachPaymentService(CoachPaymentRepository coachPaymentRepository, MembershipService membershipService) {
         this.coachPaymentRepository = coachPaymentRepository;
+        this.membershipService = membershipService;
     }
 
     /**
@@ -29,119 +33,140 @@ public class CoachPaymentService {
     }
 
     /**
-     * @param coachId    - coach's id
-     * @param month      - month
-     * @param year       - year
-     * @param startIndex - start's index
-     * @return list of coach payments
+     * @param coachId                          - coach's id that user want to get
+     *                                         coach payment histories (this
+     *                                         parameter could be optional)
+     * @param userProfileId                    - user's profile's id that user want
+     *                                         to get coach payment histories (this
+     *                                         parameter could be optional)
+     * @param monthToViewCoachPaymentHistories - month to view coach payment
+     *                                         histories (this parameter could be
+     *                                         optional)
+     * @param yearToViewCoachPaymentHistories  - year to view coach payment
+     *                                         histories (this parameter could be
+     *                                         optional)
+     * @param startIndex                       - start index for pagination (this
+     *                                         parameter could be optional)
+     * @return list of coach payment histories
      */
-    public List<Object> findCoachPaymentsByCoachIdAndByMonthAndByYearAndByPage(
-            int coachId,
-            String month,
-            String year,
-            int startIndex
-    ) {
-        return this.coachPaymentRepository.findCoachPaymentsByCoachIdAndByMonthAndByYearAndByPage(
-                coachId,
-                month,
-                year,
-                startIndex
-        );
+    public List<CoachPayment> getCoachPaymentHistoriesPaging(Integer coachId, Integer userProfileId,
+            String monthToViewCoachPaymentHistories, String yearToViewCoachPaymentHistories, Integer startIndex) {
+        List<Object> coachPaymentHistoriesObjectList = this.coachPaymentRepository.getCoachPaymentHistoriesPaging(
+                coachId, userProfileId, monthToViewCoachPaymentHistories, yearToViewCoachPaymentHistories, startIndex);
+        return this.getCoachPaymentHistoriesFromObjectList(coachPaymentHistoriesObjectList);
     }
 
     /**
-     * @param coachId - coach's id
-     * @param month   - month
-     * @param year    - year
-     * @return number of coach payments
+     * @param coachId                          - coach's id that user want to get
+     *                                         coach payment histories (this
+     *                                         parameter could be optional)
+     * @param userProfileId                    - user's profile's id that user want
+     *                                         to get coach payment histories (this
+     *                                         parameter could be optional)
+     * @param monthToViewCoachPaymentHistories - month to view coach payment
+     *                                         histories (this parameter could be
+     *                                         optional)
+     * @param yearToViewCoachPaymentHistories  - year to view coach payment
+     *                                         histories (this parameter could be
+     *                                         optional)
+     * @return list of coach payment histories
      */
-    public List<Object> countCoachPaymentsByCoachIdAndByMonthAndByYear(
-            int coachId,
-            String month,
-            String year
-    ) {
-        return this.coachPaymentRepository.countCoachPaymentsByCoachIdAndByMonthAndByYear(
-                coachId,
-                month,
-                year
-        );
+    public List<CoachPayment> getCoachPaymentHistories(Integer coachId, Integer userProfileId,
+            String monthToViewCoachPaymentHistories, String yearToViewCoachPaymentHistories) {
+        List<Object> coachPaymentHistoriesObjectList = this.coachPaymentRepository.getCoachPaymentHistories(coachId,
+                userProfileId, monthToViewCoachPaymentHistories, yearToViewCoachPaymentHistories);
+        return this.getCoachPaymentHistoriesFromObjectList(coachPaymentHistoriesObjectList);
     }
 
     /**
-     * @param coachId - coach's id
-     * @param month   - month
-     * @param year    - year
-     * @return total payments
+     * @param coachId                          - coach's id that user want to get
+     *                                         number of coach payment histories
+     *                                         (this parameter could be optional)
+     * @param userProfileId                    - user's profile's id that user want
+     *                                         to get number of coach payment
+     *                                         histories (this parameter could be
+     *                                         optional)
+     * @param monthToViewCoachPaymentHistories - month to view number of coach
+     *                                         payment histories (this parameter
+     *                                         could be optional)
+     * @param yearToViewCoachPaymentHistories  - year to view number of coach
+     *                                         payment histories (this parameter
+     *                                         could be optional)
+     * @return number of coach payment histories
      */
-    public List<Object> getTotalPaymentByCoachIdByMonthAndByYear(
-            int coachId,
-            String month,
-            String year
-    ) {
-        return this.coachPaymentRepository.getTotalPaymentByCoachIdByMonthAndByYear(
-                coachId,
-                month,
-                year
-        );
+    public int getNumberOfCoachPaymentHistories(Integer coachId, Integer userProfileId,
+            String monthToViewCoachPaymentHistories, String yearToViewCoachPaymentHistories) {
+        List<Object> nCoachPaymentHistories = this.coachPaymentRepository.getNumberOfCoachPaymentHistories(coachId,
+                userProfileId, monthToViewCoachPaymentHistories, yearToViewCoachPaymentHistories);
+        if (nCoachPaymentHistories.size() > 0) {
+            return Integer.valueOf(nCoachPaymentHistories.get(0).toString());
+        }
+        return 0;
     }
 
     /**
-     *
-     * @param userProfileId - user profile id
-     * @param month - month
-     * @param year - year
-     * @param startIndex - start index
-     * @return list of coach payments
+     * @param coachId                          - coach's id that user want to get
+     *                                         coach payment histories total (this
+     *                                         parameter could be optional)
+     * @param userProfileId                    - user's profile's id that user want
+     *                                         to get coach payment histories total
+     *                                         (this parameter could be optional)
+     * @param monthToViewCoachPaymentHistories - month to view number of coach
+     *                                         payment histories total (this
+     *                                         parameter could be optional)
+     * @param yearToViewCoachPaymentHistories  - year to view number of coach
+     *                                         payment histories total (this
+     *                                         parameter could be optional)
+     * @return coach payment histories total
      */
-    public List<Object> findCoachPaymentsByUserProfileIdAndByMonthAndByYearAndByPage(
-            int userProfileId,
-            String month,
-            String year,
-            int startIndex
-    ) {
-        return this.coachPaymentRepository.findCoachPaymentsByUserProfileIdAndByMonthAndByYearAndByPage(
-                userProfileId,
-                month,
-                year,
-                startIndex
-        );
+    public int getCoachPaymentHistoriesTotal(Integer coachId, Integer userProfileId,
+            String monthToViewCoachPaymentHistories, String yearToViewCoachPaymentHistories) {
+        List<Object> nCoachPaymentHistoriesTotal = this.coachPaymentRepository.getCoachPaymentHistoriesTotal(coachId,
+                userProfileId, monthToViewCoachPaymentHistories, yearToViewCoachPaymentHistories);
+        if (nCoachPaymentHistoriesTotal.size() > 0) {
+            return Integer.valueOf(nCoachPaymentHistoriesTotal.get(0).toString());
+        }
+        return 0;
     }
 
     /**
-     *
-     * @param userProfileId - user profile id
-     * @param month - month
-     * @param year - year
-     * @return number of coach payments
+     * @param coachPaymentHistoriesObjectList - coach payment histories object list
+     *                                        that user want to convert to coach
+     *                                        payment histories list
+     * @return list of coach payment histories
      */
-    public List<Object> countCoachPaymentsByUserProfileIdAndByMonthAndByYear(
-            int userProfileId,
-            String month,
-            String year
-    ) {
-        return this.coachPaymentRepository.countCoachPaymentsByCoachIdAndByMonthAndByYear(
-                userProfileId,
-                month,
-                year
-        );
+    public List<CoachPayment> getCoachPaymentHistoriesFromObjectList(List<Object> coachPaymentHistoriesObjectList) {
+        List<CoachPayment> coachPaymentHistories = new ArrayList<>();
+        for (Object o : coachPaymentHistoriesObjectList) {
+            Object[] coachPaymentHistoriesObjectArr = (Object[]) o;
+            CoachPayment coachPayment = this.createCoachPaymentHistoriesFromObjectArray(coachPaymentHistoriesObjectArr);
+            coachPaymentHistories.add(coachPayment);
+        }
+        return coachPaymentHistories;
     }
 
     /**
-     *
-     * @param userProfileId - user profile id
-     * @param month - month
-     * @param year - year
-     * @return total payment
+     * @param coachPaymentHistoriesObjectArr - coach payment histories object array
+     *                                       that user want to convert to coach
+     *                                       payment histories
+     * @return selected coach payment histories
      */
-    public List<Object> getTotalPaymentByUserProfileIdByMonthAndByYear(
-            int userProfileId,
-            String month,
-            String year
-    ) {
-        return this.coachPaymentRepository.getTotalPaymentByCoachIdByMonthAndByYear(
-                userProfileId,
-                month,
-                year
-        );
+    private CoachPayment createCoachPaymentHistoriesFromObjectArray(Object[] coachPaymentHistoriesObjectArr) {
+        int membershipId = (int) coachPaymentHistoriesObjectArr[0];
+        Membership membership = this.getMembership((long) membershipId);
+        int coachPaymentSum = (int) coachPaymentHistoriesObjectArr[1];
+        CoachPayment coachPayment = new CoachPayment();
+        coachPayment.setMembership(membership);
+        coachPayment.setSum(coachPaymentSum);
+        return coachPayment;
+    }
+
+    /**
+     * @param membershipId - membership's id that user want to get selected
+     *                     membership
+     * @return selected membership
+     */
+    private Membership getMembership(Long membershipId) {
+        return this.membershipService.findMembershipById(membershipId);
     }
 }

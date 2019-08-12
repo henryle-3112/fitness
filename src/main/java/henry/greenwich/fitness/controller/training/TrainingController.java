@@ -1,92 +1,76 @@
 package henry.greenwich.fitness.controller.training;
 
-import henry.greenwich.fitness.model.coach.Coach;
-import henry.greenwich.fitness.model.response.ResponseMessage;
+import henry.greenwich.fitness.constants.Constants;
 import henry.greenwich.fitness.model.training.Training;
-import henry.greenwich.fitness.model.user.UserProfile;
-import henry.greenwich.fitness.service.coach.CoachService;
 import henry.greenwich.fitness.service.training.TrainingService;
-import henry.greenwich.fitness.service.user.UserProfileService;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @Controller
+@RequestMapping("training-management")
 public class TrainingController {
-    /**
-     * trainingService - interact with training's data
-     * userProfileService - interact with user's profile's data
-     * coachService - interact with coach's data
-     */
     private TrainingService trainingService;
-    private UserProfileService userProfileService;
-    private CoachService coachService;
 
     /**
      * @param trainingService - inject trainingService
      */
-    public TrainingController(TrainingService trainingService,
-                              UserProfileService userProfileService,
-                              CoachService coachService) {
+    public TrainingController(TrainingService trainingService) {
         this.trainingService = trainingService;
-        this.userProfileService = userProfileService;
-        this.coachService = coachService;
     }
 
     /**
-     * @param userProfileId - user's profile's id
-     * @param coachId       - coach's id
-     * @param page          - page
+     * @param response      - response to add number of trainings and number of
+     *                      pages
+     * @param coachId       - coach's id that user want to get list of trainings
+     *                      (this parameter could be optional)
+     * @param userProfileId - user's profile's id that user want to get list of
+     *                      trainings (this parameter could be optional)
+     * @param page          - start index (for pagination) (this parameter could be
+     *                      optional)
      * @return list of trainings
      */
-    @GetMapping(value = "/trainings/paging/{userProfileId}/{coachId}/{page}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping(value = "/trainings", produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public List<Training> findTrainingsByUserProfileIdAndCoachIdAndPage(
-            @PathVariable int userProfileId,
-            @PathVariable int coachId,
-            @PathVariable int page) {
-        int startIndex = ((page - 1) * 8) + 1;
-        List<Training> trainings = new ArrayList<>();
-        List<Object> trainingsObject = this.trainingService.findTrainingsByUserProfileIdAndCoachIdAndPage(
-                coachId,
-                userProfileId,
-                startIndex - 1);
-        for (Object o : trainingsObject) {
-            String trainingDate = (String) o;
-            Training training = new Training();
-            training.setTrainingDate(trainingDate);
-            trainings.add(training);
+    public List<Training> getTrainings(HttpServletResponse response,
+                                       @RequestParam(required = false) Integer userProfileId,
+                                       @RequestParam(required = false) Integer coachId,
+                                       @RequestParam(required = false) Integer page) {
+        if (page != null) {
+            return this.getTrainingsPaging(response, userProfileId, coachId, page);
         }
-        return trainings;
+        return this.trainingService.getTrainings(coachId, userProfileId);
     }
 
     /**
-     * @param userProfileId - user's profile's id
-     * @param coachId       - coach's id
-     * @return number of trainings
-     */
-    @GetMapping(value = "/trainings/count/{userProfileId}/{coachId}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    @ResponseBody
-    public ResponseMessage countTrainingsByUserProfileIdAndCoachId(@PathVariable int userProfileId, @PathVariable int coachId) {
-        List<Object> countTrainingsObject = this.trainingService.countTrainingsByUserProfileIdAndCoachId(
-                coachId,
-                userProfileId
-        );
-        int nTrainings = 0;
-        for (Object eachTrainingObject : countTrainingsObject) {
-            nTrainings += Integer.valueOf(eachTrainingObject.toString());
-        }
-        return new ResponseMessage(String.valueOf(nTrainings));
-    }
-
-
-    /**
-     * @param trainings - trainings
+     * @param response      - response to add number of trainings and number of
+     *                      pages
+     * @param coachId       - coach's id that user want to get list of trainings
+     *                      (this parameter could be optional)
+     * @param userProfileId - user's profile's id that user want to get list of
+     *                      trainings (this parameter could be optional)
+     * @param page          - start index (for pagination) (this parameter could be
+     *                      optional)
      * @return list of trainings
+     */
+    private List<Training> getTrainingsPaging(HttpServletResponse response,
+                                              Integer userProfileId,
+                                              Integer coachId,
+                                              Integer page) {
+        int startIndex = ((page - 1) * Constants.NUMBER_ITEMS_PER_PAGE) + 1;
+        int nTrainings = this.trainingService.getNumberOfTrainings(coachId, userProfileId);
+        response.addHeader(Constants.HEADER_X_TOTAL_COUNT, String.valueOf(nTrainings));
+        int nPages = nTrainings > 0 ? (nTrainings >= Constants.NUMBER_ITEMS_PER_PAGE ? nTrainings / Constants.NUMBER_ITEMS_PER_PAGE : 1) : 0;
+        response.addHeader(Constants.HEADER_X_TOTAL_PAGE, String.valueOf(nPages));
+        return this.trainingService.getTrainingsPaging(coachId, userProfileId, startIndex - 1);
+    }
+
+    /**
+     * @param trainings - trainings that user want to add to the database
+     * @return inserted list of trainings
      */
     @PostMapping(value = "/trainings", produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
@@ -95,24 +79,27 @@ public class TrainingController {
     }
 
     /**
-     * @param trainingDate - training's date
-     * @return list of trainings
+     * @param trainings - trainings that user want to update to the database
+     * @return updated list of trainings
      */
-    @PostMapping(value = "/trainings/date/{userProfileId}/{coachId}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PutMapping(value = "/trainings", produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public List<Training> findTrainingsByTrainingDate(@PathVariable int userProfileId, @PathVariable int coachId, @RequestBody String trainingDate) {
-        UserProfile userProfile = this.userProfileService.getUserProfile((long) userProfileId);
-        Coach coach = this.coachService.getCoachById((long) coachId);
-        return this.trainingService.findTrainingsByTrainingDateAndUserProfileAndCoach(trainingDate, userProfile, coach);
+    public Training updateTraining(@RequestBody Training trainings) {
+        return this.trainingService.updateTraining(trainings);
     }
 
     /**
-     * @return responseMessage
+     * @param trainingDate  - training's date that user want to get list of
+     *                      trainings
+     * @param userProfileId - user's profile's id that user want to get list of
+     *                      trainings
+     * @param coachId       - coach's id that user want to get list of trainings
+     * @return list of trainings
      */
-    @PostMapping(value = "/trainings/update", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping(value = "/users/{userProfileId}/coaches/{coachId}", produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public Training updateTraining(@RequestBody Training training) {
-        return this.trainingService.updateTraining(training);
+    public List<Training> getTrainings(@PathVariable int userProfileId, @PathVariable int coachId,
+                                       @RequestParam(required = false) String trainingDate) {
+        return this.trainingService.getTrainings(userProfileId, coachId, trainingDate);
     }
-
 }

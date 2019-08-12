@@ -1,34 +1,40 @@
 package henry.greenwich.fitness.repository.feed;
 
-import henry.greenwich.fitness.model.feed.NewFeed;
+import henry.greenwich.fitness.constants.Constants;
 import henry.greenwich.fitness.model.feed.NewFeedReaction;
-import henry.greenwich.fitness.model.user.UserProfile;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
 public interface NewFeedReactionRepository extends JpaRepository<NewFeedReaction, Long> {
 
-    /**
-     *
-     * @param newFeed - new's feed
-     * @param reaction - reaction
-     * @return number of reactions
-     */
-    int countNewFeedReactionsByNewFeedAndReaction(NewFeed newFeed, int reaction);
+    String GET_NEW_FEED_REACTIONS = "select * from " + Constants.NEW_FEED_REACTION_TABLE + ""
+            + " where (:userProfileId is null or " + Constants.NEW_FEED_REACTION_TABLE + "."
+            + Constants.NEW_FEED_REACTION_USER_PROFILE_ID + " = :userProfileId)";
+
+    String GET_NEW_FEED_REACTION = "select * from " + Constants.NEW_FEED_REACTION_TABLE + ""
+            + " where (:userProfileId is null or " + Constants.NEW_FEED_REACTION_TABLE + "."
+            + Constants.NEW_FEED_REACTION_USER_PROFILE_ID + " = :userProfileId)"
+            + " and (:newFeedId is null or " + Constants.NEW_FEED_REACTION_TABLE + "."
+            + Constants.NEW_FEED_REACTION_NEW_FEED_ID + " = :newFeedId)";
 
     /**
-     *
-     * @param userProfile - user's profile
-     * @param newFeed - new's feeds
-     * @return selected new's feed's reaction
+     * @param userProfileId - user's profile's id that user want to get newfeed's
+     *                      comment's reactions
+     * @return list of newfeed's comment's reactions
      */
-    NewFeedReaction findNewFeedReactionByUserProfileAndNewFeed(UserProfile userProfile, NewFeed newFeed);
+    @Query(nativeQuery = true, value = GET_NEW_FEED_REACTIONS)
+    List<Object> getNewFeedReactions(@RequestParam("userProfileId") Integer userProfileId);
 
     /**
-     *
-     * @param userProfile - user's profile
-     * @return list of new's feed's reactions
+     * @param userProfileId - user's profile is that user want to get newfeed's
+     *                      reaction
+     * @param newFeedId     - newfeed's id that user want to get newfeed's reaction
+     * @return selected newfeed's reaction
      */
-    List<NewFeedReaction> findNewFeedReactionsByUserProfile(UserProfile userProfile);
+    @Query(nativeQuery = true, value = GET_NEW_FEED_REACTION)
+    List<Object> getNewFeedReaction(@RequestParam("userProfileId") Long userProfileId,
+                                    @RequestParam("newFeedId") Long newFeedId);
 }

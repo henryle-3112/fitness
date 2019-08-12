@@ -1,40 +1,32 @@
 package henry.greenwich.fitness.controller.coach;
 
-import henry.greenwich.fitness.model.coach.ReplyOnCoachFeedback;
 import henry.greenwich.fitness.model.coach.ReplyOnCoachFeedbackReaction;
-import henry.greenwich.fitness.model.response.ResponseMessage;
-import henry.greenwich.fitness.model.user.UserProfile;
 import henry.greenwich.fitness.service.coach.ReplyOnCoachFeedbackReactionService;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @Controller
+@RequestMapping("coach-management")
 public class ReplyOnCoachFeedbackReactionController {
-    /**
-     * replyOnCoachFeedbackReactionService - interact with reply on coach feedback data
-     */
     private ReplyOnCoachFeedbackReactionService replyOnCoachFeedbackReactionService;
 
     /**
-     *
-     * @param replyOnCoachFeedbackReactionService - inject replyOnCoachFeedbackReactionService
+     * @param replyOnCoachFeedbackReactionService - inject
+     *                                            replyOnCoachFeedbackReactionService
      */
     public ReplyOnCoachFeedbackReactionController(ReplyOnCoachFeedbackReactionService replyOnCoachFeedbackReactionService) {
         this.replyOnCoachFeedbackReactionService = replyOnCoachFeedbackReactionService;
     }
 
     /**
-     *
-     * @param replyOnCoachFeedbackReaction - replyOnCoachFeedbackReaction
-     * @return inserted ReplyOnCoachFeedbackReaction
+     * @param replyOnCoachFeedbackReaction - reply on coach's feedback reaction that
+     *                                     user want to add to the database
+     * @return inserted reply on coach's feedback reaction
      */
-    @PostMapping(value = "/coach/feedback/reply/reactions/create", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PostMapping(value = "/reply-reactions", produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public ReplyOnCoachFeedbackReaction addReplyOnCoachFeedbackReaction(
             @RequestBody ReplyOnCoachFeedbackReaction replyOnCoachFeedbackReaction) {
@@ -42,32 +34,13 @@ public class ReplyOnCoachFeedbackReactionController {
     }
 
     /**
-     *
-     * @param replyOnCoachFeedback - replyOnCoachFeedback
-     * @param reaction - reaction
-     * @return number of reactions
+     * @param userProfileId - user's profile's id that user want to get reactions of
+     *                      reply on coach's feedback
+     * @return list of reactions of reply on coach's feedback
      */
-    @PostMapping(value = "/coach/feedback/reply/reactions/count/{reaction}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping(value = "/users/{userProfileId}/reply-reactions", produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public ResponseMessage countReplyOnCoachFeedbackReactionsByReplyOnCoachFeedbackAndReaction(
-            @RequestBody ReplyOnCoachFeedback replyOnCoachFeedback,
-            @PathVariable int reaction) {
-        int nReactions = this.replyOnCoachFeedbackReactionService
-                .countReplyOnCoachFeedbackReactionsByReplyOnCoachFeedbackAndReaction(
-                        replyOnCoachFeedback, reaction
-        );
-        return new ResponseMessage(String.valueOf(nReactions));
-    }
-
-    /**
-     *
-     * @param userProfile - user's profile
-     * @return list of reply's reactions
-     */
-    @PostMapping(value = "/coach/feedback/reply/reactions", produces = {MediaType.APPLICATION_JSON_VALUE})
-    @ResponseBody
-    public List<ReplyOnCoachFeedbackReaction> getReplyOnCoachFeedbackReactionsByUserProfile(
-            @RequestBody UserProfile userProfile) {
-        return this.replyOnCoachFeedbackReactionService.getReplyOnCoachFeedbackReactionsByUserProfile(userProfile);
+    public List<ReplyOnCoachFeedbackReaction> getReplyOnCoachFeedbackReactions(@PathVariable Integer userProfileId) {
+        return this.replyOnCoachFeedbackReactionService.getReplyOnCoachFeedbackReactions(userProfileId);
     }
 }

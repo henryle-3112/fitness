@@ -9,15 +9,11 @@ import java.util.List;
 
 @Repository
 public interface ProductOrderDetailRepository extends JpaRepository<ProductOrderDetail, Long> {
-    /**
-     * @param id - product's order's detail's id that user want to get
-     * @return list of product's order's details
-     */
-    ProductOrderDetail findProductOrderDetailById(Long id);
 
     /**
-     * @param productOrder - product's order
-     * @return list of order's details
+     * @param productOrder - product's order that user want to get list of product's
+     *                     order's details
+     * @return list of product's order's details
      */
-    List<ProductOrderDetail> findProductOrderDetailsByProductOrder(ProductOrder productOrder);
+    List<ProductOrderDetail> getProductOrderDetailsByProductOrder(ProductOrder productOrder);
 }

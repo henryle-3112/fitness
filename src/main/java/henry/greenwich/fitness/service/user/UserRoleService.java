@@ -14,7 +14,6 @@ public class UserRoleService {
     private UserRoleRepository userRoleRepository;
 
     /**
-     *
      * @param userRoleRepository - inject userRoleRepository
      */
     public UserRoleService(UserRoleRepository userRoleRepository) {
@@ -22,7 +21,6 @@ public class UserRoleService {
     }
 
     /**
-     *
      * @param userProfileId - if of user's profile that user want to get roles
      * @return list of roles
      */
@@ -30,6 +28,10 @@ public class UserRoleService {
         return this.userRoleRepository.findUserRoles(userProfileId);
     }
 
+    /**
+     * @param userRole - add user' role
+     * @return inserted user's role
+     */
     public UserRole addUserRole(UserRole userRole) {
         return this.userRoleRepository.saveAndFlush(userRole);
     }

@@ -1,6 +1,7 @@
 package henry.greenwich.fitness.model.user;
 
 
+import henry.greenwich.fitness.constants.Constants;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,30 +14,30 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "achievement")
+@Table(name = Constants.ACHIEVEMENT_TABLE)
 public class Achievement {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "achievement_id")
+    @Column(name = Constants.ACHIEVEMENT_ID)
     private Long achievementId;
 
-    @Column(name = "achievement_title")
+    @Column(name = Constants.ACHIEVEMENT_TITLE)
     private String title;
 
-    @Column(name = "achievement_time")
+    @Column(name = Constants.ACHIEVEMENT_TIME)
     private String time;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_profile_id")
+    @JoinColumn(name = Constants.ACHIEVEMENT_USER_PROFILE_ID)
     public UserProfile userProfile;
 
-    @Column(name = "number_of_reps")
+    @Column(name = Constants.ACHIEVEMENT_NUMBER_OF_REPS)
     private int nReps;
 
-    @Column(name = "log")
+    @Column(name = Constants.ACHIEVEMENT_LOG)
     private String log;
 
-    @Column(name = "current_health")
+    @Column(name = Constants.ACHIEVEMENT_CURRENT_HEALTH)
     private String currentHealth;
 }

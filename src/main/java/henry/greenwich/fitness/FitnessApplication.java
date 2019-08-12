@@ -12,11 +12,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @SpringBootApplication
 public class FitnessApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(FitnessApplication.class, args);
-	}
-	
-	@Bean
+    public static void main(String[] args) {
+        SpringApplication.run(FitnessApplication.class, args);
+    }
+
+    @Bean
     public BCryptPasswordEncoder bcryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
     }

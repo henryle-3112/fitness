@@ -1,153 +1,75 @@
 package henry.greenwich.fitness.controller.post;
 
+import henry.greenwich.fitness.constants.Constants;
 import henry.greenwich.fitness.model.post.*;
-import henry.greenwich.fitness.model.response.ResponseMessage;
-import henry.greenwich.fitness.service.post.PostService;
 import henry.greenwich.fitness.service.post.PostTagService;
-import henry.greenwich.fitness.service.post.TagService;
+
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @Controller
+@RequestMapping("post-management")
 public class PostTagController {
-    /**
-     * postTagService - interact with post's tag data
-     * tagService - interact with tag's data
-     * postService - interact with post's data
-     */
     private PostTagService postTagService;
-    private TagService tagService;
-    private PostService postService;
 
     /**
      * @param postTagService - inject postTagService
-     * @param tagService - inject postTagService
-     * @param postService - inject postTagService
      */
-    public PostTagController(PostTagService postTagService,
-                             TagService tagService,
-                             PostService postService) {
+    public PostTagController(PostTagService postTagService) {
         this.postTagService = postTagService;
-        this.tagService = tagService;
-        this.postService = postService;
     }
 
     /**
-     * @return list of post's tags
-     */
-    @GetMapping(value = "/post/tags", produces = {MediaType.APPLICATION_JSON_VALUE})
-    @ResponseBody
-    public List<PostTag> getPostTags() {
-        List<PostTag> postTagResults = new ArrayList<>();
-        List<PostTag> postTags = this.postTagService.getPostTags();
-        for (PostTag eachPostTag : postTags) {
-            if (eachPostTag.tag.getTagStatus() == 1) {
-                postTagResults.add(eachPostTag);
-            }
-        }
-        return postTagResults;
-    }
-
-    /**
-     * @param id - post's tag's id
-     * @return selected post's tag
-     */
-    @GetMapping(value = "/post/tags/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    @ResponseBody
-    public PostTag getPostTag(@PathVariable Long id) {
-        PostTag selectedPostTag = this.postTagService.getPostTag(id);
-        if (selectedPostTag != null && selectedPostTag.tag.getTagStatus() == 1) {
-            return selectedPostTag;
-        }
-        return null;
-    }
-
-
-    /**
-     * @param postTag - post's tag that user want to add
-     * @return inserted post's tag
-     */
-    @PostMapping(value = "/post/tags/create", produces = {MediaType.APPLICATION_JSON_VALUE})
-    @ResponseBody
-    public PostTag addPostTag(@RequestBody PostTag postTag) {
-        return this.postTagService.addPostTag(postTag);
-    }
-
-    /**
-     * @param postTag - post's tag that user want to add
-     * @return updated post's tag
-     */
-    @PostMapping(value = "/post/tags/update", produces = {MediaType.APPLICATION_JSON_VALUE})
-    @ResponseBody
-    public PostTag updateTag(@RequestBody PostTag postTag) {
-        return this.postTagService.updatePostTag(postTag);
-    }
-
-    /**
-     * @param id - post's tag's id that user want to delete
-     */
-    @PostMapping(value = "/post/tags/delete/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    @ResponseBody
-    public void deletePostTag(@PathVariable Long id) {
-        this.postTagService.deletePostTag(id);
-    }
-
-    /**
-     *
-     * @param tagId - tag's id
-     * @param page - current's page
-     * @param status - post's status
+     * @param response   - response to add number of post tags and number of pages
+     *                   to header (this parameter could be optional)
+     * @param tagId      - tag's id (this parameter could be optional)
+     * @param page       - current's page (this parameter could be optional)
+     * @param postStatus - post's status (this parameter could be optional)
      * @return list of post tag
      */
-    @GetMapping(value = "/post/tags/paging/{tagId}/{page}/{status}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping(value = "/tags/{tagId}/posts", produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public List<PostTag> getPostTagsByTag(@PathVariable int tagId,
-                                          @PathVariable int page,
-                                          @PathVariable int status) {
-        int startIndex = ((page - 1) * 8) + 1;
-        List<PostTag> postTags = new ArrayList<>();
-        List<Object> postTagObjectList = this.postTagService.findPostTagsByTagIdAndPostStatus(tagId, startIndex - 1, status);
-        for (Object eachPostTagObject : postTagObjectList) {
-            Object[] eachPostTagArrayObject = (Object[]) eachPostTagObject;
-            int selectedPostTagId = (int) eachPostTagArrayObject[0];
-            int selectedTagId = (int) eachPostTagArrayObject[1];
-            int selectedPostId = (int) eachPostTagArrayObject[2];
-            Tag selectedTag = this.tagService.getTag((long) selectedTagId, 1);
-            Post selectedPost = this.postService.getPost((long) selectedPostId, 1);
-            PostTag postTag = new PostTag(
-                    (long) selectedPostTagId,
-                    selectedTag,
-                    selectedPost
-            );
-            postTags.add(postTag);
+    public List<PostTag> getPostTagsByTag(HttpServletResponse response,
+                                          @PathVariable Integer tagId,
+                                          @RequestParam(required = false) Integer page,
+                                          @RequestParam(required = false) Integer postStatus) {
+        if (page != null) {
+            return this.getPostTagsByTagPaging(response, tagId, page, postStatus);
         }
-        return postTags;
+        return this.postTagService.getPostTagsByTag(tagId, postStatus);
     }
 
-
-    @GetMapping(value = "/post/tags/count/{tagId}/{status}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    @ResponseBody
-    public ResponseMessage countPosts(@PathVariable int tagId, @PathVariable int status) {
-        List<Object> countPostTags = this.postTagService.countPostTagsByTagIdAndPostStatus(tagId, status);
-        Object eachCountPostTag = countPostTags.get(0);
-        return new ResponseMessage(eachCountPostTag.toString());
+    /**
+     * @param response   - response to add number of post tags and number of pages
+     *                   to header
+     * @param tagId      - tag's id
+     * @param page       - current's page
+     * @param postStatus - post's status
+     * @return list of post tag
+     */
+    private List<PostTag> getPostTagsByTagPaging(HttpServletResponse response, Integer tagId, Integer page,
+                                                 Integer postStatus) {
+        int startIndex = ((page - 1) * Constants.NUMBER_ITEMS_PER_PAGE) + 1;
+        int nPostTags = this.postTagService.getNumberOfPostTagsByTag(tagId, postStatus);
+        response.addHeader(Constants.HEADER_X_TOTAL_COUNT, String.valueOf(nPostTags));
+        int nPages = nPostTags > 0 ? (nPostTags >= Constants.NUMBER_ITEMS_PER_PAGE ? nPostTags / Constants.NUMBER_ITEMS_PER_PAGE : 1) : 0;
+        response.addHeader(Constants.HEADER_X_TOTAL_PAGE, String.valueOf(nPages));
+        return this.postTagService.getPostTagsByTagPaging(tagId, postStatus, startIndex);
     }
 
-
-    @PostMapping(value = "/post/tags/post", produces = {MediaType.APPLICATION_JSON_VALUE})
+    /**
+     * @param postId    - post's id that user want to get post tags
+     * @param tagStatus - tag's status that user want to get post tags
+     * @return list of post tags
+     */
+    @GetMapping(value = "/posts/{postId}/tags", produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public List<PostTag> getPostTagsByPost(@RequestBody Post post) {
-        List<PostTag> results = new ArrayList<>();
-        List<PostTag> postTags = this.postTagService.getPostTagsByPost(post);
-        for (PostTag eachPostTag : postTags) {
-            if (eachPostTag.tag.getTagStatus() == 1) {
-                results.add(eachPostTag);
-            }
-        }
-        return results;
+    public List<PostTag> getPostTagsByPost(@PathVariable Integer postId,
+                                           @RequestParam(required = false) Integer tagStatus) {
+        return this.postTagService.getPostTagsByPost(postId, tagStatus);
     }
 }

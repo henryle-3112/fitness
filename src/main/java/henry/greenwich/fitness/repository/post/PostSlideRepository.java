@@ -10,15 +10,8 @@ import java.util.List;
 public interface PostSlideRepository extends JpaRepository<PostSlide, Long> {
 
     /**
-     * @param id     - post's slide's id
-     * @param status - post's slide's status
-     * @return selected post's slide
+     * @param postSlideStatus - post's slide's status that user want to get post's slides
+     * @return post's slides
      */
-    PostSlide findPostSlideByIdAndPostSlideStatus(Long id, int status);
-
-    /**
-     * @param status - post's slide's status
-     * @return list of post slides
-     */
-    List<PostSlide> findPostSlidesByPostSlideStatus(int status);
+    List<PostSlide> findPostSlidesByPostSlideStatus(Integer postSlideStatus);
 }

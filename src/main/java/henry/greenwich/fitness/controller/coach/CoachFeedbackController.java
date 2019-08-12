@@ -1,22 +1,16 @@
 package henry.greenwich.fitness.controller.coach;
 
-import henry.greenwich.fitness.model.coach.Coach;
 import henry.greenwich.fitness.model.coach.CoachFeedback;
 import henry.greenwich.fitness.service.coach.CoachFeedbackService;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @Controller
+@RequestMapping("coach-management")
 public class CoachFeedbackController {
-    /**
-     * coachFeedbackService - interact with coach's feedback's data
-     */
     private CoachFeedbackService coachFeedbackService;
 
     /**
@@ -27,17 +21,35 @@ public class CoachFeedbackController {
     }
 
     /**
+     * @param status - coach's feedback's status that user want to get (this
+     *               parameter could be optional)
      * @return list of coach's feedbacks
      */
-    @PostMapping(value = "/coach/feedbacks/{status}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping(value = "/feedbacks", produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public List<CoachFeedback> getCoachFeedbacks(@RequestBody Coach coach, @PathVariable int status) {
-        return this.coachFeedbackService.getCoachFeedbacksByCoachAndCoachFeedbackStatus(coach, status);
+    public List<CoachFeedback> getCoachFeedbacks(@RequestParam(required = false) Integer coachId,
+                                                 @RequestParam(required = false) Integer status) {
+        return this.coachFeedbackService.getCoachFeedbacks(coachId, status);
     }
 
-    @PostMapping(value = "/coach/feedbacks/create", produces = {MediaType.APPLICATION_JSON_VALUE})
+    /**
+     * @param coachFeedback - coach's feedback's status that user want to add to the
+     *                      database
+     * @return inserted coach's feedback
+     */
+    @PostMapping(value = "/feedbacks", produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public CoachFeedback addCoachFeedback(@RequestBody CoachFeedback coachFeedback) {
         return this.coachFeedbackService.addCoachFeedback(coachFeedback);
+    }
+
+    /**
+     * @param coachFeedback - coach's feedback that user want to update
+     * @return updated coach's feedback
+     */
+    @PutMapping(value = "/feedbacks", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @ResponseBody
+    public CoachFeedback updateCoachFeedback(@RequestBody CoachFeedback coachFeedback) {
+        return this.coachFeedbackService.updateCoachFeedback(coachFeedback);
     }
 }

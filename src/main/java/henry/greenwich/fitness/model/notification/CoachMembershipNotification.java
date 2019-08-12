@@ -1,5 +1,6 @@
 package henry.greenwich.fitness.model.notification;
 
+import henry.greenwich.fitness.constants.Constants;
 import henry.greenwich.fitness.model.coach.Coach;
 import henry.greenwich.fitness.model.user.UserProfile;
 import lombok.AllArgsConstructor;
@@ -15,28 +16,28 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "coach_membership_notification")
+@Table(name = Constants.COACH_MEMBERSHIP_NOTIFICATION_TABLE)
 public class CoachMembershipNotification {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = Constants.COACH_MEMBERSHIP_NOTIFICATION_ID)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_profile_id")
+    @JoinColumn(name = Constants.COACH_MEMBERSHIP_NOTIFICATION_USER_PROFILE_ID)
     public UserProfile userProfile;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "coach_id")
+    @JoinColumn(name = Constants.COACH_MEMBERSHIP_NOTIFICATION_COACH_ID)
     public Coach coach;
 
-    @Column(name = "status")
+    @Column(name = Constants.COACH_MEMBERSHIP_NOTIFICATION_STATUS)
     private int status;
 
-    @Column(name = "content")
+    @Column(name = Constants.COACH_MEMBERSHIP_NOTIFICATION_CONTENT)
     private String content;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "created_date")
+    @Column(name = Constants.COACH_MEMBERSHIP_NOTIFICATION_CREATED_DATE)
     private Date createdDate;
 }

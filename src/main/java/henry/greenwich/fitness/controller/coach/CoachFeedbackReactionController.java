@@ -1,24 +1,16 @@
 package henry.greenwich.fitness.controller.coach;
 
-import henry.greenwich.fitness.model.coach.CoachFeedback;
 import henry.greenwich.fitness.model.coach.CoachFeedbackReaction;
-import henry.greenwich.fitness.model.response.ResponseMessage;
-import henry.greenwich.fitness.model.user.UserProfile;
 import henry.greenwich.fitness.service.coach.CoachFeedbackReactionService;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @Controller
+@RequestMapping("coach-management")
 public class CoachFeedbackReactionController {
-    /**
-     * coachFeedbackReactionService - interact with coach feedback reaction
-     */
     private CoachFeedbackReactionService coachFeedbackReactionService;
 
     /**
@@ -28,26 +20,26 @@ public class CoachFeedbackReactionController {
         this.coachFeedbackReactionService = coachFeedbackReactionService;
     }
 
-
-    @PostMapping(value = "/coach/feedback/reactions/create", produces = {MediaType.APPLICATION_JSON_VALUE})
+    /**
+     * @param coachFeedbackReaction - coach's feedback's reaction that user want to
+     *                              add to the database
+     * @return inserted coach's feedback's reaction
+     */
+    @PostMapping(value = "/feedback-reactions", produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public CoachFeedbackReaction addCoachFeedbackReaction(@RequestBody CoachFeedbackReaction coachFeedbackReaction) {
         return this.coachFeedbackReactionService.addCoachFeedbackReaction(coachFeedbackReaction);
     }
 
-    @PostMapping(value = "/coach/feedback/reactions/count/{reaction}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    /**
+     * @param userProfileId - user's profile's id that user want to get list of
+     *                      coach's feedback's reactions (1 is like and 0 is
+     *                      dislike)
+     * @return list of coach's feedback's reactions
+     */
+    @GetMapping(value = "/users/{userProfileId}/feedback-reactions", produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public ResponseMessage countCoachFeedbackReactionsByCoachFeedbackAndReaction(
-            @RequestBody CoachFeedback coachFeedback,
-            @PathVariable int reaction) {
-        int nReactions = this.coachFeedbackReactionService.countCoachFeedbackReactionsByCoachFeedbackAndReaction(coachFeedback, reaction);
-        return new ResponseMessage(String.valueOf(nReactions));
-    }
-
-    @PostMapping(value = "/coach/feedback/reactions", produces = {MediaType.APPLICATION_JSON_VALUE})
-    @ResponseBody
-    public List<CoachFeedbackReaction> getCoachFeedbackReactionsByUserProfile(
-            @RequestBody UserProfile userProfile) {
-        return this.coachFeedbackReactionService.getCoachFeedbackReactionsByUserProfile(userProfile);
+    public List<CoachFeedbackReaction> getCoachFeedbackReactionsByUserProfile(@PathVariable Integer userProfileId) {
+        return this.coachFeedbackReactionService.getCoachFeedbackReactions(userProfileId);
     }
 }

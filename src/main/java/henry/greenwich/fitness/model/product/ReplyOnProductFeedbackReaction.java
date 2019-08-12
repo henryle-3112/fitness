@@ -1,5 +1,6 @@
 package henry.greenwich.fitness.model.product;
 
+import henry.greenwich.fitness.constants.Constants;
 import henry.greenwich.fitness.model.user.UserProfile;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,21 +14,21 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "reply_on_product_feedback_reaction")
+@Table(name = Constants.REPLY_ON_PRODUCT_FEEDBACK_REACTION_TABLE)
 public class ReplyOnProductFeedbackReaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = Constants.REPLY_ON_PRODUCT_FEEDBACK_REACTION_ID)
     private Long id;
 
-    @Column(name = "reaction")
+    @Column(name = Constants.REPLY_ON_PRODUCT_FEEDBACK_REACTION_REACTION)
     private int reaction;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "reply_on_product_feedback_id")
+    @JoinColumn(name = Constants.REPLY_ON_PRODUCT_FEEDBACK_REACTION_REPLY_ON_PRODUCT_FEEDBACK_ID)
     public ReplyOnProductFeedback replyOnProductFeedback;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_profile_id")
+    @JoinColumn(name = Constants.REPLY_ON_PRODUCT_FEEDBACK_REACTION_USER_PROFILE_ID)
     public UserProfile userProfile;
 }

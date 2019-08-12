@@ -1,6 +1,7 @@
 package henry.greenwich.fitness.model.user;
 
 
+import henry.greenwich.fitness.constants.Constants;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,17 +14,17 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "facebook_account")
+@Table(name = Constants.FACEBOOK_ACCOUNT_TABLE)
 public class FacebookAccount {
 
     @EmbeddedId
     private UserProfileKey userProfileId;
 
-    @Column(name = "facebook_id")
+    @Column(name = Constants.FACEBOOK_ACCOUNT_FACEBOOK_ID)
     private String facebookId;
 
     @MapsId("userProfileId")
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_profile_id")
+    @JoinColumn(name = Constants.FACEBOOK_ACCOUNT_USER_PROFILE_ID)
     public UserProfile userProfile;
 }

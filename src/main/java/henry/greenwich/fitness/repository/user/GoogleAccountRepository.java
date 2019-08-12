@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface GoogleAccountRepository extends JpaRepository<GoogleAccount, Long> {
     /**
-     *
      * @param googleId - google's id that user want to get account
      * @return selected googleAccount
      */

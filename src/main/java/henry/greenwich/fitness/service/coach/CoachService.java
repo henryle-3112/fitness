@@ -3,94 +3,140 @@ package henry.greenwich.fitness.service.coach;
 import henry.greenwich.fitness.model.coach.Coach;
 import henry.greenwich.fitness.model.user.UserProfile;
 import henry.greenwich.fitness.repository.coach.CoachRepository;
+import henry.greenwich.fitness.service.user.UserProfileService;
+
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class CoachService {
-    /**
-     * coachRepository - interact with coach's data
-     */
     private CoachRepository coachRepository;
+    private UserProfileService userProfileService;
 
     /**
-     * @param coachRepository - inject coachRepository
+     * @param coachRepository    - inject coachRepository
+     * @param userProfileService - inject userProfileService
      */
-    public CoachService(CoachRepository coachRepository) {
+    public CoachService(CoachRepository coachRepository, UserProfileService userProfileService) {
         this.coachRepository = coachRepository;
+        this.userProfileService = userProfileService;
     }
 
     /**
-     * @param status - coach's status
+     * @param coachStatus           - coach's status that user want to get coaches
+     *                              (this parameter could be optional)
+     * @param coachFullNameKeywords - coach's fullname's keywords that user want to
+     *                              filter coaches (this parameter can be optional)
      * @return list of coaches
      */
-    public List<Coach> getCoaches(int status) {
-        return this.coachRepository.findCoachesByStatus(status);
+    public List<Coach> getCoaches(Integer coachStatus, String coachFullNameKeywords) {
+        List<Object> coachesObjectList = this.coachRepository.getCoaches(coachStatus, coachFullNameKeywords);
+        return this.getCoachesFromObjectList(coachesObjectList);
     }
 
     /**
-     * @param id     - coach's id
-     * @param status - coach's status
+     * @param coachStatus           - coach's status that user want to get coaches
+     *                              (this parameter could be optional)
+     * @param coachFullNameKeywords - coach's full name that user want to get (this
+     *                              parameter could be optional)
+     * @param startIndex            - start index (for pagination)
+     * @return list of coaches
+     */
+    public List<Coach> getCoachesByPage(Integer coachStatus, String coachFullNameKeywords, Integer startIndex) {
+        List<Object> coachesObjectList = this.coachRepository.getCoachesByPage(coachStatus, coachFullNameKeywords,
+                startIndex);
+        return this.getCoachesFromObjectList(coachesObjectList);
+    }
+
+    /**
+     * @param coachId     - coach's id that user want to get selected coach
+     * @param coachStatus - coach's status that user want to get selected coach
      * @return selected coach
      */
-    public Coach getCoach(Long id, int status) {
-        return this.coachRepository.findCoachByIdAndStatus(id, status);
+    public Coach getCoach(Integer coachId, Integer coachStatus) {
+        List<Object> coachesObjectList = this.coachRepository.getCoach(coachId, coachStatus);
+        // because coachId and userProfileId are unique. Therefore the maximum length of
+        // the list is one.
+        // That's why we will use .get(0) in this situation
+        List<Coach> coaches = this.getCoachesFromObjectList(coachesObjectList);
+        if (coaches.size() > 0) {
+            return coaches.get(0);
+        }
+        return null;
     }
 
     /**
-     * @param coach - coach
-     * @return inserted coach
+     * @param userProfileId - user's profile's id that user want to get selected
+     *                      coach
+     * @param coachStatus   - coach's status that user want to get selected coach
+     * @return selected coach
      */
-    public Coach addCoach(Coach coach) {
-        return this.coachRepository.saveAndFlush(coach);
+    public Coach getCoachByUser(Integer userProfileId, Integer coachStatus) {
+        List<Object> coachesObjectList = this.coachRepository.getCoachByUser(userProfileId, coachStatus);
+        // because userProfileId are unique. Therefore the maximum length of the list is
+        // one.
+        // That's why we will use .get(0) in this situation
+        List<Coach> coaches = this.getCoachesFromObjectList(coachesObjectList);
+        if (coaches.size() > 0) {
+            return coaches.get(0);
+        }
+        return null;
     }
 
     /**
-     * @param coach - coach
-     * @return updated coach
-     */
-    public Coach updateCoach(Coach coach) {
-        return this.coachRepository.saveAndFlush(coach);
-    }
-
-    /**
-     * @param id - coach's id
-     */
-    public void deleteCoach(Long id) {
-        this.coachRepository.deleteById(id);
-    }
-
-    /**
-     * @param selectedKeyWord - selected keywords
-     * @param startIndex      - start's index
-     * @return list of coaches
-     */
-    public List<Object> findCoachesByPage(String selectedKeyWord, int startIndex, int status) {
-        return this.coachRepository.findCoachesByPage(selectedKeyWord, startIndex, status);
-    }
-
-    /**
-     * @param selectedKeyWord - selected keywords
+     * @param coachStatus           - coach's status that user want to get number of
+     *                              coaches
+     * @param coachFullNameKeywords - coach's full name that user want to get
      * @return number of coaches
      */
-    public List<Object> countCoaches(String selectedKeyWord, int status) {
-        return this.coachRepository.countCoaches(selectedKeyWord, status);
+    public int getNumberOfCoaches(Integer coachStatus, String coachFullNameKeywords) {
+        List<Object> nCoachesObjectList = this.coachRepository.getNumberOfCoaches(coachStatus, coachFullNameKeywords);
+        if (nCoachesObjectList.size() > 0) {
+            return Integer.valueOf(nCoachesObjectList.get(0).toString());
+        }
+        return 0;
     }
 
     /**
-     * @param id - coach's id
-     * @return selected coach
+     * @param coachesObjectList - coaches object list that user want to convert to
+     *                          coaches list
+     * @return list of coaches
      */
-    public Coach getCoachById(Long id) {
-        return this.coachRepository.findCoachById(id);
+    private List<Coach> getCoachesFromObjectList(List<Object> coachesObjectList) {
+        List<Coach> coaches = new ArrayList<>();
+        for (Object o : coachesObjectList) {
+            Object[] coachObjectArr = (Object[]) o;
+            Coach coach = this.createCoachFromObjectArray(coachObjectArr);
+            coaches.add(coach);
+        }
+        return coaches;
     }
 
     /**
-     * @param userProfile - user's profile
-     * @return selected coach
+     * @param coachObjectArr - coach object array that user want to convert to coach
+     *                       object
+     * @return converted coach
      */
-    public Coach getCoachByUserProfile(UserProfile userProfile, int status) {
-        return this.coachRepository.findCoachByUserProfileAndStatus(userProfile, status);
+    private Coach createCoachFromObjectArray(Object[] coachObjectArr) {
+        int coachId = (int) coachObjectArr[0];
+        int userProfileId = (int) coachObjectArr[1];
+        UserProfile userProfile = this.getUserProfile((long) userProfileId);
+        String coachAbout = (String) coachObjectArr[2];
+        int coachStatus = (int) coachObjectArr[3];
+        int coachRatingAverage = (int) coachObjectArr[4];
+        int nMemberships = (int) coachObjectArr[5];
+        return new Coach((long) coachId, userProfile, coachAbout, coachStatus, coachRatingAverage, nMemberships);
     }
+
+    /**
+     * @param userProfileId - user's profile's id that user want to get selected
+     *                      user's profile
+     * @return selected user's profile
+     */
+    private UserProfile getUserProfile(Long userProfileId) {
+        return this.userProfileService.getUserProfile(userProfileId);
+    }
+
 }

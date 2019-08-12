@@ -1,85 +1,105 @@
 package henry.greenwich.fitness.repository.post;
 
+import henry.greenwich.fitness.constants.Constants;
 import henry.greenwich.fitness.model.post.Post;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
 public interface PostRepository extends JpaRepository<Post, Long> {
-    /**
-     *
-     * @param id - post's id
-     * @param status - post's status
-     * @return selected post
-     */
-    Post findPostByIdAndPostStatus(Long id, int status);
+
+    String GET_POSTS_PAGING = "select * from " + Constants.POST_TABLE + "" + " where (:postCategoryId is null or "
+            + Constants.POST_TABLE + "." + Constants.POST_POST_CATEGORY_ID + " = :postCategoryId)"
+            + " and (:postStatus is null or " + Constants.POST_TABLE + "." + Constants.POST_STATUS
+            + " = :postStatus)" + " and (:postNameKeywords is null or lower(" + Constants.POST_TABLE + "."
+            + Constants.POST_TITLE + ") like %:postNameKeywords%)" + " limit :startIndex , "
+            + Constants.NUMBER_ITEMS_PER_PAGE;
+
+    String GET_NUMBER_OF_POSTS = "select count(*) from " + Constants.POST_TABLE + ""
+            + " where (:postCategoryId is null or " + Constants.POST_TABLE + "."
+            + Constants.POST_POST_CATEGORY_ID + " = :postCategoryId)" + " and (:postStatus is null or "
+            + Constants.POST_TABLE + "." + Constants.POST_STATUS + " = :postStatus)"
+            + " and (:postNameKeywords is null or lower(" + Constants.POST_TABLE + "."
+            + Constants.POST_TITLE + ") like %:postNameKeywords%)";
+
+    String GET_TOP_POSTS = "select * from " + Constants.POST_TABLE + "" + " where (:postCategoryId is null or "
+            + Constants.POST_TABLE + "." + Constants.POST_POST_CATEGORY_ID + " = :postCategoryId)"
+            + " and (:postStatus is null or " + Constants.POST_TABLE + "." + Constants.POST_STATUS
+            + " = :postStatus)" + " and (:postNameKeywords is null or lower(" + Constants.POST_TABLE + "."
+            + Constants.POST_TITLE + ") like %:postNameKeywords%)" + " limit :topPostLimit";
+
+    String GET_POSTS = "select * from " + Constants.POST_TABLE + "" + " where (:postCategoryId is null or "
+            + Constants.POST_TABLE + "." + Constants.POST_POST_CATEGORY_ID + " = :postCategoryId)"
+            + " and (:postStatus is null or " + Constants.POST_TABLE + "." + Constants.POST_STATUS
+            + " = :postStatus)" + " and (:postNameKeywords is null or lower(" + Constants.POST_TABLE + "."
+            + Constants.POST_TITLE + ") like %:postNameKeywords%)";
 
     /**
-     *
-     * @param status - post's status
+     * @param postCategoryId   - post's category's id that user want to get posts
+     *                         (this paramter could be optional)
+     * @param postStatus       - post's status that user want to get posts (this
+     *                         paramter could be optional)
+     * @param postNameKeywords - post's name's keywords that user want to get posts
+     *                         (this paramter could be optional)
+     * @param startIndex       - start index (for pagination) (this paramter could
+     *                         be optional)
      * @return list of posts
      */
-    List<Post> findPostsByPostStatus(int status);
+    @Query(nativeQuery = true, value = GET_POSTS_PAGING)
+    List<Object> getPostsPaging(Integer postCategoryId,
+                                Integer postStatus,
+                                String postNameKeywords,
+                                Integer startIndex);
 
     /**
-     *
-     * @param categoryId - post's category's id
-     * @param top - number of posts that user want to get
-     * @param status - post's status
+     * @param postCategoryId   - post's category's id that user want to get posts
+     *                         (this paramter could be optional)
+     * @param postStatus       - post's status that user want to get posts (this
+     *                         paramter could be optional)
+     * @param postNameKeywords - post's name's keywords that user want to get posts
+     *                         (this paramter could be optional)
      * @return list of posts
      */
-    @Query(nativeQuery = true, value = "select * from post where status = :status and post_category_id = :categoryId limit :top")
-    List<Object> findTopPostsByCategoryAndPostStatus(int categoryId, int top, int status);
+    @Query(nativeQuery = true, value = GET_POSTS)
+    List<Object> getPosts(Integer postCategoryId,
+                          Integer postStatus,
+                          String postNameKeywords);
 
     /**
-     * @param categoryId - post's category's id
-     * @param startIndex - start index
-     * @param status     - status
-     * @return list of posts
-     */
-    @Query(nativeQuery = true, value = "select * from post where post_category_id = :categoryId and status = :status limit :startIndex, 8")
-    List<Object> findPostsByCategoryAndByPage(int categoryId, int startIndex, int status);
-
-    /**
-     * @param categoryId - post's category's id
-     * @param status     - post's status
+     * @param postCategoryId   - post's category's id that user want to get number
+     *                         of posts (this paramter could be optional)
+     * @param postStatus       - post's status that user want to get number of posts
+     *                         (this paramter could be optional)
+     * @param postNameKeywords - post's name's keywords that user want to get number
+     *                         of posts (this paramter could be optional)
      * @return number of posts
      */
-    @Query(nativeQuery = true, value = "select count(*) from post where post_category_id = :categoryId and status = :status")
-    List<Object> countPostsByCategoryAndByPostStatus(int categoryId, int status);
+    @Query(nativeQuery = true, value = GET_NUMBER_OF_POSTS)
+    List<Object> getNumberOfPosts(Integer postCategoryId,
+                                  Integer postStatus,
+                                  String postNameKeywords);
 
     /**
-     *
-     * @param categoryId - post's category's id
-     * @param postNameKeywords - post's name keywords
-     * @param status - status
-     * @return number of posts
+     * @param postCategoryId   - post's category's id that user want to get posts
+     *                         (this paramter could be optional)
+     * @param postStatus       - post's status that user want to get posts (this
+     *                         paramter could be optional)
+     * @param postNameKeywords - post's name's keywords that user want to get posts
+     *                         (this paramter could be optional)
+     * @param topPostLimit     - number of posts that user want to get posts (this
+     *                         parameter could be optional)
+     * @return list of posts
      */
-    @Query(nativeQuery = true, value = "select count(*) from post where (:categoryId is null or post_category_id = :categoryId) and status = :status and (:postNameKeywords is null or title like :postNameKeywords)")
-    List<Object> countSearchingPosts(@Param("categoryId") Integer categoryId,
-                                        @Param("postNameKeywords") String postNameKeywords,
-                                        @Param("status") int status);
+    @Query(nativeQuery = true, value = GET_TOP_POSTS)
+    List<Object> getTopPosts(Integer postCategoryId,
+                             Integer postStatus,
+                             String postNameKeywords,
+                             Integer topPostLimit);
 
     /**
-     *
-     * @param selectedCategoryId - post's category's id
-     * @param selectedPostNameKeyword - product's name keywords
-     * @param startIndex - start index
-     * @param status - status
-     * @return list of post
-     */
-    @Query(nativeQuery = true, value = "select * from post where (:selectedCategoryId is null or post_category_id = :selectedCategoryId) and status = :status and (:selectedPostNameKeyword is null or title like :selectedPostNameKeyword) limit :startIndex, 8")
-    List<Object> findSearchingPostsByPage(@Param("selectedCategoryId") Integer selectedCategoryId,
-                                             @Param("selectedPostNameKeyword") String selectedPostNameKeyword,
-                                             @Param("startIndex") int startIndex,
-                                             @Param("status") int status);
-
-    /**
-     *
      * @param id - post's id
      * @return selected post
      */

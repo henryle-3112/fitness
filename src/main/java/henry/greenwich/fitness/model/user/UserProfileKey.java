@@ -15,6 +15,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Embeddable
 public class UserProfileKey implements Serializable {
+    private static final long serialVersionUID = 1L;
     @Column(name = "user_profile_id")
     private Long userProfileId;
 

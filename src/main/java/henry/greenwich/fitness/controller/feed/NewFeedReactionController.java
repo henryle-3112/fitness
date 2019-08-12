@@ -1,24 +1,16 @@
 package henry.greenwich.fitness.controller.feed;
 
-import henry.greenwich.fitness.model.feed.NewFeed;
 import henry.greenwich.fitness.model.feed.NewFeedReaction;
-import henry.greenwich.fitness.model.response.ResponseMessage;
-import henry.greenwich.fitness.model.user.UserProfile;
 import henry.greenwich.fitness.service.feed.NewFeedReactionService;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @Controller
+@RequestMapping("feed-management")
 public class NewFeedReactionController {
-    /**
-     * newFeedReactionService - interact with new's feed's reaction's data
-     */
     private NewFeedReactionService newFeedReactionService;
 
     /**
@@ -29,37 +21,24 @@ public class NewFeedReactionController {
     }
 
     /**
-     * @param newFeedReaction - new's feed's reaction
-     * @return inserted new's feed's reaction
+     * @param newFeedReaction - new's feed's reaction that user want to add to the
+     *                        database
+     * @return inserted newfeed's reactions
      */
-    @PostMapping(value = "/feed/reactions/create", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PostMapping(value = "/reactions", produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public NewFeedReaction addNewFeedReaction(@RequestBody NewFeedReaction newFeedReaction) {
         return this.newFeedReactionService.addNewFeedReaction(newFeedReaction);
     }
 
     /**
-     * @param newFeed  - new's feed
-     * @param reaction - reaction
-     * @return number of reactions
+     * @param userProfileId - user's profile's id that user want to get newfeed's
+     *                      reactions
+     * @return list of newfeed's reactions
      */
-    @PostMapping(value = "/feed/reactions/count/{reaction}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping(value = "/users/{userProfileId}/reactions", produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public ResponseMessage countNewFeedReactionsByNewFeedAndReaction(
-            @RequestBody NewFeed newFeed,
-            @PathVariable int reaction) {
-        int nReactions = this.newFeedReactionService.countNewFeedReactionsByNewFeedAndReaction(newFeed, reaction);
-        return new ResponseMessage(String.valueOf(nReactions));
-    }
-
-    /**
-     * @param userProfile - user's profile
-     * @return list of new's feed's reactions
-     */
-    @PostMapping(value = "/feed/reactions", produces = {MediaType.APPLICATION_JSON_VALUE})
-    @ResponseBody
-    public List<NewFeedReaction> findNewFeedReactionsByUserProfile(
-            @RequestBody UserProfile userProfile) {
-        return this.newFeedReactionService.findNewFeedReactionsByUserProfile(userProfile);
+    public List<NewFeedReaction> getNewFeedReactions(@PathVariable Integer userProfileId) {
+        return this.newFeedReactionService.getNewFeedReactions(userProfileId);
     }
 }

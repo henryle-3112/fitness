@@ -8,11 +8,6 @@ import java.util.List;
 
 @Repository
 public interface ProductCategoryRepository extends JpaRepository<ProductCategory, Long> {
-    /**
-     * @param id - product's category's id that user want to get
-     * @return selected product's category
-     */
-    ProductCategory findProductCategoryByIdAndProductCategoryStatus(Long id, int status);
 
     /**
      * @param status - status of categories that user want to get (normal is 1)

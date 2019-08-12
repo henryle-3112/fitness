@@ -1,5 +1,6 @@
 package henry.greenwich.fitness.model.post;
 
+import henry.greenwich.fitness.constants.Constants;
 import henry.greenwich.fitness.model.user.UserProfile;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,59 +15,59 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "post")
+@Table(name = Constants.POST_TABLE)
 public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = Constants.POST_ID)
     private Long id;
 
-    @Column(name = "content")
+    @Column(name = Constants.POST_CONTENT)
     private String postContent;
 
-    @Column(name = "description")
+    @Column(name = Constants.POST_DESCRIPTION)
     private String postDescription;
 
-    @Column(name = "meta_keywords")
+    @Column(name = Constants.POST_META_KEYWORDS)
     private String postMetaKeywords;
 
-    @Column(name = "title")
+    @Column(name = Constants.POST_TITLE)
     private String postTitle;
 
-    @Column(name = "image")
+    @Column(name = Constants.POST_IMAGE)
     private String postImage;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "created_date")
+    @Column(name = Constants.POST_CREATED_DATE)
     private Date postCreatedDate;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "modified_date")
+    @Column(name = Constants.POST_MODIFIED_DATE)
     private Date postModifiedDate;
 
-    @Column(name = "status")
+    @Column(name = Constants.POST_STATUS)
     private int postStatus;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "post_category_id")
+    @JoinColumn(name = Constants.POST_POST_CATEGORY_ID)
     public PostCategory postCategory;
 
-    @Column(name = "meta_title")
+    @Column(name = Constants.POST_META_TITLE)
     private String postMetaTitle;
 
-    @Column(name = "meta_description")
+    @Column(name = Constants.POST_META_DESCRIPTION)
     private String postMetaDescription;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_profile_id")
+    @JoinColumn(name = Constants.POST_USER_PROFILE_ID)
     public UserProfile userProfile;
 
-    @Column(name = "view_count")
+    @Column(name = Constants.POST_VIEW_COUNT)
     private int postViewCount;
 
-    @Column(name = "top_hot")
+    @Column(name = Constants.POST_TOP_HOT)
     private int postTopHot;
 
-    @Column(name = "new")
+    @Column(name = Constants.POST_NEW)
     private int postNew;
 }

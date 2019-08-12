@@ -23,40 +23,74 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 
-
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
-
     private AuthenticationManager authenticationManager;
 
+    /**
+     * @param authenticationManager - inject authenticationManager
+     */
     public JWTAuthenticationFilter(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
     }
 
+    /**
+     * @param request  - request
+     * @param response - response
+     * @return Authentication
+     * @throws AuthenticationException - throw AuthenticationException
+     */
     @Override
-    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
+    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
+            throws AuthenticationException {
         try {
             UserAccount creds = new ObjectMapper().readValue(request.getInputStream(), UserAccount.class);
 
-            return this.authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            creds.getUserName(),
-                            creds.getPassword(),
-                            new ArrayList<>()
-                    )
-            );
+            return this.authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(creds.getUserName(),
+                    creds.getPassword(), new ArrayList<>()));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
+    /**
+     * @param request    - request
+     * @param response   - response
+     * @param chain      - chain
+     * @param authResult - auth result
+     * @throws IOException - throw IOException
+     */
     @Override
-    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException {
+    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
+                                            Authentication authResult) throws IOException {
         User userDetails = (User) authResult.getPrincipal();
-        String token = JWT.create()
-                .withSubject(userDetails.getUsername())
+        String token = this.generateJWT(userDetails);
+        StringBuilder responseData = this.createResponseData(userDetails, token);
+        // use gson to print response's data as json format to user
+        Gson gson = new Gson();
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.addHeader(Constants.HEADER_STRING, Constants.TOKEN_PREFIX + token);
+        response.getWriter().print(gson.toJson(responseData.toString()));
+    }
+
+    /**
+     * @param userDetails - user's details that will be used to generate jwt
+     * @return jwt
+     */
+    private String generateJWT(User userDetails) {
+        return JWT.create().withSubject(userDetails.getUsername())
                 .withExpiresAt(new Date(System.currentTimeMillis() + Constants.EXPIRATION_TIME))
                 .sign(Algorithm.HMAC512(Constants.SECRET.getBytes()));
-        StringBuilder responseData = new StringBuilder("{\"userName\": \"" + userDetails.getUsername() + "\", \"token\": \"" + Constants.TOKEN_PREFIX + token + "\", \"roles\": [");
+    }
+
+    /**
+     * @param userDetails - user details that will be used to create response data
+     * @param token       - token that will be used to create response data
+     * @return response data
+     */
+    private StringBuilder createResponseData(User userDetails, String token) {
+        StringBuilder responseData = new StringBuilder("{\"userName\": \"" + userDetails.getUsername()
+                + "\", \"token\": \"" + Constants.TOKEN_PREFIX + token + "\", \"roles\": [");
         // get user's authorities then add to string to convert to json format
         ArrayList<GrantedAuthority> listOfAuthorities = new ArrayList<>(userDetails.getAuthorities());
         for (int i = 0; i < listOfAuthorities.size(); i++) {
@@ -67,13 +101,6 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             }
         }
         responseData.append("]}");
-        // return jwt toke and return user's information
-        // create gson object to return response data as json format
-        Gson gson = new Gson();
-        // configure response
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-        response.addHeader(Constants.HEADER_STRING, Constants.TOKEN_PREFIX + token);
-        response.getWriter().print(gson.toJson(responseData.toString()));
+        return responseData;
     }
 }

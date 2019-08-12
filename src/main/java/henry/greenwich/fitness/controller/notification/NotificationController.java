@@ -1,106 +1,84 @@
 package henry.greenwich.fitness.controller.notification;
 
+import henry.greenwich.fitness.constants.Constants;
 import henry.greenwich.fitness.model.notification.Notification;
-import henry.greenwich.fitness.model.response.ResponseMessage;
-import henry.greenwich.fitness.model.user.UserProfile;
 import henry.greenwich.fitness.service.notification.NotificationService;
-import henry.greenwich.fitness.service.user.UserProfileService;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Date;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
-import java.util.Optional;
 
-@SuppressWarnings("ALL")
 @Controller
+@RequestMapping("notification-management")
 public class NotificationController {
-    /**
-     * notificationService - inject notificationService
-     * userProfileService - inject userProfileService
-     */
     private NotificationService notificationService;
-    private UserProfileService userProfileService;
 
     /**
      * @param notificationService - inject notificationService
-     * @param userProfileService  - inject userProfileService
      */
-    public NotificationController(NotificationService notificationService,
-                                  UserProfileService userProfileService) {
+    public NotificationController(NotificationService notificationService) {
         this.notificationService = notificationService;
-        this.userProfileService = userProfileService;
     }
 
     /**
-     * @param userProfileId - user's profile's id
-     * @param page          - page
-     * @param keyword       - keyword
+     * @param response      - response to add number of pages and number of
+     *                      notifications to header
+     * @param userProfileId - user's profile's id that user want to get
+     *                      notifications (this parameter could be optional)
+     * @param search        - notification's content's keywords that user want to
+     *                      get notifications (this parameter could be optional)
+     * @param page          - start index (for pagination) (this parameter could be
+     *                      optional)
+     * @param status        - notification's status that user want to get
+     *                      notifications (this parameter could be optional)
      * @return list of notifications
      */
-    @GetMapping(value = "/notifications/paging/{userProfileId}/{page}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping(value = "/users/{userProfileId}/notifications", produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public List<Notification> getNotificationsByPage(
-            @PathVariable int userProfileId, @PathVariable int page, @RequestParam Optional<String> keyword) {
-        String paramKeywords = keyword.orElse(null);
-        String selectedKeyWord = "%%";
-        if (paramKeywords != null && !paramKeywords.equals("")) {
-            selectedKeyWord = "%" + paramKeywords + "%";
+    public List<Notification> getNotifications(HttpServletResponse response,
+                                               @PathVariable Integer userProfileId,
+                                               @RequestParam(required = false) Integer page,
+                                               @RequestParam(required = false) String search,
+                                               @RequestParam(required = false) Integer status) {
+        if (page != null) {
+            return this.getNotificationsPaging(response, userProfileId, page, search, status);
         }
-        int startIndex = ((page - 1) * 8) + 1;
-        List<Notification> notifications = new ArrayList<>();
-        List<Object> notificationsObject = this.notificationService
-                .getNotificationsByUserProfileAndByPage(userProfileId, selectedKeyWord, startIndex - 1);
-        for (int i = 0; i < notificationsObject.size(); i++) {
-            Object[] eachNotificationObject = (Object[]) notificationsObject.get(i);
-            int id = (int) eachNotificationObject[0];
-            String content = (String) eachNotificationObject[1];
-            Date createdDate = (Date) eachNotificationObject[2];
-            int status = (int) eachNotificationObject[3];
-            // get selected user's profile
-            UserProfile userProfile = this.userProfileService.getUserProfile((long) userProfileId);
-            // create notification object
-            Notification notification = new Notification(
-                    (long) id,
-                    content,
-                    userProfile,
-                    createdDate,
-                    status
-            );
-            notifications.add(notification);
-        }
-        return notifications;
+        return this.notificationService.getNotifications(userProfileId, search, status);
     }
 
     /**
-     * @param keyword - number of notifications based on keywords
-     * @return number of notifications
+     * @param response      - response to add number of pages and number of
+     *                      notifications to header
+     * @param userProfileId - user's profile's id that user want to get
+     *                      notifications (this parameter could be optional)
+     * @param search        - notification's content's keywords that user want to
+     *                      get notifications (this parameter could be optional)
+     * @param page          - start index (for pagination) (this parameter could be
+     *                      optional)
+     * @return list of notifications
      */
-    @GetMapping(value = "/notifications/count/{userProfileId}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    @ResponseBody
-    public ResponseMessage countNotifications(
-            @PathVariable int userProfileId, @RequestParam Optional<String> keyword) {
-        String paramKeywords = keyword.orElse(null);
-        String selectedKeyWord = "%%";
-        if (paramKeywords != null && !paramKeywords.equals("")) {
-            selectedKeyWord = "%" + paramKeywords + "%";
-        }
-        List<Object> countNotificationsObject = this.notificationService
-                .getNumberOfNotificationsByUserProfile(userProfileId, selectedKeyWord);
-        Object eachCountNotification = countNotificationsObject.get(0);
-        return new ResponseMessage(eachCountNotification.toString());
+    private List<Notification> getNotificationsPaging(HttpServletResponse response,
+                                                      Integer userProfileId,
+                                                      Integer page,
+                                                      String search,
+                                                      Integer status) {
+        int startIndex = ((page - 1) * Constants.NUMBER_ITEMS_PER_PAGE) + 1;
+        int nNotifications = this.notificationService.getNumberOfNotifications(userProfileId, search, status);
+        response.addHeader(Constants.HEADER_X_TOTAL_COUNT, String.valueOf(nNotifications));
+        int nPages = nNotifications > 0 ? (nNotifications >= Constants.NUMBER_ITEMS_PER_PAGE ? nNotifications / Constants.NUMBER_ITEMS_PER_PAGE : 1) : 0;
+        response.addHeader(Constants.HEADER_X_TOTAL_PAGE, String.valueOf(nPages));
+        return this.notificationService.getNotificationsPaging(userProfileId, search, status, startIndex - 1);
     }
 
     /**
-     *
      * @param notification - notification
      * @return inserted notification
      */
-    @PostMapping(value = "/notifications/create", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PostMapping(value = "/notifications", produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public Notification addNotification(@RequestBody  Notification notification) {
+    public Notification addNotification(@RequestBody Notification notification) {
         return this.notificationService.addNotification(notification);
     }
 }

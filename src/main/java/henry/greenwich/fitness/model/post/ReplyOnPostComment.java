@@ -1,5 +1,6 @@
 package henry.greenwich.fitness.model.post;
 
+import henry.greenwich.fitness.constants.Constants;
 import henry.greenwich.fitness.model.user.UserProfile;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,28 +15,34 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "reply_on_post_comment")
+@Table(name = Constants.REPLY_ON_POST_COMMENT_TABLE)
 public class ReplyOnPostComment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = Constants.REPLY_ON_POST_COMMENT_ID)
     private Long id;
 
-    @Column(name = "reply_on_post_comment_content")
+    @Column(name = Constants.REPLY_ON_POST_COMMENT_CONTENT)
     private String replyOnPostCommentContent;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "post_comment_id")
+    @JoinColumn(name = Constants.REPLY_ON_POST_COMMENT_POST_COMMENT_ID)
     public PostComment postComment;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_profile_id")
+    @JoinColumn(name = Constants.REPLY_ON_POST_COMMENT_USER_PROFILE_ID)
     public UserProfile userProfile;
 
-    @Column(name = "status")
+    @Column(name = Constants.REPLY_ON_POST_COMMENT_STATUS)
     private int replyOnPostCommentStatus;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "reply_on_post_comment_created_date")
+    @Column(name = Constants.REPLY_ON_POST_COMMENT_CREATED_DATE)
     private Date replyOnPostCommentCreatedDate;
+
+    @Column(name = Constants.REPLY_ON_POST_COMMENT_NUMBER_OF_LIKES)
+    private int numberOfLikes;
+
+    @Column(name = Constants.REPLY_ON_POST_COMMENT_NUMBER_OF_DISLIKES)
+    private int numberOfDislikes;
 }

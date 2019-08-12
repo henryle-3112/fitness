@@ -1,5 +1,6 @@
 package henry.greenwich.fitness.model.feed;
 
+import henry.greenwich.fitness.constants.Constants;
 import henry.greenwich.fitness.model.user.UserProfile;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,33 +15,42 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "new_feed")
+@Table(name = Constants.NEW_FEED_TABLE)
 public class NewFeed {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = Constants.NEW_FEED_ID)
     private Long id;
 
-    @Column(name = "image")
+    @Column(name = Constants.NEW_FEED_IMAGE)
     private String image;
 
-    @Column(name = "achievement")
+    @Column(name = Constants.NEW_FEED_ACHIEVEMENT)
     private String achievement;
 
-    @Column(name = "achievement_time")
+    @Column(name = Constants.NEW_FEED_ACHIEVEMENT_TIME)
     private String achievementTime;
 
-    @Column(name = "content")
+    @Column(name = Constants.NEW_FEED_CONTENT)
     private String content;
 
-    @Column(name = "status")
+    @Column(name = Constants.NEW_FEED_STATUS)
     private int status;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "created_date")
+    @Column(name = Constants.NEW_FEED_CREATED_DATE)
     private Date createdDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_profile_id")
+    @JoinColumn(name = Constants.NEW_FEED_USER_PROFILE_ID)
     public UserProfile userProfile;
+
+    @Column(name = Constants.NEW_FEED_NUMBER_OF_LIKES)
+    private int numberOfLikes;
+
+    @Column(name = Constants.NEW_FEED_NUMBER_OF_DISLIKES)
+    private int numberOfDislikes;
+
+    @Column(name = Constants.NEW_FEED_NUMBER_OF_COMMENTS)
+    private int numberOfComments;
 }

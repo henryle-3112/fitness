@@ -1,5 +1,6 @@
 package henry.greenwich.fitness.model.post;
 
+import henry.greenwich.fitness.constants.Constants;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,51 +14,51 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "post_category")
+@Table(name = Constants.POST_CATEGORY_TABLE)
 public class PostCategory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = Constants.POST_CATEGORY_ID)
     private Long id;
 
-    @Column(name = "name")
+    @Column(name = Constants.POST_CATEGORY_NAME)
     private String postCategoryName;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "created_date")
+    @Column(name = Constants.POST_CATEGORY_CREATED_DATE)
     private Date postCategoryCreatedDate;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "modified_date")
+    @Column(name = Constants.POST_CATEGORY_MODIFIED_DATE)
     private Date postCategoryModifiedDate;
 
-    @Column(name = "status")
+    @Column(name = Constants.POST_CATEGORY_STATUS)
     private int postCategoryStatus;
 
-    @Column(name = "meta_title")
+    @Column(name = Constants.POST_CATEGORY_META_TITLE)
     private String postCategoryMetaTitle;
 
-    @Column(name = "parent_id")
+    @Column(name = Constants.POST_CATEGORY_PARENT_ID)
     private int postCategoryParentId;
 
-    @Column(name = "display_order")
+    @Column(name = Constants.POST_CATEGORY_DISPLAY_ORDER)
     private int postCategoryDisplayOrder;
 
-    @Column(name = "seo_title")
+    @Column(name = Constants.POST_CATEGORY_SEO_TITLE)
     private String postCategorySeoTitle;
 
-    @Column(name = "meta_keywords")
+    @Column(name = Constants.POST_CATEGORY_META_KEYWORDS)
     private String postCategoryMetaKeywords;
 
-    @Column(name = "meta_description")
+    @Column(name = Constants.POST_CATEGORY_META_DESCRIPTION)
     private String postCategoryMetaDescription;
 
-    @Column(name = "show_on_home")
+    @Column(name = Constants.POST_CATEGORY_SHOW_ON_HOME)
     private int postCategoryShowOnHome;
 
-    @Column(name = "image")
+    @Column(name = Constants.POST_CATEGORY_IMAGE)
     private String postCategoryImage;
 
-    @Column(name = "more_image")
+    @Column(name = Constants.POST_CATEGORY_MORE_IMAGE)
     private String postCategoryMoreImage;
 }

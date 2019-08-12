@@ -13,11 +13,10 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.firewall.DefaultHttpFirewall;
 import org.springframework.security.web.firewall.HttpFirewall;
-import org.springframework.security.web.firewall.StrictHttpFirewall;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
+import henry.greenwich.fitness.constants.Constants;
 
 @EnableWebSecurity
 public class WebSecurity extends WebSecurityConfigurerAdapter {
@@ -27,10 +26,15 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     private UserRoleService userRoleService;
     private GoogleAccountService googleAccountService;
 
-    public WebSecurity(UserDetailsServiceImpl userDetailsService,
-                       BCryptPasswordEncoder bCryptPasswordEncoder,
-                       FacebookAccountService facebookAccountService,
-                       UserRoleService userRoleService,
+    /**
+     * @param userDetailsService     - inject userDetailsService
+     * @param bCryptPasswordEncoder  - inject bCryptPasswordEncoder
+     * @param facebookAccountService - inject facebookAccountService
+     * @param userRoleService        - inject userRoleService
+     * @param googleAccountService   - inject googleAccountService
+     */
+    public WebSecurity(UserDetailsServiceImpl userDetailsService, BCryptPasswordEncoder bCryptPasswordEncoder,
+                       FacebookAccountService facebookAccountService, UserRoleService userRoleService,
                        GoogleAccountService googleAccountService) {
         this.userDetailsService = userDetailsService;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
@@ -39,37 +43,35 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
         this.googleAccountService = googleAccountService;
     }
 
+    /**
+     * @param http - http
+     * @throws Exception - throw Exception
+     */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.cors().and().csrf().disable().authorizeRequests()
-                .antMatchers(HttpMethod.POST).permitAll()
-                .antMatchers(HttpMethod.PUT).permitAll()
-                .antMatchers(HttpMethod.GET, "/resources/**").permitAll()
-                .anyRequest().authenticated()
-                .antMatchers("/users/**").hasRole("ADMIN")
-                .and()
+        http.cors().and().csrf().disable().authorizeRequests().antMatchers(HttpMethod.POST, Constants.LOGIN_URL)
+                .permitAll().antMatchers(HttpMethod.POST).permitAll().antMatchers(HttpMethod.PUT).permitAll()
+                .antMatchers(HttpMethod.GET, "/resources/**").permitAll().anyRequest().authenticated()
+                .antMatchers("/users/**").hasRole("ADMIN").and()
                 .addFilter(new JWTAuthenticationFilter(authenticationManager()))
-                .addFilter(new JWTAuthorizationFilter(authenticationManager(), this.userDetailsService, facebookAccountService, userRoleService, googleAccountService))
+                .addFilter(new JWTAuthorizationFilter(authenticationManager(), this.userDetailsService,
+                        facebookAccountService, userRoleService, googleAccountService))
                 // this disables session creation on Spring Security
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-
-        System.out.println("Sample Password: " + this.bCryptPasswordEncoder.encode("123"));
-        /* Date currentDate = new Date();
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(currentDate);
-        calendar.add(Calendar.DATE, 10);
-        currentDate = calendar.getTime();
-
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String strDate = sdf.format(currentDate);
-        System.out.println("Date: " + strDate); */
     }
 
+    /**
+     * @param auth -auth
+     * @throws Exception - throw Exception
+     */
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder);
     }
 
+    /**
+     * @return CorsConfigurationSource
+     */
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
@@ -77,6 +79,9 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
         return source;
     }
 
+    /**
+     * @return HttpFirewall
+     */
     @Bean
     public HttpFirewall defaultHttpFirewall() {
         return new DefaultHttpFirewall();

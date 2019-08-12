@@ -1,5 +1,6 @@
 package henry.greenwich.fitness.model.user;
 
+import henry.greenwich.fitness.constants.Constants;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,23 +13,23 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "user_profile")
+@Table(name = Constants.USER_PROFILE_TABLE)
 public class UserProfile {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = Constants.USER_PROFILE_ID)
     private Long id;
 
-    @Column(name = "full_name")
+    @Column(name = Constants.USER_PROFILE_FULL_NAME)
     private String fullName;
 
-    @Column(name = "avatar")
+    @Column(name = Constants.USER_PROFILE_AVATAR)
     private String avatar;
 
-    @Column(name = "accept_terms_of_service")
+    @Column(name = Constants.USER_PROFILE_ACCEPT_TERMS_OF_SERVICE)
     private int acceptTermsOfService;
 
-    @Column(name = "status")
+    @Column(name = Constants.USER_PROFILE_STATUS)
     private int status;
 }

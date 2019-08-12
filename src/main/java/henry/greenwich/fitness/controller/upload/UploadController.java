@@ -8,19 +8,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 @Controller
+@RequestMapping("upload-management")
 public class UploadController {
-
-    /**
-     * uploadImageService - upload image to the server
-     */
     private UploadService uploadService;
 
     /**
-     *
      * @param uploadService - inject uploadImageService
      */
     public UploadController(UploadService uploadService) {
@@ -28,8 +25,7 @@ public class UploadController {
     }
 
     /**
-     *
-     * @param file - file that would be uploaded to the server
+     * @param file         - file that would be uploaded to the server
      * @param rootLocation - the location that the file would be added
      * @return message that the file was uploaded successfully or not
      */

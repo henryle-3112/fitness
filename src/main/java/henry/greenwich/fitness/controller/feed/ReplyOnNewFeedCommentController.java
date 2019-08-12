@@ -1,23 +1,16 @@
 package henry.greenwich.fitness.controller.feed;
 
-import henry.greenwich.fitness.model.feed.NewFeedComment;
 import henry.greenwich.fitness.model.feed.ReplyOnNewFeedComment;
-import henry.greenwich.fitness.model.response.ResponseMessage;
 import henry.greenwich.fitness.service.feed.ReplyOnNewFeedCommentService;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @Controller
+@RequestMapping("feed-management")
 public class ReplyOnNewFeedCommentController {
-    /**
-     * replyOnNewFeedCommentService - interact with reply new feed comment data
-     */
     private ReplyOnNewFeedCommentService replyOnNewFeedCommentService;
 
     /**
@@ -28,39 +21,38 @@ public class ReplyOnNewFeedCommentController {
     }
 
     /**
-     * @param newFeedComment - new's feed's comment
-     * @param status         - status
+     * @param newFeedCommentId - newfeed's comment's id that user want to get
+     *                         replies
+     * @param status           - status of reply on newfeed's comment that user want
+     *                         to filter replies (this parameter could be optional)
      * @return list of replies
      */
-    @PostMapping(value = "/feed/comment/replies/{status}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping(value = "/comments/{newFeedCommentId}/replies", produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public List<ReplyOnNewFeedComment> findReplyOnNewFeedCommentsByNewFeedCommentAndReplyOnNewFeedCommentStatus(
-            @RequestBody NewFeedComment newFeedComment, @PathVariable int status) {
-        return this.replyOnNewFeedCommentService.findReplyOnNewFeedCommentsByNewFeedCommentAndReplyOnNewFeedCommentStatus(
-                newFeedComment, status);
+    public List<ReplyOnNewFeedComment> getRepliesOnNewFeedComment(@PathVariable Integer newFeedCommentId,
+                                                                  @RequestParam(required = false) Integer status) {
+        return this.replyOnNewFeedCommentService.getRepliesOnNewFeedComment(newFeedCommentId, status);
     }
 
     /**
-     * @param replyOnNewFeedComment - replyOnNewFeedComment
-     * @return inserted replyOnNewFeedComment
+     * @param replyOnNewFeedComment - reply on newfeed's comment that user want to
+     *                              add to the database
+     * @return inserted reply on newfeed's comment
      */
-    @PostMapping(value = "/feed/comment/replies/create", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PostMapping(value = "/replies", produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public ReplyOnNewFeedComment addReplyOnNewFeedComment(@RequestBody ReplyOnNewFeedComment replyOnNewFeedComment) {
         return this.replyOnNewFeedCommentService.addReplyOnNewFeedComment(replyOnNewFeedComment);
     }
 
     /**
-     * @param newFeedComment - new's feed's commet
-     * @param status         - status
-     * @return number of replies
+     * @param replyOnNewFeedComment - reply on newfeed's comment that user want to update
+     * @return updated reply on newfeed's comment
      */
-    @PostMapping(value = "/feed/comment/replies/count/{status}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PutMapping(value = "/replies", produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public ResponseMessage countReplyOnNewFeedCommentsByNewFeedCommentAndReplyOnNewFeedCommentStatus(
-            @RequestBody NewFeedComment newFeedComment, @PathVariable int status) {
-        int nReplies = this.replyOnNewFeedCommentService
-                .countReplyOnNewFeedCommentsByNewFeedCommentAndReplyOnNewFeedCommentStatus(newFeedComment, status);
-        return new ResponseMessage(String.valueOf(nReplies));
+    public ReplyOnNewFeedComment updateReplyOnNewFeedComment(@RequestBody ReplyOnNewFeedComment replyOnNewFeedComment) {
+        return this.replyOnNewFeedCommentService.updateReplyOnNewFeedComment(replyOnNewFeedComment);
     }
+
 }
