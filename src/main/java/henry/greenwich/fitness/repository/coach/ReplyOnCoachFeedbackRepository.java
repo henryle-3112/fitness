@@ -11,7 +11,7 @@ import java.util.List;
 @Repository
 public interface ReplyOnCoachFeedbackRepository extends JpaRepository<ReplyOnCoachFeedback, Long> {
 
-    String GET_REPLIES_ON_COACH_FEEDBACK = "select * " + Constants.REPLY_ON_COACH_FEEDBACK_TABLE + ""
+    String GET_REPLIES_ON_COACH_FEEDBACK = "select * from " + Constants.REPLY_ON_COACH_FEEDBACK_TABLE + ""
             + " where (:coachFeedbackId is null or " + Constants.REPLY_ON_COACH_FEEDBACK_TABLE + "."
             + Constants.REPLY_ON_COACH_FEEDBACK_COACH_FEED_BACK_ID + " = :coachFeedbackId)"
             + " and (:replyOnCoachFeedbackStatus is null or " + Constants.REPLY_ON_COACH_FEEDBACK_TABLE

@@ -18,8 +18,6 @@ import java.util.Date;
 @Table(name = Constants.USER_ACCOUNT_TABLE)
 public class UserAccount implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-
     @EmbeddedId
     private UserProfileKey userProfileId;
 
@@ -39,12 +37,12 @@ public class UserAccount implements Serializable {
     @Column(name = Constants.USER_ACCOUNT_EMAIL_CONFIRMATION_TOKEN)
     private String emailConfirmationToken;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = Constants.USER_ACCOUNT_USER_ACCOUNT_STATUS_ID)
     private UserAccountStatus userAccountStatus;
 
     @MapsId("userProfileId")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = Constants.USER_ACCOUNT_USER_PROFILE_ID)
     public UserProfile userProfile;
 

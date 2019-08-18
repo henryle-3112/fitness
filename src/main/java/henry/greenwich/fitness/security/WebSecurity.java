@@ -18,6 +18,9 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import henry.greenwich.fitness.constants.Constants;
 
+import java.util.Arrays;
+import java.util.Collections;
+
 @EnableWebSecurity
 public class WebSecurity extends WebSecurityConfigurerAdapter {
     private UserDetailsServiceImpl userDetailsService;
@@ -33,8 +36,10 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
      * @param userRoleService        - inject userRoleService
      * @param googleAccountService   - inject googleAccountService
      */
-    public WebSecurity(UserDetailsServiceImpl userDetailsService, BCryptPasswordEncoder bCryptPasswordEncoder,
-                       FacebookAccountService facebookAccountService, UserRoleService userRoleService,
+    public WebSecurity(UserDetailsServiceImpl userDetailsService,
+                       BCryptPasswordEncoder bCryptPasswordEncoder,
+                       FacebookAccountService facebookAccountService,
+                       UserRoleService userRoleService,
                        GoogleAccountService googleAccountService) {
         this.userDetailsService = userDetailsService;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
@@ -74,8 +79,13 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
      */
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedHeaders(Collections.singletonList("*"));
+        configuration.setAllowedOrigins(Collections.singletonList("*"));
+        configuration.setAllowedMethods(Collections.singletonList("*"));
+        configuration.setExposedHeaders(Arrays.asList(Constants.HEADER_X_TOTAL_COUNT, Constants.HEADER_X_TOTAL_PAGE, Constants.HEADER_X_TOTAL_PAYMENT));
         final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());
+        source.registerCorsConfiguration("/**", configuration);
         return source;
     }
 

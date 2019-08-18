@@ -36,9 +36,9 @@ public class MusicController {
     @GetMapping(value = "/musics", produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public List<Music> getMusics(HttpServletResponse response,
-                                 @RequestParam("status") Integer status,
-                                 @RequestParam("search") String search,
-                                 @RequestParam("page") Integer page) {
+                                 @RequestParam(required = false) Integer status,
+                                 @RequestParam(required = false) String search,
+                                 @RequestParam(required = false) Integer page) {
         if (page != null) {
             return this.getMusicsPaging(response, status, search, page);
         }

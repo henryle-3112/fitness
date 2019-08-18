@@ -36,7 +36,7 @@ public class UploadService {
                         + ".mp3";
             }
             Files.copy(file.getInputStream(), rootLocation.resolve(savedFileName));
-            return "http://localhost:8080/resources/upload/" + rootPath + "/" + savedFileName;
+            return "http://localhost:8080/greenwich-fitness/api/resources/upload/" + rootPath + "/" + savedFileName;
         } catch (Exception e) {
             throw new RuntimeException("failure");
         }

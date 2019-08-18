@@ -123,7 +123,7 @@ public class CoachPaymentService {
             String monthToViewCoachPaymentHistories, String yearToViewCoachPaymentHistories) {
         List<Object> nCoachPaymentHistoriesTotal = this.coachPaymentRepository.getCoachPaymentHistoriesTotal(coachId,
                 userProfileId, monthToViewCoachPaymentHistories, yearToViewCoachPaymentHistories);
-        if (nCoachPaymentHistoriesTotal.size() > 0) {
+        if (nCoachPaymentHistoriesTotal.size() > 0 && nCoachPaymentHistoriesTotal.get(0) != null) {
             return Integer.valueOf(nCoachPaymentHistoriesTotal.get(0).toString());
         }
         return 0;

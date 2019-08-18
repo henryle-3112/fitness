@@ -60,10 +60,7 @@ public class NewFeedReactionService {
         // because userProfileId, newFeedId are unique. Therefore, the maximum length in
         // the list is one
         // That's why .get(0) will be used in this situation
-        if (newFeedReactionObjectList.size() > 0) {
-            return this.getNewFeedReactionsFromObjectList(newFeedReactionObjectList).get(0);
-        }
-        return null;
+        return newFeedReactionObjectList.size() > 0 ? this.getNewFeedReactionsFromObjectList(newFeedReactionObjectList).get(0) : null;
     }
 
     /**

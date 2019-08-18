@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
-@RequestMapping("user-managment")
+@RequestMapping("user-management")
 public class RegisterController {
     private RegisterService registerService;
 

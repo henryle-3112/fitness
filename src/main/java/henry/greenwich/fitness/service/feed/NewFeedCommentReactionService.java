@@ -63,7 +63,7 @@ public class NewFeedCommentReactionService {
         // because userProfileId and newFeedCommentId. Therefore, there is just one
         // result in the list.
         // That's why .get(0) will be used in this situation
-        return this.getNewFeedCommentReactionsFromObjectList(newFeedCommentReactionsObjectList).get(0);
+        return newFeedCommentReactionsObjectList.size() > 0 ? this.getNewFeedCommentReactionsFromObjectList(newFeedCommentReactionsObjectList).get(0) : null;
     }
 
     /**

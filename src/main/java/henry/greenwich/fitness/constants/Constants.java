@@ -582,4 +582,25 @@ public class Constants {
     public static final String USER_ROLE_ROLE_ID = "role_id";
     public static final String USER_ROLE_USER_PROFILE_ID = "user_profile_id";
 
+    // gift type table and columns
+    public static final String GIFT_TYPE_TABLE = "gift_type";
+    public static final String GIFT_TYPE_ID = "gift_type_id";
+    public static final String GIFT_TYPE_NAME = "name";
+
+    // gift table and columns
+    public static final String GIFT_TABLE = "gift";
+    public static final String GIFT_ID = "id";
+    public static final String GIFT_NAME = "name";
+    public static final String GIFT_POINT = "point";
+    public static final String GIFT_GIFT_TYPE_ID = "gift_type_id";
+    public static final String GIFT_IMAGE = "image";
+
+    // user gift table and columns
+    public static final String USER_GIFT_TABLE = "user_gift";
+    public static final String USER_GIFT_ID = "id";
+    public static final String USER_GIFT_STATUS = "status";
+    public static final String USER_GIFT_GIFT_ID = "gift_id";
+    public static final String USER_GIFT_USER_PROFILE_ID = "user_profile_id";
+
+
 }

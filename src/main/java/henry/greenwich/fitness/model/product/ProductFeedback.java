@@ -41,11 +41,11 @@ public class ProductFeedback {
     public Product product;
 
     @Column(name = Constants.PRODUCT_FEEDBACK_NUMBER_OF_LIKES)
-    private int nLikes;
+    private int numberOfLikes;
 
     @Column(name = Constants.PRODUCT_FEEDBACK_NUMBER_OF_DISLIKES)
-    private int nDislikes;
+    private int numberOfDislikes;
 
     @Column(name = Constants.PRODUCT_FEEDBACK_NUMBER_OF_REPLIES)
-    private int nReplies;
+    private int numberOfReplies;
 }

@@ -45,9 +45,7 @@ public class MembershipController {
             int startIndex = ((page - 1) * Constants.NUMBER_ITEMS_PER_PAGE) + 1;
             int nMembershipsPaging = this.membershipService.getNumberOfMembershipsPaging(coachId, status, search);
             response.addHeader(Constants.HEADER_X_TOTAL_COUNT, String.valueOf(nMembershipsPaging));
-            int nPages = nMembershipsPaging >= Constants.NUMBER_ITEMS_PER_PAGE
-                    ? nMembershipsPaging / Constants.NUMBER_ITEMS_PER_PAGE
-                    : 1;
+            int nPages = nMembershipsPaging > 0 ? (nMembershipsPaging >= Constants.NUMBER_ITEMS_PER_PAGE ? nMembershipsPaging / Constants.NUMBER_ITEMS_PER_PAGE : 1) : 0;
             response.addHeader(Constants.HEADER_X_TOTAL_PAGE, String.valueOf(nPages));
             return this.membershipService.getMembershipsByPage(coachId, status, search, startIndex - 1);
         } else {
@@ -79,9 +77,7 @@ public class MembershipController {
             int startIndex = ((page - 1) * Constants.NUMBER_ITEMS_PER_PAGE) + 1;
             int nCoachesPaging = this.membershipService.getNumberOfCoachesPaging(userProfileId, status, search);
             response.addHeader(Constants.HEADER_X_TOTAL_COUNT, String.valueOf(nCoachesPaging));
-            int nPages = nCoachesPaging >= Constants.NUMBER_ITEMS_PER_PAGE
-                    ? nCoachesPaging / Constants.NUMBER_ITEMS_PER_PAGE
-                    : 1;
+            int nPages = nCoachesPaging > 0 ? (nCoachesPaging >= Constants.NUMBER_ITEMS_PER_PAGE ? nCoachesPaging / Constants.NUMBER_ITEMS_PER_PAGE : 1) : 0;
             response.addHeader(Constants.HEADER_X_TOTAL_PAGE, String.valueOf(nPages));
             return this.membershipService.getCoachesByPage(userProfileId, status, search, startIndex - 1);
         } else {

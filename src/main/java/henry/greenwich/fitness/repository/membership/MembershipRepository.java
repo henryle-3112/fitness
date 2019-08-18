@@ -57,8 +57,8 @@ public interface MembershipRepository extends JpaRepository<Membership, Long> {
             + Constants.MEMBERSHIP_COACH_ID + " = " + Constants.COACH_TABLE + "." + Constants.COACH_ID + ""
             + " inner join " + Constants.USER_PROFILE_TABLE + " on " + Constants.COACH_TABLE + "."
             + Constants.COACH_USER_PROFILE_ID + " = " + Constants.USER_PROFILE_TABLE + "."
-            + Constants.USER_PROFILE_ID + "" + " where (:userProfileId is null or " + Constants.COACH_TABLE
-            + "." + Constants.COACH_USER_PROFILE_ID + " = :userProfileId)"
+            + Constants.USER_PROFILE_ID + "" + " where (:userProfileId is null or " + Constants.MEMBERSHIP_TABLE
+            + "." + Constants.MEMBERSHIP_USER_PROFILE_ID + " = :userProfileId)"
             + " and (:membershipStatus is null or " + Constants.MEMBERSHIP_TABLE + "."
             + Constants.MEMBERSHIP_STATUS + " = :membershipStatus)"
             + " and (:coachFullNameKeywords is null or lower(" + Constants.USER_PROFILE_TABLE + "."
