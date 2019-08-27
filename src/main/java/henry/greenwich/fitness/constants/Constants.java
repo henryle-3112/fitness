@@ -115,6 +115,7 @@ public class Constants {
     public static final String USER_PROFILE_AVATAR = "avatar";
     public static final String USER_PROFILE_ACCEPT_TERMS_OF_SERVICE = "accept_terms_of_service";
     public static final String USER_PROFILE_STATUS = "status";
+    public static final String USER_PROFILE_POINT = "point";
 
     // coach's feedback's table and columns
     public static final String COACH_FEEDBACK_TABLE = "coach_feedback";
@@ -584,7 +585,7 @@ public class Constants {
 
     // gift type table and columns
     public static final String GIFT_TYPE_TABLE = "gift_type";
-    public static final String GIFT_TYPE_ID = "gift_type_id";
+    public static final String GIFT_TYPE_ID = "id";
     public static final String GIFT_TYPE_NAME = "name";
 
     // gift table and columns

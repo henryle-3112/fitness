@@ -32,4 +32,7 @@ public class UserProfile {
 
     @Column(name = Constants.USER_PROFILE_STATUS)
     private int status;
+
+    @Column(name = Constants.USER_PROFILE_POINT)
+    private int point;
 }
