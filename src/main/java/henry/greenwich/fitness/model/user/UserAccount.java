@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.Date;
 
 @Setter
@@ -16,7 +15,7 @@ import java.util.Date;
 @NoArgsConstructor
 @Entity
 @Table(name = Constants.USER_ACCOUNT_TABLE)
-public class UserAccount implements Serializable {
+public class UserAccount {
 
     @EmbeddedId
     private UserProfileKey userProfileId;
