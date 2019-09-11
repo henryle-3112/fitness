@@ -603,5 +603,31 @@ public class Constants {
     public static final String USER_GIFT_GIFT_ID = "gift_id";
     public static final String USER_GIFT_USER_PROFILE_ID = "user_profile_id";
 
+    // chat room table and columns
+    public static final String CHAT_ROOM_TABLE = "chat_room";
+    public static final String CHAT_ROOM_ID = "id";
+    public static final String CHAT_ROOM_NAME = "name";
+    public static final String CHAT_ROOM_TYPE = "type";
+
+    // participant table and columns
+    public static final String PARTICIPANT_TABLE = "participant";
+    public static final String PARTICIPANT_ID = "id";
+    public static final String PARTICIPANT_USER_PROFILE_ID = "user_profile_id";
+    public static final String PARTICIPANT_COACH_ID = "coach_id";
+    public static final String PARTICIPANT_CHAT_ROOM_ID = "chat_room_id";
+
+    // chat message table and columns
+    public static final String CHAT_MESSAGE_TABLE = "chat_message";
+    public static final String CHAT_MESSAGE_ID = "id";
+    public static final String CHAT_MESSAGE_USER_PROFILE_ID = "user_profile_id";
+    public static final String CHAT_MESSAGE_CHAT_ROOM_ID = "chat_room_id";
+    public static final String CHAT_MESSAGE_MESSAGE = "message";
+
+    // chat bot message table and columns
+    public static final String CHAT_BOT_MESSAGE_TABLE = "chat_bot_message";
+    public static final String CHAT_BOT_MESSAGE_ID = "id";
+    public static final String CHAT_BOT_MESSAGE_MESSAGE = "message";
+    public static final String CHAT_BOT_MESSAGE_USER_PROFILE_ID = "user_profile_id";
+
 
 }
