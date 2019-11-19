@@ -37,8 +37,8 @@ public class CoachFeedbackService {
      * @return list of coach's feedbacks
      */
     public List<CoachFeedback> getCoachFeedbacks(Integer coachId, Integer coachFeedbackStatus) {
-        List<Object> coachFeedbacksObjectList = this.coachFeedbackRepository.getCoachFeedbacks(coachId,
-                coachFeedbackStatus);
+        List<Object> coachFeedbacksObjectList = this.coachFeedbackRepository.getCoachFeedbacks(coachFeedbackStatus,
+                coachId);
         return this.getCoachFeedbacksFromObjectList(coachFeedbacksObjectList);
     }
 

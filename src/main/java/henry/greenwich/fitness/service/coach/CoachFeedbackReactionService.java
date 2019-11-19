@@ -38,7 +38,7 @@ public class CoachFeedbackReactionService {
      */
     public CoachFeedbackReaction addCoachFeedbackReaction(CoachFeedbackReaction coachFeedbackReaction) {
         // check coach feedback reaction existed in the database or not
-        // if not create new one, if yes, update coach feedback reactioin
+        // if not create new one, if yes, update coach feedback reaction
         Long userProfileId = coachFeedbackReaction.getUserProfile().getId();
         Long coachFeedbackId = coachFeedbackReaction.getCoachFeedback().getId();
         CoachFeedbackReaction selectedCoachFeedbackReaction = this.getCoachFeedbackReaction(userProfileId,
