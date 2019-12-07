@@ -31,14 +31,19 @@ public class CoachController {
      *                 coaches (this parameter could be optional)
      * @return list of coaches
      */
-    @GetMapping(value = "/coaches", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping(value = "/coaches", produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    public List<Coach> getCoaches(HttpServletResponse response,
-                                  @RequestParam(required = false) Integer page,
-                                  @RequestParam(required = false) Integer status,
-                                  @RequestParam(required = false) String search) {
+    public List<Coach> getCoaches(HttpServletResponse response, @RequestParam(required = false) Integer page,
+            @RequestParam(required = false) Integer status, @RequestParam(required = false) List<Long> coachIds,
+            @RequestParam(required = false) String search) {
         if (page != null) {
-            return this.getCoachesPaging(response, page, status, search);
+            if (coachIds != null && coachIds.size() != 0) {
+                // check get coaches by ids in or not because recommendation system wil send
+                // list of coach's id
+                // to the service.
+                return this.getCoachesPaging(response, page, status, coachIds, search);
+            }
+            return this.getCoachesPaging(response, page, status, null, search);
         }
         return this.coachService.getCoaches(status, search);
     }
@@ -54,12 +59,23 @@ public class CoachController {
      *                 coaches (this parameter could be optional)
      * @return list of coaches
      */
-    private List<Coach> getCoachesPaging(HttpServletResponse response, Integer page, Integer status, String search) {
-        int startIndex = ((page - 1) * Constants.NUMBER_ITEMS_PER_PAGE) + 1;
-        int nCoaches = this.coachService.getNumberOfCoaches(status, search);
+    private List<Coach> getCoachesPaging(HttpServletResponse response, Integer page, Integer status,
+            List<Long> coachIds, String search) {
+        int startIndex = ((page - 1) * Constants.NUMBER_ITEMS_PER_PAGE) + 1, nCoaches;
+        boolean isGetCoachesByIdsId = coachIds != null && coachIds.size() != 0;
+        if (isGetCoachesByIdsId) {
+            nCoaches = this.coachService.getNumberOfCoachesByIdsIn(status, coachIds, search);
+        } else {
+            nCoaches = this.coachService.getNumberOfCoaches(status, search);
+        }
         response.addHeader(Constants.HEADER_X_TOTAL_COUNT, String.valueOf(nCoaches));
-        int nPages = nCoaches > 0 ? (nCoaches >= Constants.NUMBER_ITEMS_PER_PAGE ? nCoaches / Constants.NUMBER_ITEMS_PER_PAGE : 1) : 0;
+        int nPages = nCoaches > 0
+                ? (nCoaches >= Constants.NUMBER_ITEMS_PER_PAGE ? nCoaches / Constants.NUMBER_ITEMS_PER_PAGE : 1)
+                : 0;
         response.addHeader(Constants.HEADER_X_TOTAL_PAGE, String.valueOf(nPages));
+        if (isGetCoachesByIdsId) {
+            return this.coachService.getCoachesByPageAndIdsIn(status, coachIds, search, startIndex - 1);
+        }
         return this.coachService.getCoachesByPage(status, search, startIndex - 1);
     }
 
@@ -69,7 +85,7 @@ public class CoachController {
      *                could be optional)
      * @return selected coach
      */
-    @GetMapping(value = "/coaches/{coachId}", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping(value = "/coaches/{coachId}", produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     public Coach getCoach(@PathVariable Integer coachId, @RequestParam(required = false) Integer status) {
         return this.coachService.getCoach(coachId, status);
@@ -80,7 +96,7 @@ public class CoachController {
      * @param status        - coach's status that user want to get coach
      * @return selected coach
      */
-    @GetMapping(value = "/users/{userProfileId}/coaches", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping(value = "/users/{userProfileId}/coaches", produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     public Coach getCoachByUser(@PathVariable Integer userProfileId, @RequestParam(required = false) Integer status) {
         return this.coachService.getCoachByUser(userProfileId, status);

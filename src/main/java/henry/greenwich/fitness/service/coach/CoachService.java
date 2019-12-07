@@ -51,6 +51,25 @@ public class CoachService {
     }
 
     /**
+     * 
+     * @param coachStatus           - coach's status that user want to get coaches
+     *                              (this parameter could be optional)
+     * @param coachIds              - coach ids that user want to get coaches (this
+     *                              parameter could be optional)
+     * @param coachFullNameKeywords - coach's full name that user want to get
+     *                              coaches (this parameter could be optional)
+     * @param startIndex            - start index (for pagination) (this parameter
+     *                              could be optional)
+     * @return list of coaches
+     */
+    public List<Coach> getCoachesByPageAndIdsIn(Integer coachStatus, List<Long> coachIds, String coachFullNameKeywords,
+            Integer startIndex) {
+        List<Object> coachesObjectList = this.coachRepository.getCoachesByPageAndIdsIn(coachStatus, coachIds,
+                coachFullNameKeywords, startIndex);
+        return this.getCoachesFromObjectList(coachesObjectList);
+    }
+
+    /**
      * @param coachId     - coach's id that user want to get selected coach
      * @param coachStatus - coach's status that user want to get selected coach
      * @return selected coach
@@ -83,6 +102,24 @@ public class CoachService {
             return coaches.get(0);
         }
         return null;
+    }
+
+    /**
+     * @param coachStatus           - coach's status that user want to get (this
+     *                              parameter could be optional)
+     * @param coachIds              - coach's ids that user want to get (this
+     *                              parameter could be optional)
+     * @param coachFullNameKeywords - coach's full name that user want to get (this
+     *                              parameter could be optional)
+     * @return number of coaches
+     */
+    public int getNumberOfCoachesByIdsIn(Integer coachStatus, List<Long> coachIds, String coachFullNameKeywords) {
+        List<Object> nCoachesObjectList = this.coachRepository.getNumberOfCoachesByIdsIn(coachStatus, coachIds,
+                coachFullNameKeywords);
+        if (nCoachesObjectList.size() > 0) {
+            return Integer.valueOf(nCoachesObjectList.get(0).toString());
+        }
+        return 0;
     }
 
     /**

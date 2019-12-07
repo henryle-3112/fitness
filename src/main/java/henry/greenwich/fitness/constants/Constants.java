@@ -629,5 +629,4 @@ public class Constants {
     public static final String CHAT_BOT_MESSAGE_MESSAGE = "message";
     public static final String CHAT_BOT_MESSAGE_USER_PROFILE_ID = "user_profile_id";
 
-
 }
