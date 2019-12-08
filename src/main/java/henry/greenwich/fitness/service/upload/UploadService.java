@@ -31,12 +31,15 @@ public class UploadService {
             if (currentFileName != null && currentFileName.contains(".jpg")) {
                 savedFileName = currentFileName.substring(0, currentFileName.indexOf(".jpg")) + "_" + uploadedDate
                         + ".jpg";
+            } else if (currentFileName != null && currentFileName.contains(".png")) {
+                savedFileName = currentFileName.substring(0, currentFileName.indexOf(".png")) + "_" + uploadedDate
+                        + ".png";
             } else if (currentFileName != null && currentFileName.contains(".mp3")) {
                 savedFileName = currentFileName.substring(0, currentFileName.indexOf(".mp3")) + "_" + uploadedDate
                         + ".mp3";
             }
             Files.copy(file.getInputStream(), rootLocation.resolve(savedFileName));
-            return "http://localhost:8080/greenwich-fitness/api/resources/upload/" + rootPath + "/" + savedFileName;
+            return "http://localhost:8080/greenwich-fitness/api/v1/resources/upload/" + rootPath + "/" + savedFileName;
         } catch (Exception e) {
             throw new RuntimeException("failure");
         }
